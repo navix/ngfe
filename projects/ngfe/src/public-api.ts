@@ -1,7 +1,6 @@
 /*
- * Public API Surface of ngfe
+ * Public API Surface of @novyk/ngfe
  */
 
-export * from './lib/ngfe.service';
-export * from './lib/ngfe.component';
-export * from './lib/ngfe.module';
+export * from './lib/fn-validator';
+export * from './lib/validation-ref';

@@ -2,7 +2,9 @@
 
 # WIP
 
-* [ ] `validatorFn`
+* [x] `fnValidator`
+* [ ] `asyncFnValidator`
+* [x] `validationRef`
 * [ ] `formError`
 * [ ] `formFile`
 * [ ] `FormLeaveGueard`
