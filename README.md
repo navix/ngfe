@@ -11,3 +11,4 @@
 * [ ] `validationClasses` - bind `.-invalid`, `.-valid`, ... classes to any parent element based on state of children.
 * [ ] `formFile` - file input handling and customization.
 * [ ] `FormLeaveGueard` - prevent form data loosing.
+* [ ] `formSubmit` - mark all fields touched to display errors.

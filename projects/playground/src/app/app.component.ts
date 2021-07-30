@@ -31,6 +31,11 @@ export class AppComponent {
   v9_2 = '2';
   v9_3 = '2';
 
+  ev1 = '123';
+  ev2 = '';
+  ev3 = '';
+  ev4 = '';
+
   fv2() {
     return {
       err2: true,
@@ -41,7 +46,7 @@ export class AppComponent {
     if (control.value === 'pg') {
       return {
         err3: true,
-      }
+      };
     }
     return null;
   }
@@ -50,16 +55,16 @@ export class AppComponent {
     if (control.value !== this.v4_2) {
       return {
         err4: true,
-      }
+      };
     }
     return null;
-  }
+  };
 
   fv5(control: AbstractControl) {
     if (control.value !== this.v5_2) {
       return {
         err5: true,
-      }
+      };
     }
     return null;
   }
@@ -68,7 +73,7 @@ export class AppComponent {
     if (control.value !== this.v6_2) {
       return {
         err6: true,
-      }
+      };
     }
     return null;
   }
@@ -77,7 +82,7 @@ export class AppComponent {
     if (+control.value !== +this.v7_2 + +this.v7_3) {
       return {
         err7: true,
-      }
+      };
     }
     return null;
   }
@@ -86,7 +91,7 @@ export class AppComponent {
     if (control.value !== this.v8_2) {
       return {
         err8: true,
-      }
+      };
     }
     return null;
   }
@@ -95,8 +100,14 @@ export class AppComponent {
     if (control.value !== this.v9_3) {
       return {
         err9: true,
-      }
+      };
     }
     return null;
+  }
+
+  evv1() {
+    return {
+      evErr: true,
+    };
   }
 }
