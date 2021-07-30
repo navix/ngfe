@@ -7,6 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "lib:build": "ng run ngfe:build:production && cpx ./README.md ./dist/ngfe",
+    "lib:publish": "npm publish ./dist/ngfe --access=public",
+    "lib:publish:beta": "npm publish ./dist/ngfe --access=public --tag=beta",
     "playground:serve": "ng run playground:serve"
   },
   "private": true,
@@ -29,6 +32,7 @@
     "@angular/compiler-cli": "~12.1.0-",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
+    "cpx": "^1.5.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

@@ -2,13 +2,14 @@
 
 ## WIP
 
-## TODO
+## PROTOTYPES TODO
 
 * [x] `fnValidator` - run function as validator.
+  * [ ] Accept array of function.  
 * [ ] `asyncFnValidator` - run function as async validator.
 * [x] `validationRef` - trigger validation on other form control.
-* [ ] `formError` - display (pick) validation errors.
+* [x] `formError` - display (pick) validation errors.
 * [ ] `validationClasses` - bind `.-invalid`, `.-valid`, ... classes to any parent element based on state of children.
-* [ ] `formFile` - file input handling and customization.
-* [ ] `FormLeaveGueard` - prevent form data loosing.
 * [ ] `formSubmit` - mark all fields touched to display errors.
+* [ ] `formFile` - file input handling and customization.
+* [ ] `FormLeaveGuard` - prevent form data loosing.

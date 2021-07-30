@@ -1,6 +1,6 @@
 {
-  "name": "ngfe",
-  "version": "0.0.1",
+  "name": "@novyk/ngfe",
+  "version": "12.0.0-beta.1",
   "peerDependencies": {
     "@angular/common": "^12.1.0-",
     "@angular/core": "^12.1.0-"
