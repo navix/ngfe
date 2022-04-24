@@ -4,8 +4,9 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 /**
  * Run function as validator.
  */
+// @todo -> [fn]
 @Directive({
-  selector: '[ngModel][fnValidator]',
+  selector: '[ngModel][fn]',
   providers: [{
     provide: NG_VALIDATORS,
     useExisting: FnValidatorDirective,
@@ -13,13 +14,13 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
   }],
 })
 export class FnValidatorDirective implements Validator {
-  @Input() fnValidator?: ((control: AbstractControl) => ValidationErrors | null) | false;
+  @Input() fn?: ((control: AbstractControl) => ValidationErrors | null) | false;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (!this.fnValidator) {
+    if (!this.fn) {
       return null;
     }
     // @todo check is function
-    return this.fnValidator(control);
+    return this.fn(control);
   }
 }

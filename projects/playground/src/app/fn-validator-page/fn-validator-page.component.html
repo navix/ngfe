@@ -1,0 +1,80 @@
+<h2>fn</h2>
+
+<div>
+  <h5>1. =false and no error</h5>
+  <input #m1="ngModel" [(ngModel)]="v1" [fn]="false">
+  {{ m1.errors | json }}
+</div>
+
+<div>
+  <h5>2. fn with err</h5>
+  <input #m2="ngModel" [(ngModel)]="v1" [fn]="fv2">
+  {{ m2.errors | json }}
+</div>
+
+<div>
+  <h5>3. err if value === 'pg'</h5>
+  <input #m3="ngModel" [(ngModel)]="v3" [fn]="fv3">
+  {{ m3.errors | json }}
+</div>
+
+<div>
+  <h5>4. err if value_left !== value_right (with lambda)</h5>
+  <input #m4_1="ngModel" [(ngModel)]="v4_1" [fn]="fv4">
+  <input [(ngModel)]="v4_2">
+  {{ m4_1.errors | json }}
+</div>
+
+<div>
+  <h5>5. err if value_left !== value_right (with .bind)</h5>
+  <input #m5_1="ngModel" [(ngModel)]="v5_1" [fn]="fv5.bind(this)">
+  <input [(ngModel)]="v5_2">
+  {{ m5_1.errors | json }}
+</div>
+
+<div>
+  <h5>6. err if value_left !== value_right (with ref and bind ngModel)</h5>
+  <input #m6_1="ngModel" [(ngModel)]="v6_1" [fn]="fv6.bind(this)">
+  <input [(ngModel)]="v6_2" [ref]="m6_1">
+  {{ m6_1.errors | json }}
+</div>
+
+<div>
+  <h5>7. err if value_left !== value_right_1 + value_right_2 (with ref and bind ngModels array)</h5>
+  <input #m7_1="ngModel" [(ngModel)]="v7_1" [fn]="fv7.bind(this)">
+  <input [(ngModel)]="v7_2" [ref]="m7_1">
+  <input [(ngModel)]="v7_3" [ref]="m7_1">
+  {{ m7_1.errors | json }}
+</div>
+
+<div>
+  <form>
+    <h5>8. err if value_left !== value_right (with ref and bind control name)</h5>
+    <input #m8_1="ngModel" [(ngModel)]="v8_1" [fn]="fv8.bind(this)" name="v8_1">
+    <input [(ngModel)]="v8_2" name="v8_2" [ref]="m8_1">
+    {{ m8_1.errors | json }}
+  </form>
+</div>
+
+<div>
+  <form>
+    <h5>9. err if value_left_1 !== value_right_1, value_left_2 !== value_right_1 (with ref and bind ngModels array)</h5>
+    <input #m9_1="ngModel" [(ngModel)]="v9_1" [fn]="fv9.bind(this)" name="m9_1">
+    {{ m9_1.errors | json }}
+    <input #m9_2="ngModel" [(ngModel)]="v9_2" [fn]="fv9.bind(this)" name="m9_2">
+    {{ m9_2.errors | json }}
+    <input [(ngModel)]="v9_3" [ref]="[m9_1, m9_2]" name="m9_3">
+  </form>
+</div>
+
+<div>
+  <h5>TODO 7. multiple errors</h5>
+  <input #m3="ngModel" [(ngModel)]="v3" [fn]="fv3">
+  {{ m3.errors | json }}
+</div>
+
+<div>
+  <h5>TODO 8. using closure</h5>
+  <input #m3="ngModel" [(ngModel)]="v3" [fn]="fv3">
+  {{ m3.errors | json }}
+</div>

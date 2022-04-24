@@ -4,14 +4,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FnValidatorModule, FormErrorModule, ValidationRefModule } from '@novyk/ngfe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ErrPipe } from './err.pipe';
-import { RequiredErrComponent } from './required-err/required-err.component';
+import { FnValidatorPageComponent } from './fn-validator-page/fn-validator-page.component';
+import { FormErrorPageComponent } from './form-error-page/form-error-page.component';
+import { DisplayErrorsComponent } from './form-error-page/display-errors/display-errors.component';
+import { ErrorsPipe } from './form-error-page/errors.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ErrPipe,
-    RequiredErrComponent,
+    FnValidatorPageComponent,
+    FormErrorPageComponent,
+    DisplayErrorsComponent,
+    ErrorsPipe,
   ],
   imports: [
     BrowserModule,
