@@ -1,13 +1,23 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { FeFnValidatorModule, FeErrModule, FeRefModule } from '@novyk/ngfe';
+import {
+  FeDestroyModule,
+  FeErrModule,
+  FeFileModule,
+  FeFnValidatorModule,
+  FeRefModule,
+  FeSubmitModule,
+} from '@novyk/ngfe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DestroyPageComponent } from './destroy-page/destroy-page.component';
+import { FilePageComponent } from './file-page/file-page.component';
 import { FnValidatorPageComponent } from './fn-validator-page/fn-validator-page.component';
-import { FormErrorPageComponent } from './form-error-page/form-error-page.component';
 import { DisplayErrorsComponent } from './form-error-page/display-errors/display-errors.component';
 import { ErrorsPipe } from './form-error-page/errors.pipe';
+import { FormErrorPageComponent } from './form-error-page/form-error-page.component';
+import { SubmitPageComponent } from './submit-page/submit-page.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +26,9 @@ import { ErrorsPipe } from './form-error-page/errors.pipe';
     FormErrorPageComponent,
     DisplayErrorsComponent,
     ErrorsPipe,
+    SubmitPageComponent,
+    FilePageComponent,
+    DestroyPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,6 +37,9 @@ import { ErrorsPipe } from './form-error-page/errors.pipe';
     FeFnValidatorModule,
     FeRefModule,
     FeErrModule,
+    FeSubmitModule,
+    FeFileModule,
+    FeDestroyModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
