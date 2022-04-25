@@ -4,13 +4,12 @@
 
 ## PROTOTYPES TODO
 
-* [x] `fnValidator` - run function as validator.
+* [x] `[feFn]` - run function as validator.
   * [ ] Accept array of functions.
-* [ ] `asyncFnValidator` - run function as async validator.
-* [x] `validationRef` - trigger validation on other form control.
-* [x] `formError` - display (pick) validation errors.
-  * [ ] Accept `NgModel` ref.
-* [ ] `validationClasses` - bind `.-invalid`, `.-valid`, ... classes to any parent element based on state of children.
-* [ ] `formSubmit` - mark all fields touched to display errors.
-* [ ] `formFile` - file input handling and customization.
-* [ ] `FormLeaveGuard` - prevent form data loosing.
+* [ ] `[feAsyncFn]` - run function as async validator.
+* [x] `[feRef]` - trigger validation on other form control.
+* [x] `*feErr` - display validation if needed errors.
+* [ ] `feSubmit` - mark all fields touched to display errors.
+* [ ] `feFile` - file input handling and customization.
+* [ ] `feDestroy` - emitter to handle element destroy.
+* [ ] `FeLeaveGuard` - prevent form data loosing.

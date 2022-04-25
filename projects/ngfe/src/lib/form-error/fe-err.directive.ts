@@ -1,19 +1,18 @@
 import { Directive, DoCheck, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
+import { NgModel } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 @Directive({
-  selector: '[err]',
+  selector: '[feErr]',
 })
-export class FormErrorDirective implements OnDestroy, DoCheck {
-  @Input() err?: NgModel;
+export class FeErrDirective implements OnDestroy, DoCheck {
+  @Input() feErr?: NgModel;
 
   private viewRef?: EmbeddedViewRef<any>;
 
   private destroy = new Subject();
 
   constructor(
-    private ngForm: NgForm,
     private viewContainer: ViewContainerRef,
     private templateRef: TemplateRef<any>,
   ) {
@@ -21,7 +20,7 @@ export class FormErrorDirective implements OnDestroy, DoCheck {
 
   // @todo optimize, cache, diff
   ngDoCheck() {
-    const control = this.err?.control;
+    const control = this.feErr?.control;
     if (!control) {
       return;
     }

@@ -1,2 +1,2 @@
-export * from './validation-ref.directive';
-export * from './validation-ref.module';
+export * from './fe-ref.directive';
+export * from './fe-ref.module';

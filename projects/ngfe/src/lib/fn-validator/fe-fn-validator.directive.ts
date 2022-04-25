@@ -4,23 +4,22 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 /**
  * Run function as validator.
  */
-// @todo -> [fn]
 @Directive({
-  selector: '[ngModel][fn]',
+  selector: '[ngModel][feFn]',
   providers: [{
     provide: NG_VALIDATORS,
-    useExisting: FnValidatorDirective,
+    useExisting: FeFnValidatorDirective,
     multi: true,
   }],
 })
-export class FnValidatorDirective implements Validator {
-  @Input() fn?: ((control: AbstractControl) => ValidationErrors | null) | false;
+export class FeFnValidatorDirective implements Validator {
+  @Input() feFn?: ((control: AbstractControl) => ValidationErrors | null) | false;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (!this.fn) {
+    if (!this.feFn) {
       return null;
     }
     // @todo check is function
-    return this.fn(control);
+    return this.feFn(control);
   }
 }

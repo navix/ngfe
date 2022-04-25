@@ -7,14 +7,14 @@
     <span *ngIf="em1.errors?.required">Required.</span>
     <span *ngIf="em1.getError('required'); let err">Required. {{ err | json }}</span>
     <span *ngIf="em1.errors?.required; let err">Required. {{ err | json }}</span>
-    <span *err="em1; let errors">{{ errors | json }}</span>
+    <span *feErr="em1; let errors">{{ errors | json }}</span>
   </form>
 </div>
 
 <div>
   Native:
   <form>
-    <input [(ngModel)]="ev3" name="ev3" #em3="ngModel" required [fn]="evv1">
+    <input [(ngModel)]="ev3" name="ev3" #em3="ngModel" required [feFn]="evv1">
     <div *ngIf="em3.touched && em3.errors?.required">Required.</div>
     <div *ngIf="em3.touched && em3.errors; let errors">{{ errors | json }}</div>
   </form>
@@ -23,9 +23,17 @@
 <div>
   formError:
   <form>
-    <input [(ngModel)]="ev4" name="ev4" required [fn]="evv1" #em4="ngModel">
-    <div *err="em4; let errors">{{ errors | json }}</div>
-    <div *err="em4; let errors">{{ errors | errors }}</div>
-    <app-display-errors *err="em4; let errors" [errors]="errors"></app-display-errors>
+    <input [(ngModel)]="ev4" name="ev4" required [feFn]="evv1" #em4="ngModel">
+    <div *feErr="em4; let errors">{{ errors | json }}</div>
+    <div *feErr="em4; let errors">{{ errors | errors }}</div>
+    <app-display-errors *feErr="em4; let errors" [errors]="errors"></app-display-errors>
   </form>
+</div>
+
+<div>
+  DIV HAS INVALID MODEL:
+  <div class="field">
+    <input [(ngModel)]="ev5" name="ev5" required #em5="ngModel">
+    <div *feErr="em5; let errors">{{ errors | json }}</div>
+  </div>
 </div>

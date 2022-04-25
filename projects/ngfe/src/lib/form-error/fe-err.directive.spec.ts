@@ -1,8 +1,8 @@
-import { FormErrorDirective } from './form-error.directive';
+import { FeErrDirective } from './fe-err.directive';
 
 describe('FormErrorDirective', () => {
   it('should create an instance', () => {
-    const directive = new FormErrorDirective();
+    const directive = new FeErrDirective();
     expect(directive).toBeTruthy();
   });
 });

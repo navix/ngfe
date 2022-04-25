@@ -6,12 +6,11 @@ import { delay, takeUntil } from 'rxjs/operators';
 /**
  * Trigger validation on other form controls when changed.
  */
-// @todo -> [ref]
 @Directive({
-  selector: '[ngModel][ref]',
+  selector: '[ngModel][feRef]',
 })
-export class ValidationRefDirective implements OnInit, OnDestroy {
-  @Input() ref?: NgModel | NgModel[];
+export class FeRefDirective implements OnInit, OnDestroy {
+  @Input() feRef?: NgModel | NgModel[];
 
   private destroy = new Subject();
 
@@ -29,8 +28,8 @@ export class ValidationRefDirective implements OnInit, OnDestroy {
         takeUntil(this.destroy),
       )
       .subscribe(() => {
-        if (this.ref) {
-          const refs = Array.isArray(this.ref) ? this.ref : [this.ref];
+        if (this.feRef) {
+          const refs = Array.isArray(this.feRef) ? this.feRef : [this.feRef];
           refs.forEach(ref => {
             this.updateControl(ref.control);
           });

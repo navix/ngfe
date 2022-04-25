@@ -1,8 +1,8 @@
-import { ValidationRefDirective } from './validation-ref.directive';
+import { FeRefDirective } from './fe-ref.directive';
 
 describe('FnValidatorRefDirective', () => {
   it('should create an instance', () => {
-    const directive = new ValidationRefDirective();
+    const directive = new FeRefDirective();
     expect(directive).toBeTruthy();
   });
 });

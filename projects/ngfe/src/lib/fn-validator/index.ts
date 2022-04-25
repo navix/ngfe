@@ -1,2 +1,2 @@
-export * from './fn-validator.directive';
-export * from './fn-validator.module';
+export * from './fe-fn-validator.directive';
+export * from './fe-fn-validator.module';

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { FnValidatorModule, FormErrorModule, ValidationRefModule } from '@novyk/ngfe';
+import { FeFnValidatorModule, FeErrModule, FeRefModule } from '@novyk/ngfe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FnValidatorPageComponent } from './fn-validator-page/fn-validator-page.component';
@@ -21,9 +21,9 @@ import { ErrorsPipe } from './form-error-page/errors.pipe';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    FnValidatorModule,
-    ValidationRefModule,
-    FormErrorModule,
+    FeFnValidatorModule,
+    FeRefModule,
+    FeErrModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

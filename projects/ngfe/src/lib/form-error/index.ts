@@ -1,2 +1,2 @@
-export * from './form-error.directive';
-export * from './form-error.module';
+export * from './fe-err.directive';
+export * from './fe-err.module';
