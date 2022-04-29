@@ -1,10 +1,17 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
-import { UiFileSelect } from './meta';
 import { FeFileHolderDirective } from './fe-file-holder.directive';
+import { FeFileSelect } from './meta';
 
 @Component({
-  // tslint:disable-next-line
   selector: 'input[type="file"][feFile]',
   template: '',
   styleUrls: ['./fe-file.component.scss'],
@@ -12,7 +19,9 @@ import { FeFileHolderDirective } from './fe-file-holder.directive';
   exportAs: 'uiFile',
 })
 export class FeFileComponent {
-  @Output() fileSelect = new EventEmitter<UiFileSelect[]>();
+  @Input() readAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL';
+
+  @Output() fileSelect = new EventEmitter<FeFileSelect[]>();
 
   @Output() fileError = new EventEmitter<string>();
 
@@ -42,7 +51,7 @@ export class FeFileComponent {
     this.elementRef.nativeElement.value = '';
   }
 
-  private loadFile(file: File): Observable<UiFileSelect> {
+  private loadFile(file: File): Observable<FeFileSelect> {
     return new Observable(observer => {
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -55,7 +64,19 @@ export class FeFileComponent {
       reader.onerror = () => {
         observer.error('Read data error');
       };
-      reader.readAsDataURL(file);
+      switch (this.readAs) {
+        case 'DataURL':
+          reader.readAsDataURL(file);
+          break;
+        case 'Text':
+          reader.readAsText(file);
+          break;
+        case 'ArrayBuffer':
+          reader.readAsArrayBuffer(file);
+          break;
+        case 'BinaryString':
+          reader.readAsBinaryString(file);
+      }
     });
   }
 }
