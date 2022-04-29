@@ -15,6 +15,7 @@
 * [x] `feDestroy` - emitter to handle element destroy.
 * [ ] Docs
 * [ ] Specs
+* [ ] CI release
 
 ## Modules
 
