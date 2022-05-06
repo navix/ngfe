@@ -1,0 +1,93 @@
+<h2>[(feModel)]</h2>
+
+<h3>Default controls</h3>
+
+<form>
+  <h4>text</h4>
+  INP_TEXT1: <input type="text" [(feModel)]="form.inputText"><br>
+  INP_TEXT1: <input type="text" [(feModel)]="form.inputText"><br>
+  INP_TEXT2: <input type="text" [(feModel)]="form.inputText2"><br>
+  INP_TEXT3: <input type="text" [(feModel)]="form.inputText3" [forceUndefined]="true"><br>
+  TEXTAREA: <textarea [(feModel)]="form.textarea"></textarea><br>
+  <hr>
+  <h4>input - number</h4>
+  <hr>
+  <h4>input - date</h4>
+  <hr>
+  <h4>input - time</h4>
+  <hr>
+  <h4>input - color</h4>
+  <hr>
+  <h4>input - file</h4>
+  <hr>
+  <h4>input - range</h4>
+  <hr>
+  <h4>checkbox</h4>
+  <input type="checkbox" [(feModel)]="form.checkbox1"> CHECKY 1<br>
+  <input type="checkbox" [(feModel)]="form.checkbox2"> CHECKY 2<br>
+  <hr>
+  <h4>radio - string</h4>
+  <input type="radio" [(feModel)]="form.radio1" value="one"> RADIO1-1<br>
+  <input type="radio" [(feModel)]="form.radio1" value="two"> RADIO1-2<br>
+  <hr>
+  <h4>radio - number</h4>
+  <input type="radio" [(feModel)]="form.radio2" [value]="1"> RADIO2-1<br>
+  <input type="radio" [(feModel)]="form.radio2" [value]="2"> RADIO2-2<br>
+  <input type="radio" [(feModel)]="form.radio2" [value]="5"> RADIO2-5<br>
+  <hr>
+  <h4>select - single string</h4>
+  <select [(feModel)]="form.select1">
+    <option value="one">ONE</option>
+    <option value="two">TWO</option>
+    <option value="three">THREE</option>
+  </select>
+  <hr>
+  <h4>select - single non-string</h4>
+  <hr>
+  <h4>radio - multiple</h4>
+</form>
+
+{{ form | json }}
+
+<h3>Validators</h3>
+
+<form>
+  <h4>required</h4>
+  <input type="text" [(feModel)]="form2.text1" required #m="feModel">
+  {{ m.errors | json }}<br>
+  <input type="text" [(feModel)]="form2.text2" [required]="true" #m2="feModel">
+  {{ m2.errors | json }}<br>
+  <input type="text" [(feModel)]="form2.text3" [required]="form2.text3_req" #m3="feModel">
+  {{ m3.errors | json }}
+  <input type="checkbox" [(feModel)]="form2.text3_req"><br>
+  <input type="text" [(feModel)]="form2.text4" [validators]="[text4validator]" #m4="feModel">
+  {{ m4.errors | json }}<br>
+  <br>
+</form>
+
+
+<h3>Field Proto</h3>
+
+<form>
+  <app-field label="Req field">
+    <input [(feModel)]="form3.text1" #model3_1="feModel" type="text" required>
+    <div *ngIf="model3_1.displayedErrors as errors" errors>
+      {{ errors | json }}
+    </div>
+  </app-field>
+  <app-field label="Non-req field">
+    <input [(feModel)]="form3.text2" type="text"><br>
+  </app-field>
+</form>
+
+
+<h4>Errors output</h4>
+<form>
+  <input [(feModel)]="form3.text3" #model3_3="feModel" type="text" required>
+  {{ model3_3.touched$ | async | json }}
+  {{ model3_3.touched | json }}
+  <div *ngIf="model3_3.displayedErrors as errors">
+    <span *ngIf="errors.has('required')">Required.</span>
+  </div>
+  <br>
+</form>

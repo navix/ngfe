@@ -3,6 +3,7 @@ import { FeDestroyModule } from './destroy';
 import { FeErrModule } from './err';
 import { FeFileModule } from './file';
 import { FeFnValidatorModule } from './fn-validator';
+import { FeModelModule } from './model';
 import { FeRefModule } from './ref';
 import { FeSubmitModule } from './submit';
 
@@ -12,6 +13,7 @@ import { FeSubmitModule } from './submit';
     FeErrModule,
     FeFileModule,
     FeFnValidatorModule,
+    FeModelModule,
     FeRefModule,
     FeSubmitModule,
   ],
@@ -20,6 +22,7 @@ import { FeSubmitModule } from './submit';
     FeErrModule,
     FeFileModule,
     FeFnValidatorModule,
+    FeModelModule,
     FeRefModule,
     FeSubmitModule,
   ],

@@ -5,7 +5,7 @@ import {
   FeDestroyModule,
   FeErrModule,
   FeFileModule,
-  FeFnValidatorModule,
+  FeFnValidatorModule, FeModule,
   FeRefModule,
   FeSubmitModule,
 } from '@novyk/ngfe';
@@ -18,6 +18,8 @@ import { DisplayErrorsComponent } from './form-error-page/display-errors/display
 import { ErrorsPipe } from './form-error-page/errors.pipe';
 import { FormErrorPageComponent } from './form-error-page/form-error-page.component';
 import { SubmitPageComponent } from './submit-page/submit-page.component';
+import { ModelPageComponent } from './model-page/model-page.component';
+import { FieldComponent } from './model-page/field/field.component';
 
 @NgModule({
   declarations: [
@@ -29,17 +31,14 @@ import { SubmitPageComponent } from './submit-page/submit-page.component';
     SubmitPageComponent,
     FilePageComponent,
     DestroyPageComponent,
+    ModelPageComponent,
+    FieldComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    FeFnValidatorModule,
-    FeRefModule,
-    FeErrModule,
-    FeSubmitModule,
-    FeFileModule,
-    FeDestroyModule,
+    FeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

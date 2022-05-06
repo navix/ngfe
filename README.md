@@ -2,17 +2,38 @@
 
 ## WIP
 
+Boosted template-driven Angular forms.
+
+It is an alternative for the native `FormsModule`.
+
+## Installation
+
+```
+$ npm i ngfe
+```
+
 ## TODO
 
 * [x] `[feFn]` - run function as validator.
-  * [ ] Accept array of functions.
-* [ ] `[feAsyncFn]` - run function as async validator.
+  * [ ] rm?
+  * [ ] `[feAsyncFn]` - run function as async validator.
 * [x] `[feRef]` - trigger validation on other form control.
-* [x] `*feErr` - display validation if needed errors.
-* [x] `feSubmit` - mark all fields touched to display errors.
+  * [ ] rm? 
+* [x] `*feErr` - display validation errors if needed.
+  * [ ] rm? 
+* [ ] `feSubmit` - mark all fields touched to display errors.
+* [ ] `feFile` - file input handling and customization. 
+* [x] `(feDestroy)` - emitter to handle element destroy.
+  * [ ] Add (clear) event to `feModel` instead. 
+* [ ] Move validators to separated module
+* [ ] Integration with native ValueAccessor
+* [ ] Integration with native Validator
+* Labs:
   * [ ] Optional scroll to first invalid field.
-* [x] `feFile` - file input handling and customization.
-* [x] `feDestroy` - emitter to handle element destroy.
+  * [ ] `[feModelDefault]` Directive for defining model value if it's empty.
+  * [ ] textarea autoresize
+  * [ ] input text mask
+  * [ ] focus control?
 * [ ] Docs
 * [ ] Specs
 * [ ] CI release
@@ -62,3 +83,21 @@ Pick a File
   <button feSubmit>Submit</button>
 </form>
 ```
+
+
+## `FeModel` features
+
+* Focused on template-driven approach.
+* Less abstractions, ultimate control.
+* More freedom for developers.
+* Simple custom value accessors creation.
+* Simple custom validators creation.
+* Direct way to control model in validators.
+* Handy ways to display validation errors.
+
+
+### Caveats
+
+* No reactive forms.
+* More freedom for developers.
+* Does not support `Validator` and `ValueAccessor` interfaces.

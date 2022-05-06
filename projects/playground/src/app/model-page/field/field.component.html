@@ -1,0 +1,10 @@
+<div class="wrapper" [class.-invalid]="invalid">
+  <label>
+    {{ label }}
+    <span *ngIf="required">*</span>
+  </label>
+  <ng-content></ng-content>
+  <div *ngIf="model?.errors" class="errors">
+    <ng-content select="[errors]"></ng-content>
+  </div>
+</div>
