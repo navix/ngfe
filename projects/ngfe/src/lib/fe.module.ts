@@ -1,30 +1,21 @@
 import { NgModule } from '@angular/core';
-import { FeDestroyModule } from './destroy';
-import { FeErrModule } from './err';
+import { FeControlsModule } from './controls';
 import { FeFileModule } from './file';
-import { FeFnValidatorModule } from './fn-validator';
 import { FeModelModule } from './model';
-import { FeRefModule } from './ref';
-import { FeSubmitModule } from './submit';
+import { FeValidatorsModule } from './validators';
 
 @NgModule({
   imports: [
-    FeDestroyModule,
-    FeErrModule,
+    FeControlsModule,
     FeFileModule,
-    FeFnValidatorModule,
     FeModelModule,
-    FeRefModule,
-    FeSubmitModule,
+    FeValidatorsModule,
   ],
   exports: [
-    FeDestroyModule,
-    FeErrModule,
+    FeControlsModule,
     FeFileModule,
-    FeFnValidatorModule,
     FeModelModule,
-    FeRefModule,
-    FeSubmitModule,
+    FeValidatorsModule,
   ],
 })
 export class FeModule {

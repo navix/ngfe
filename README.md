@@ -4,7 +4,29 @@
 
 Boosted template-driven Angular forms.
 
-It is an alternative for the native `FormsModule`.
+It is an alternative for the original `FormsModule`.
+
+## Features
+
+* Focused on template-driven approach.
+* Single source of truth for your forms - templates.
+* Less abstractions, ultimate control.
+* More freedom for developers.
+* Simple custom value accessors creation.
+* Simple custom validators creation.
+* Direct way to control model in validators.
+* Handy ways to display validation errors.
+* Nice submit directive which touches all fields and checks validity.
+* Reduce bundle size dropping @angular/forms.
+
+
+### Caveats
+
+* 3rd party lib.
+* Non-standard way to do things.
+* Does not support `Validator` and `ValueAccessor` interfaces. [TODO FeFormsAdapter]
+* Sometimes too much freedom for developers.
+
 
 ## Installation
 
@@ -12,92 +34,106 @@ It is an alternative for the native `FormsModule`.
 $ npm i ngfe
 ```
 
+## Usage
+
+```
+imports: [
+  FeModule,
+  ...
+]
+```
+
+### Binding
+
+```
+<input [(feModel)]="field">
+```
+
+#### Default value
+
+TODO
+
+#### Clean up
+
+TODO
+
+
+### Validation
+
+```
+<input [(feModel)]="field" required>
+```
+
+#### Display Errors
+
+```
+<input #model="feModel" [(feModel)]="field" required>
+<span *ngIf="model.displayedErrors as errors>
+  <span *ngIf="errros.has('required')">Required</span>
+</span>
+```
+
+You can move errors displaying in a separated component or use pipe to reduce boilerplate.
+
+#### Built-in validators
+
+#### Function validator
+
+TODO
+
+#### Custom validator directive
+
+TODO
+
+
+### Submit
+
+#### On button
+
+TODO
+
+#### On form
+
+TODO
+
+
+### Custom controls
+
+TODO
+
+
+
+
 ## TODO
 
-* [x] `[feFn]` - run function as validator.
-  * [ ] rm?
-  * [ ] `[feAsyncFn]` - run function as async validator.
-* [x] `[feRef]` - trigger validation on other form control.
-  * [ ] rm? 
-* [x] `*feErr` - display validation errors if needed.
-  * [ ] rm? 
-* [ ] `feSubmit` - mark all fields touched to display errors.
-* [ ] `feFile` - file input handling and customization. 
-* [x] `(feDestroy)` - emitter to handle element destroy.
-  * [ ] Add (clear) event to `feModel` instead. 
-* [ ] Move validators to separated module
-* [ ] Integration with native ValueAccessor
-* [ ] Integration with native Validator
+* [ ] Async validation
+* [ ] `dirty`
+* [ ] `[default]` + `reset()`
+* [ ] Rework `feFile` - file input handling and customization
+* [ ] Rework `(feDestroy)` - maybe add (clear) event to `feModel` instead
+* [ ] Complete native controls
+* [ ] Complete validators
+* [ ] Handle `disabled`
+* [ ] `FeForm` todos
+* `FeAdapterModule`
+  * [ ] Integration with native ValueAccessor
+  * [ ] Integration with native Validator
 * Labs:
+  * [ ] `DisplayedErrorsStrategy`
+  * [ ] `DisabledStrategy`
   * [ ] Optional scroll to first invalid field.
-  * [ ] `[feModelDefault]` Directive for defining model value if it's empty.
   * [ ] textarea autoresize
   * [ ] input text mask
-  * [ ] focus control?
-* [ ] Docs
+  * [ ] focus control
+* Docs
+  * [ ] README 
+  * Stackblitz demos
+    * [ ] `<app-errors>`
+    * [ ] `| errors`
+    * [ ] `<app-field>`
+    * [ ] Place links in the README
+  * Fancy hacks
+    * [ ] Dynamic forms 
+    * [ ] Combine custom control with custom validators under one component. 
 * [ ] Specs
 * [ ] CI release
-
-## Modules
-
-### `FeDestroyModule`
-
-```
-<div *ngIf="condition" (feDestroy)="handler()"></div>
-```
-
-### `FeErrModule`
-
-```
-<input #model="ngModel" [(ngModel)]="value" name="value" required>
-<span *feErr="model; let errors">{{ errors | json }}</span>
-```
-
-### `FeFileModule`
-
-```
-<button class="custom" feFileHolder>
-Pick a File
-<input type="file" required [(ngModel)]="file" name="file" feFile>
-</button>
-```
-
-### `FeFnValidatorModule`
-
-```
-<input [(ngModel)]="value" [feFn]="validationFunction">
-```
-
-### `FeRefModule`
-
-```
-<input #password="ngModel" [(ngModel)]="password" name="password">
-<input [(ngModel)]="passwordConfirm" [feRef]="[password]" name="passwordConfirm">
-```
-
-### `FeSubmitModule`
-
-```
-<form>
-  ...
-  <button feSubmit>Submit</button>
-</form>
-```
-
-
-## `FeModel` features
-
-* Focused on template-driven approach.
-* Less abstractions, ultimate control.
-* More freedom for developers.
-* Simple custom value accessors creation.
-* Simple custom validators creation.
-* Direct way to control model in validators.
-* Handy ways to display validation errors.
-
-
-### Caveats
-
-* No reactive forms.
-* More freedom for developers.
-* Does not support `Validator` and `ValueAccessor` interfaces.

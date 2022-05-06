@@ -48,4 +48,7 @@ export class ModelPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  submit() {
+    alert('SUBM');
+  }
 }

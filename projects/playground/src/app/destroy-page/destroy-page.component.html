@@ -1,9 +1,0 @@
-<h2>feDestroy</h2>
-
-<form>
-  <input type="checkbox" [(ngModel)]="show" name="show">
-  <div *ngIf="show" (feDestroy)="count = count + 1">
-    BLOCKY
-  </div>
-  Destroy counter: {{ count }}
-</form>

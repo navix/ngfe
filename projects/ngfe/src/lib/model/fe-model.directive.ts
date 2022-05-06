@@ -1,24 +1,28 @@
 import {
   ChangeDetectorRef,
   Directive,
-  EventEmitter,
+  EventEmitter, Inject,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
+  Optional,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { FeForm } from './fe-form.directive';
 import { FeModelValidator, FeModelValue } from './meta';
 
 @Directive({
   selector: '[feModel]',
-  providers: [FeModel],
   exportAs: 'feModel',
 })
-export class FeModel<T = any> implements OnInit, OnChanges {
+export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   @Input() feModel?: T;
+
+  @Input() name?: string;
 
   // @todo impl
   @Input() default?: T;
@@ -39,8 +43,10 @@ export class FeModel<T = any> implements OnInit, OnChanges {
   private _validators: FeModelValidator<T>[] = [];
 
   constructor(
+    @Optional() @Inject(FeForm) public form: FeForm | undefined,
     private cdr: ChangeDetectorRef,
   ) {
+    this.form?.models.add(this);
     this.value$.pipe().subscribe(() => {
       this.updateValidity();
     });
@@ -54,7 +60,6 @@ export class FeModel<T = any> implements OnInit, OnChanges {
         map(v => v.value),
       )
       .subscribe(value => {
-        console.log('OUTPUT V', value);
         this.feModelChange.emit(value);
       });
   }
@@ -81,6 +86,10 @@ export class FeModel<T = any> implements OnInit, OnChanges {
     }
   }
 
+  ngOnDestroy() {
+    this.form?.models.delete(this);
+  }
+
   get touched() {
     return this._touched$.value;
   }
@@ -97,7 +106,6 @@ export class FeModel<T = any> implements OnInit, OnChanges {
 
   // @todo get displayedErrors$()
   get displayedErrors() {
-    // @todo config displayed rules
     return this.touched ? this.errors : undefined;
   }
 

@@ -1,12 +1,9 @@
 /*
- * Public API Surface of @novyk/ngfe
+ * Public API Surface of ngfe package.
  */
 
-export * from './lib/fe.module';
-export * from './lib/destroy';
-export * from './lib/err';
+export * from './lib/controls';
 export * from './lib/file';
-export * from './lib/fn-validator';
 export * from './lib/model';
-export * from './lib/ref';
-export * from './lib/submit';
+export * from './lib/validators';
+export * from './lib/fe.module';
