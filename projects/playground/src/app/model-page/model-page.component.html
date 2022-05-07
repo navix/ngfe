@@ -4,11 +4,11 @@
 
 <form>
   <h4>text</h4>
-  INP_TEXT1: <input type="text" [(feModel)]="form.inputText"><br>
-  INP_TEXT1: <input type="text" [(feModel)]="form.inputText"><br>
-  INP_TEXT2: <input type="text" [(feModel)]="form.inputText2"><br>
-  INP_TEXT3: <input type="text" [(feModel)]="form.inputText3" [forceUndefined]="true"><br>
-  TEXTAREA: <textarea [(feModel)]="form.textarea"></textarea><br>
+  INP_TEXT1: <input type="text" [(feModel)]="form.inputText" name="t1"><br>
+  INP_TEXT1: <input type="text" [(feModel)]="form.inputText" name="t12"><br>
+  INP_TEXT2: <input type="text" [(feModel)]="form.inputText2" name="t2"><br>
+  INP_TEXT3: <input type="text" [(feModel)]="form.inputText3" [forceUndefined]="true" name="t3"><br>
+  TEXTAREA: <textarea [(feModel)]="form.textarea" name="ta1"></textarea><br>
   <hr>
   <h4>input - number</h4>
   <hr>
@@ -23,23 +23,31 @@
   <h4>input - range</h4>
   <hr>
   <h4>checkbox</h4>
-  <input type="checkbox" [(feModel)]="form.checkbox1"> CHECKY 1<br>
-  <input type="checkbox" [(feModel)]="form.checkbox2"> CHECKY 2<br>
+  <input type="checkbox" [(feModel)]="form.checkbox1" name="cb1"> CHECKY 1<br>
+  <input type="checkbox" [(feModel)]="form.checkbox2" name="cb2"> CHECKY 2<br>
   <hr>
   <h4>radio - string</h4>
-  <input type="radio" [(feModel)]="form.radio1" value="one"> RADIO1-1<br>
-  <input type="radio" [(feModel)]="form.radio1" value="two"> RADIO1-2<br>
+  <input type="radio" [(feModel)]="form.radio1" value="one" name="r1"> RADIO1-1<br>
+  <input type="radio" [(feModel)]="form.radio1" value="two" name="r1"> RADIO1-2<br>
   <hr>
   <h4>radio - number</h4>
-  <input type="radio" [(feModel)]="form.radio2" [value]="1"> RADIO2-1<br>
-  <input type="radio" [(feModel)]="form.radio2" [value]="2"> RADIO2-2<br>
-  <input type="radio" [(feModel)]="form.radio2" [value]="5"> RADIO2-5<br>
+  <input type="radio" [(feModel)]="form.radio2" [value]="1" name="r2"> RADIO2-1<br>
+  <input type="radio" [(feModel)]="form.radio2" [value]="2" name="r2"> RADIO2-2<br>
+  <input type="radio" [(feModel)]="form.radio2" [value]="5" name="r2"> RADIO2-5<br>
   <hr>
   <h4>select - single string</h4>
-  <select [(feModel)]="form.select1">
+  <select [(feModel)]="form.select1" name="select1">
     <option value="one">ONE</option>
     <option value="two">TWO</option>
     <option value="three">THREE</option>
+  </select>
+  <hr>
+  <h4>select - empty value without empty options</h4>
+  <select [(feModel)]="form.select2" name="select2">
+    <option value="one">ONE</option>
+    <option value="two">TWO</option>
+    <option value="three">THREE</option>
+    <option>FOUR</option>
   </select>
   <hr>
   <h4>select - single non-string</h4>
@@ -53,14 +61,14 @@
 
 <form>
   <h4>required</h4>
-  <input type="text" [(feModel)]="form2.text1" required #m="feModel">
+  <input type="text" [(feModel)]="form2.text1" required #m="feModel" name="t1">
   {{ m.errors | json }}<br>
-  <input type="text" [(feModel)]="form2.text2" [required]="true" #m2="feModel">
+  <input type="text" [(feModel)]="form2.text2" [required]="true" #m2="feModel" name="t2">
   {{ m2.errors | json }}<br>
-  <input type="text" [(feModel)]="form2.text3" [required]="form2.text3_req" #m3="feModel">
+  <input type="text" [(feModel)]="form2.text3" [required]="form2.text3_req" #m3="feModel" name="t3">
   {{ m3.errors | json }}
-  <input type="checkbox" [(feModel)]="form2.text3_req"><br>
-  <input type="text" [(feModel)]="form2.text4" [validators]="[text4validator]" #m4="feModel">
+  <input type="checkbox" [(feModel)]="form2.text3_req" name="t3c"><br>
+  <input type="text" [(feModel)]="form2.text4" [validators]="[text4validator]" #m4="feModel" name="t4">
   {{ m4.errors | json }}<br>
   <br>
 </form>
@@ -70,20 +78,20 @@
 
 <form>
   <app-field label="Req field">
-    <input [(feModel)]="form3.text1" #model3_1="feModel" type="text" required>
+    <input [(feModel)]="form3.text1" #model3_1="feModel" type="text" required name="t1">
     <div *ngIf="model3_1.displayedErrors as errors" errors>
       {{ errors | json }}
     </div>
   </app-field>
   <app-field label="Non-req field">
-    <input [(feModel)]="form3.text2" type="text"><br>
+    <input [(feModel)]="form3.text2" type="text" name="t2"><br>
   </app-field>
 </form>
 
 
 <h4>Errors output</h4>
 <form (feSubmit)="submit()">
-  <input [(feModel)]="form3.text3" #model3_3="feModel" type="text" required>
+  <input [(feModel)]="form3.text3" #model3_3="feModel" type="text" required name="t1">
   touched$: {{ model3_3.touched$ | async | json }}
   touched: {{ model3_3.touched | json }}
   <div *ngIf="model3_3.displayedErrors as errors">

@@ -22,7 +22,7 @@ import { FeModelValidator, FeModelValue } from './meta';
 export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   @Input() feModel?: T;
 
-  @Input() name?: string;
+  @Input() name!: string;
 
   // @todo impl
   @Input() default?: T;
@@ -65,6 +65,9 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.name) {
+      throw new Error('feModel should have a name.');
+    }
     if ('feModel' in changes) {
       // @todo RLY?
       if (this.feModel === this.value.value) {

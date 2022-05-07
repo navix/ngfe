@@ -2,19 +2,17 @@ import { Directive, ElementRef, Host, HostListener, Input, Renderer2 } from '@an
 import { filter } from 'rxjs/operators';
 import { FeModel } from '../../model';
 
-// @todo use NOT, to catch case where type is not defined and other text-like inputs
-// @todo autoresize for textarea and move to separated directive?
 @Directive({
-  selector: 'input[type="text"][feModel],textarea[feModel]',
+  selector: 'input[type="date"][feModel]',
 })
-export class FeInputText {
+export class FeInputDate {
   /**
-   * Set undefined if input is empty ('').
+   * Convert input from/to Date object.
    */
-  @Input() forceUndefined = false;
+  @Input() jsDate = false;
 
   constructor(
-    @Host() private model: FeModel<string>,
+    @Host() private model: FeModel<string | Date>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
@@ -23,14 +21,19 @@ export class FeInputText {
       .value$
       .pipe(filter(v => v.source === 'MODEL'))
       .subscribe(value => {
-        this.renderer.setProperty(this.elementRef.nativeElement, 'value', value.value != null ? value.value : '');
+        const v = this.jsDate
+          ? (value instanceof Date) ? value.toISOString().substring(0, 10) : ''
+          : value.value != null ? value.value : '';
+        this.renderer.setProperty(this.elementRef.nativeElement, 'value', v);
       });
   }
 
   @HostListener('input', ['$event']) inputHandler(event: any) {
     const value = event?.target?.value;
     this.model.write({
-      value: value ? value : this.forceUndefined ? undefined : value,
+      value: this.jsDate
+        ? !!value ? new Date(value) : undefined
+        : value,
       source: 'CONTROL',
     });
   }

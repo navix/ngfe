@@ -9,6 +9,7 @@ import { FeModel } from '../../../../../ngfe/src/lib/model';
 export class FieldComponent implements OnInit, AfterViewInit {
   @Input() label?: string;
 
+  // @todo use static
   @ContentChild(FeModel) model?: FeModel;
 
   constructor(

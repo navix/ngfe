@@ -27,4 +27,6 @@ export class FeInputCheckbox {
       source: 'CONTROL',
     });
   }
+
+  // @todo touch on focusout & click
 }

@@ -19,6 +19,7 @@ export class ModelPageComponent implements OnInit {
     radio2: 2,
     radio3: 2,
     select1: 'two',
+    select2: undefined,
   };
 
   form2 = {

@@ -31,4 +31,8 @@ export class FeInputRadio {
       });
     }
   }
+
+  // @todo accept only string ???
+  // @todo touch on focusout & click
+  // @todo and also need to trigger other radios with the same name
 }

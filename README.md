@@ -18,6 +18,7 @@ It is an alternative for the original `FormsModule`.
 * Handy ways to display validation errors.
 * Nice submit directive which touches all fields and checks validity.
 * Reduce bundle size dropping @angular/forms.
+* Native date input value transform to/from Date.
 
 
 ### Caveats
@@ -69,7 +70,7 @@ TODO
 ```
 <input #model="feModel" [(feModel)]="field" required>
 <span *ngIf="model.displayedErrors as errors>
-  <span *ngIf="errros.has('required')">Required</span>
+  <span *ngIf="errors.has('required')">Required</span>
 </span>
 ```
 
