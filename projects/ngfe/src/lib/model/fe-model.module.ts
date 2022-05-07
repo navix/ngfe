@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { FeForm } from './fe-form.directive';
 import { FeModel } from './fe-model.directive';
-import { FeButtonSubmit, FeFormSubmit } from './fe-submit.directive';
+import { FeButtonSubmitDirective, FeFormSubmit } from './fe-submit.directive';
 
 @NgModule({
   declarations: [
     FeModel,
     FeForm,
-    FeButtonSubmit,
+    FeButtonSubmitDirective,
     FeFormSubmit,
   ],
   exports: [
     FeModel,
     FeForm,
-    FeButtonSubmit,
+    FeButtonSubmitDirective,
     FeFormSubmit,
   ],
 })

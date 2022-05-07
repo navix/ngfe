@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
-import { FeFileHolderDirective } from './fe-file-holder.directive';
+import { FeFileHolder } from './fe-file-holder.directive';
 import { FeFileSelect } from './meta';
 
 @Component({
@@ -18,7 +18,7 @@ import { FeFileSelect } from './meta';
   changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'uiFile',
 })
-export class FeFileComponent {
+export class FeFile {
   @Input() readAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL';
 
   @Output() fileSelect = new EventEmitter<FeFileSelect[]>();
@@ -26,7 +26,7 @@ export class FeFileComponent {
   @Output() fileError = new EventEmitter<string>();
 
   constructor(
-    private holder: FeFileHolderDirective,
+    private holder: FeFileHolder,
     private elementRef: ElementRef,
   ) {
     this.holder.file = this;

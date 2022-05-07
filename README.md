@@ -19,6 +19,7 @@ It is an alternative for the original `FormsModule`.
 * Nice submit directive which touches all fields and checks validity.
 * Reduce bundle size dropping @angular/forms.
 * Native date input value transform to/from Date.
+* Strict data type checks in controls. 
 
 
 ### Caveats
@@ -113,6 +114,7 @@ TODO
 * [ ] Rework `feFile` - file input handling and customization
 * [ ] Rework `(feDestroy)` - maybe add (clear) event to `feModel` instead
 * [ ] Complete native controls
+  * [ ] Strict type checks 
 * [ ] Complete validators
 * [ ] Handle `disabled`
 * [ ] `FeForm` todos

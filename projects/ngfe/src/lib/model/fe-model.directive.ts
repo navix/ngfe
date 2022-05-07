@@ -1,7 +1,7 @@
 import {
-  ChangeDetectorRef,
   Directive,
-  EventEmitter, Inject,
+  EventEmitter,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -44,7 +44,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     @Optional() @Inject(FeForm) public form: FeForm | undefined,
-    private cdr: ChangeDetectorRef,
   ) {
     this.form?.models.add(this);
     this.value$.pipe().subscribe(() => {

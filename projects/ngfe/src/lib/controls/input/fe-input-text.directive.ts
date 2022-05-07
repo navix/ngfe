@@ -6,6 +6,7 @@ import { FeModel } from '../../model';
 // @todo autoresize for textarea and move to separated directive?
 @Directive({
   selector: 'input[type="text"][feModel],textarea[feModel]',
+  providers: [FeModel],
 })
 export class FeInputText {
   /**

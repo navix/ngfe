@@ -1,11 +1,11 @@
 import { Directive, HostBinding, HostListener } from '@angular/core';
-import { FeFileComponent } from './fe-file.component';
+import { FeFile } from './fe-file.component';
 
 @Directive({
   selector: '[feFileHolder]',
 })
-export class FeFileHolderDirective {
-  file?: FeFileComponent;
+export class FeFileHolder {
+  file?: FeFile;
 
   @HostBinding('style.display') styleDisplay = 'inline-block';
 

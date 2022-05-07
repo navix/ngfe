@@ -4,7 +4,7 @@ import { FeForm } from './fe-form.directive';
 @Directive({
   selector: 'button[feSubmit]',
 })
-export class FeButtonSubmit {
+export class FeButtonSubmitDirective {
   @Output() feSubmit = new EventEmitter();
 
   constructor(

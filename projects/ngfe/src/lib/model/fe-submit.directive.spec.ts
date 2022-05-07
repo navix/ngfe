@@ -1,8 +1,8 @@
-import { FeButtonSubmit } from './fe-submit.directive';
+import { FeButtonSubmitDirective } from './fe-submit.directive';
 
 describe('FeSubmitDirective', () => {
   it('should create an instance', () => {
-    const directive = new FeButtonSubmit();
+    const directive = new FeButtonSubmitDirective();
     expect(directive).toBeTruthy();
   });
 });
