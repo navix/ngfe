@@ -142,6 +142,17 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  get dirty() {
+    return this.state.dirty;
+  }
+
+  get dirty$() {
+    return this.state$.pipe(
+      map(state => state.dirty),
+      distinctUntilChanged(),
+    );
+  }
+
   // @todo get displayedErrors$(), ->touchedErrors?
   get displayedErrors() {
     return this.touched ? this.errors : undefined;

@@ -111,6 +111,7 @@ TODO
 TODO
 
 
+
 ### Submit
 
 #### On button
@@ -126,13 +127,12 @@ TODO
 
 TODO
 
+Model and Controller can be declared of different elements, you do not always need to define a custom control to create a component with a native input.
 
 
 
 ## TODO
 
-* Output value only when valid O_o ??
-* Detect situation when no controls bind?
 * `dirty`
 * `[default]` - not default, valueIfEmpty? Loops possibility. `(empty)="model = 'DEFAULT'"` event instead?
 * `(destroy)` event -- `(destroy)="model = undefined" || [destroyValue]="undefined"`. Still, loops possibilities. 
@@ -157,6 +157,7 @@ TODO
   * input text mask
   * focus control
   * feMath
+  * detect situation when no controls bind -- it could improve DX
 * Docs
   * README 
   * Stackblitz demos
