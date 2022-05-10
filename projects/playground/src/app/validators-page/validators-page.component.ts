@@ -11,6 +11,8 @@ import { delay, tap } from 'rxjs/operators';
 export class ValidatorsPageComponent {
   model1 = '';
 
+  debounce = 400;
+
   asyncValObs: FeValidator<string> = ({value}) => {
     return of({avo: true}).pipe(delay(500), tap(() => console.log('**** AVO END TAP')));
   };

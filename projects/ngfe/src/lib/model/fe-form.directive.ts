@@ -8,9 +8,6 @@ import { FeModel } from './fe-model.directive';
 export class FeForm {
   models = new Set<FeModel>();
 
-  constructor() {
-  }
-
   touchAll() {
     this.models.forEach(m => m.touched = true);
   }
@@ -20,7 +17,6 @@ export class FeForm {
   }
 
   // @todo valid$
-  // @todo value
-  // @todo value$
-  // @todo reset
+  // @todo change$
+  // @todo reset ???
 }

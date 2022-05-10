@@ -2,8 +2,18 @@
 
 <form>
   <div>
-    <input #m="feModel" [(feModel)]="model1" [validators]="[asyncValObs, asyncValProm, optAsyncObs]" feText name="model1">
+    <input
+        #m="feModel"
+        [(feModel)]="model1"
+        [debounce]="debounce"
+        [validators]="[asyncValObs, asyncValProm, optAsyncObs]"
+        feText
+        name="model1"
+    >
     <br>{{ m.validity | json }}
     <br>{{ m.errors | json }}
+  </div>
+  <div>
+    DEBOUNCE: <input [(feModel)]="debounce" feNumber>
   </div>
 </form>

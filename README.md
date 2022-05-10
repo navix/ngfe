@@ -21,6 +21,7 @@ It is an alternative for the original `FormsModule`.
 * Reduce bundle size dropping @angular/forms.
 * Native date input value transform to/from Date. ??
 * Stricter data type checks in controls. 
+* Built-in debounce.
 * Does not conflict with the native `FormsModule`.
 * Explicit native controls binding (input, select, etc). 
 * `OnPush` mode support.
@@ -130,7 +131,6 @@ TODO
 
 ## TODO
 
-* Ddebounce
 * Output value only when valid O_o ??
 * Detect situation when no controls bind?
 * `dirty`

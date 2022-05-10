@@ -10,8 +10,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { BehaviorSubject, forkJoin, from, Observable, of, Subject } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, from, Observable, of, Subject, timer } from 'rxjs';
+import { debounce, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { diff } from '../util';
 import { FeForm } from './fe-form.directive';
 import { FeModelState } from './fe-model-state';
@@ -31,6 +31,8 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   // @todo impl - do not register in the form
   @Input() standalone = false;
 
+  @Input() debounce?: number;
+
   @Output() feModelChange = new EventEmitter<T>();
 
   readonly initialValue = Symbol('initial');
@@ -43,6 +45,8 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     validity: 'initial',
     errors: {},
   });
+
+  private readonly _writeFromControl$ = new Subject<T | any>();
 
   private readonly _updateValidityCall$ = new Subject<undefined>();
 
@@ -60,11 +64,12 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     }, () => {
       console.log('CMPL');
     });
+
+    this.initWriteFromControlHandler();
     this.initValidityHandler();
   }
 
   ngOnInit() {
-    console.log('ON_INIT', this._state$);
     this.value$.subscribe(value => {
       console.log('VALUE$', value);
     });
@@ -74,7 +79,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
         filter(value => value !== this.feModel),
       )
       .subscribe(value => {
-        console.log('EMIT', value);
         this.feModelChange.emit(value);
       });
     forkJoin([
@@ -89,9 +93,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-//    if (!this.name) {
-//      throw new Error('feModel should have a name.');
-//    }
     if ('feModel' in changes) {
       if (this.feModel === this.value) {
         return;
@@ -212,19 +213,16 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       ...markAsDirty ? {dirty: true} : {},
       value,
     });
-    console.log('WRT', value, this._state$);
   }
 
-  writeFromControl(value: T) {
-    this.write(value, {markAsDirty: true, fromControl: true});
+  writeFromControl(value: T | any) {
+    this._writeFromControl$.next(value);
   }
 
-  // @todo use for add and remove
   updateValidators({add = [], remove = []}: {
     add?: FeValidator<T>[];
     remove?: FeValidator<T>[];
   }) {
-    console.log('UPD VALS');
     this._state$.next({
       ...this.state,
       validators: [...new Set([...this.state.validators, ...add])].filter(v => remove.indexOf(v) === -1),
@@ -236,12 +234,25 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   }
 
   // @todo run revalidate after zone tick?
-  // @todo update validity for passed names
   updateValidity() {
     this._updateValidityCall$.next();
   }
 
+  private initWriteFromControlHandler() {
+    this
+      ._writeFromControl$
+      .asObservable()
+      .pipe(
+        // @todo makes this always ASYNC!!! even when debounce === 0
+        debounce(() => timer(this.debounce)),
+      )
+      .subscribe(value => {
+        this.write(value, {markAsDirty: true, fromControl: true});
+      });
+  }
+
   private initValidityHandler() {
+    // @todo properly handle errors in stream
     this
       ._updateValidityCall$
       .asObservable()
@@ -252,12 +263,10 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
           for (const validator of this.state.validators) {
             const res = validator({value: this.value!});
             if (res instanceof Observable) {
-              console.log('VAL.OBSRV', res);
               asyncs.push(res);
               continue;
             }
             if (res instanceof Promise) {
-              console.log('VAL.PRMS', res);
               asyncs.push(from(res));
               continue;
             }
@@ -274,7 +283,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
         }),
       )
       .subscribe(errorsArray => {
-        console.log('>>>>> HANDLE ERRRS ARR');
         let errors: FeErrors = {};
         for (const error of errorsArray) {
           if (error) {
@@ -287,7 +295,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
         if (diff(this.state.errors, errors, {cyclesFix: false}).length === 0) {
           return;
         }
-        console.log('UPD VALIDITY', errors, this.state.errors);
         this._state$.next({
           ...this.state,
           errors,
