@@ -2,7 +2,7 @@ import { Directive } from '@angular/core';
 import { FeModel } from './fe-model.directive';
 
 @Directive({
-  selector: 'form',
+  selector: '[feForm]',
   exportAs: 'feForm',
 })
 export class FeForm {
