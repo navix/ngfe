@@ -1,0 +1,9 @@
+<h2>Validators</h2>
+
+<form>
+  <div>
+    <input #m="feModel" [(feModel)]="model1" [validators]="[asyncValObs, asyncValProm, optAsyncObs]" feText name="model1">
+    <br>{{ m.validity | json }}
+    <br>{{ m.errors | json }}
+  </div>
+</form>

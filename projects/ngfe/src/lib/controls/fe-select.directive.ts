@@ -1,6 +1,6 @@
 import {
   Directive,
-  ElementRef,
+  ElementRef, Host,
   HostListener,
   Input,
   OnChanges,
@@ -11,42 +11,43 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { FeModel } from '../../model';
+import { FeModel } from '../model';
+import { isString, checkStringErr } from '../util';
 
 @Directive({
   selector: 'select[feModel]',
 })
 export class FeSelect {
+  // @todo impl
+  @Input() emptyToUndefined = false;
+
   options = new Set<FeSelectOption>();
 
+  private value = '';
+
   constructor(
-    private model: FeModel<string>,
+    @Host() private model: FeModel<string>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
     this
       .model
       .value$
-      .pipe(filter(v => v.source === 'MODEL'))
+      .pipe(filter(value => value !== this.value))
       .subscribe(value => {
-        if ((typeof value.value !== 'string') && value.value != null) {
-          throw new Error(`FeSelect: model value should be empty or a string, ${typeof value.value} "${value.value}" passed.`);
-        }
+        checkStringErr('FeSelect', value);
+        this.value = value;
         this.bindValue();
       });
   }
 
   @HostListener('change', ['$event']) inputHandler(event: any) {
-    const value = event?.target?.value;
-    this.model.write({
-      value: value,
-      source: 'CONTROL',
-    });
+    this.value = event?.target?.value || '';
+    this.model.write(this.value);
   }
 
   bindValue() {
-    const v = this.model.value.value != null ? this.model.value.value : null;
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', v);
+    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.value);
   }
 
   @HostListener('focusout') focusoutHandler() {
@@ -84,12 +85,12 @@ export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
       return;
     }
     if ('value' in changes) {
-      if (this.value !== undefined && (typeof this.value !== 'string')) {
+      if (this.value !== undefined && !isString(this.value)) {
         throw new Error('FeSelectOption: <option> [value] should be a string.');
       }
     }
     if ('selected' in changes) {
-      throw new Error('FeSelectOption: Do not bind [selected], set value in [feModel] on <select>.');
+      throw new Error('FeSelectOption: Do not bind [selected], set value to [feModel] on <select>.');
     }
   }
 

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ContentChild, Input, OnInit } from '@angular/core';
-import { FeModel } from '../../../../../ngfe/src/lib/model';
+import { FeModel } from 'ngfe';
 
 @Component({
   selector: 'app-field',
@@ -26,7 +26,8 @@ export class FieldComponent implements OnInit, AfterViewInit {
   }
 
   get required() {
-    return !!this.model?.getValidator('required');
+    return false;
+//    return !!this.model?.getValidator('required');
   }
 
   get invalid() {

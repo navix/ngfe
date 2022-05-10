@@ -1,0 +1,21 @@
+<h1>[feNumber]</h1>
+
+<form>
+  <div>
+    input[type=number]<br>
+    <input [(feModel)]="number1" feNumber name="numb1" type="number">
+    {{ number1 | json }}
+  </div>
+  <div>
+    input[type=text]<br>
+    <input [(feModel)]="number2" feNumber name="numb1">
+    {{ number2 | json }}
+  </div>
+  <div>
+    outside fe model<br>
+    <div [(feModel)]="number4">
+      <input feNumber name="numb4">
+      {{ number4 | json }}
+    </div>
+  </div>
+</form>

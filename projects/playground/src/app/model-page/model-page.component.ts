@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { FeModelValidator } from '../../../../ngfe/src/lib/model';
+import { FeValidator } from 'ngfe';
 
 @Component({
   selector: 'app-model-page',
@@ -16,8 +15,8 @@ export class ModelPageComponent implements OnInit {
     checkbox1: false,
     checkbox2: true,
     radio1: 'one',
-    radio2: 2,
-    radio3: 2,
+    radio2: '2',
+    radio3: undefined,
     select1: 'two',
     select2: undefined,
   };
@@ -36,11 +35,8 @@ export class ModelPageComponent implements OnInit {
     text3: '',
   };
 
-  text4validator: FeModelValidator<string> = {
-    name: 't4v',
-    validator: ({value}) => {
-      return value.value === 'MEH';
-    },
+  text4validator: FeValidator<string> = ({value}) => {
+    return value === 'MEH' ? {text4: true} : undefined;
   };
 
   constructor() {

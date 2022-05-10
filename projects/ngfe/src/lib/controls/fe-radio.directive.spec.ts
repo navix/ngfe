@@ -1,8 +1,8 @@
-import { FeInputRadio } from './fe-input-radio.directive';
+import { FeRadio } from './fe-radio.directive';
 
 describe('FeInputRadioDirective', () => {
   it('should create an instance', () => {
-    const directive = new FeInputRadio();
+    const directive = new FeRadio();
     expect(directive).toBeTruthy();
   });
 });

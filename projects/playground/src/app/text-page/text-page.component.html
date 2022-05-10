@@ -1,0 +1,12 @@
+<h2>[feText]</h2>
+
+<form>
+  <div>
+    <input [(feModel)]="text1" feText name="text1">
+    {{ text1 | json }}
+  </div>
+  <div>
+    <input [(feModel)]="text2" feText name="text2" type="number">
+    {{ text2 | json }}
+  </div>
+</form>

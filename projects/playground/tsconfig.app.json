@@ -5,7 +5,7 @@
     "outDir": "../../out-tsc/app",
     "types": [],
     "paths": {
-      "@novyk/ngfe": [
+      "ngfe": [
         "projects/ngfe/src/public-api"
       ]
     }
