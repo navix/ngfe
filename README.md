@@ -133,7 +133,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* `dirty`
 * `[default]` - not default, valueIfEmpty? Loops possibility. `(empty)="model = 'DEFAULT'"` event instead?
 * `(destroy)` event -- `(destroy)="model = undefined" || [destroyValue]="undefined"`. Still, loops possibilities. 
 * `reset()` - state not values
