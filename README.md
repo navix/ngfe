@@ -138,14 +138,11 @@ Model and Controller can be declared of different elements, you do not always ne
 ## TODO
 
 * `reset()` - state not values
-* Rework `feFile` - file input handling and customization
-* Rework `(feDestroy)` - maybe add (clear) event to `feModel` instead
-* Complete native controls (value accessors)
-  * Strict type checks
-  * Ability to override default controls
-* Complete validators
 * Handle `disabled`
 * `FeForm` todos
+* Rework `feFile` - file input handling and customization
+* Complete built-in controls (value accessors)
+* Complete built-in validators
 * Debug mode
 * `FeAdapterModule`
   * Integration with native ValueAccessor
@@ -170,6 +167,7 @@ Model and Controller can be declared of different elements, you do not always ne
     * Dynamic forms 
     * Combine custom control with custom validators under one component. 
     * Type convert: `[feModel]="dateToString(someDate)" (feModelChange)="stringToDate($event)"`
+    * Register validator from child component // How to debug this sheesh?
   * Links to forms UX articles 
 * Specs
 * CI release

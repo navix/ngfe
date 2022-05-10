@@ -1,6 +1,17 @@
 <h2>Validators</h2>
 
 <form>
+  Required
+  <div>
+    <input #m0="feModel" [(feModel)]="model0" feText required>
+  </div>
+  {{ m0.validity }}<br>
+  touched={{ m0.touched }}<br>
+  {{ m0.errors | json }}
+</form>
+
+<form>
+  Asyncs
   <div>
     <input
         #m="feModel"

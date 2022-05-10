@@ -1,4 +1,5 @@
 import { Directive, EventEmitter, HostListener, Inject, Optional, Output } from '@angular/core';
+import { err } from '../util';
 import { FeForm } from './fe-form.directive';
 
 @Directive({
@@ -11,7 +12,7 @@ export class FeButtonSubmitDirective {
     @Optional() @Inject(FeForm) private form: FeForm,
   ) {
     if (!this.form) {
-      throw new Error('FeSubmit should be used inside <form>.');
+      err('FeSubmit', 'Should be used inside <form>.');
     }
   }
 
@@ -24,7 +25,7 @@ export class FeButtonSubmitDirective {
 }
 
 @Directive({
-  selector: 'form[feSubmit]',
+  selector: '[feForm][feSubmit]',
 })
 export class FeFormSubmit {
   @Output() feSubmit = new EventEmitter();

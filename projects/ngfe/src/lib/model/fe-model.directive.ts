@@ -155,10 +155,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  get pending() {
-    return this.state.validity === 'pending';
-  }
-
   // @todo get displayedErrors$(), ->touchedErrors?
   get displayedErrors() {
     return this.touched ? this.errors : undefined;
@@ -213,6 +209,28 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     return this.state$.pipe(map(state => state.validity), distinctUntilChanged());
   }
 
+  /**
+   * True when model passed all validators.
+   */
+  get valid() {
+    return this.state.validity === 'valid';
+  }
+
+  /**
+   * True if model has errors.
+   * Invalid state is not opposite to valid - pending model is also not invalid.
+   */
+  get invalid() {
+    return this.state.validity === 'invalid';
+  }
+
+  /**
+   * True if model has async validators in progress.
+   */
+  get pending() {
+    return this.state.validity === 'pending';
+  }
+
   isInitialValue(value: T | symbol): value is symbol {
     return value === this.initialValue;
   }
@@ -244,10 +262,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       ...this.state,
       validators: [...new Set([...this.state.validators, ...add])].filter(v => remove.indexOf(v) === -1),
     });
-  }
-
-  addValidator(validator: FeValidator<T>) {
-    this.updateValidators({add: [validator]});
   }
 
   updateValidity() {

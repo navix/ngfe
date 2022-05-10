@@ -87,20 +87,20 @@
 
 <form>
   <app-field label="Req field">
-    <input #model3_1="feModel" [(feModel)]="form3.text1" name="t1" required type="text">
+    <input #model3_1="feModel" [(feModel)]="form3.text1" feText name="t1" required type="text">
     <div *ngIf="model3_1.displayedErrors as errors" errors>
       {{ errors | json }}
     </div>
   </app-field>
   <app-field label="Non-req field">
-    <input [(feModel)]="form3.text2" name="t2" type="text"><br>
+    <input [(feModel)]="form3.text2" feText name="t2" type="text"><br>
   </app-field>
 </form>
 
 
 <h4>Errors output</h4>
-<form (feSubmit)="submit()">
-  <input #model3_3="feModel" [(feModel)]="form3.text3" name="t1" required type="text">
+<form (feSubmit)="submit()" feForm>
+  <input #model3_3="feModel" [(feModel)]="form3.text3" feText name="t1" required type="text">
   touched$: {{ model3_3.touched$ | async | json }}
   touched: {{ model3_3.touched | json }}
   <div *ngIf="model3_3.displayedErrors as errors">

@@ -9,6 +9,7 @@ import { delay, tap } from 'rxjs/operators';
   styleUrls: ['./validators-page.component.scss'],
 })
 export class ValidatorsPageComponent {
+  model0 = '';
   model1 = '';
 
   debounce = 400;
