@@ -9,6 +9,7 @@
         [validators]="[asyncValObs, asyncValProm, optAsyncObs]"
         feText
         name="model1"
+        [disabled]="m.pending"
     >
     <br>{{ m.validity | json }}
     <br>{{ m.errors | json }}

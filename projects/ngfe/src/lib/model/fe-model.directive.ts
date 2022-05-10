@@ -24,6 +24,8 @@ import { FeErrors, FeValidator, FeValidatorResult } from './fe-validator';
 export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   @Input() feModel!: T;
 
+  @Input() default?: T;
+
   @Input() name?: string;
 
   @Input() validators?: FeValidator<T>[];
@@ -34,6 +36,8 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   @Input() debounce?: number;
 
   @Output() feModelChange = new EventEmitter<T>();
+
+  @Output() destroy = new EventEmitter<undefined>();
 
   readonly initialValue = Symbol('initial');
 
@@ -94,12 +98,9 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if ('feModel' in changes) {
-      if (this.feModel === this.value) {
-        return;
+      if (this.feModel !== this.value) {
+        this.write(this.feModel);
       }
-      this.write(this.feModel, {
-        markAsDirty: false,
-      });
     }
     if ('validators' in changes) {
       const prev: FeValidator<T>[] | undefined = changes.validators.previousValue;
@@ -112,6 +113,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.form?.models.delete(this);
+    this.destroy.emit();
   }
 
   get state() {
@@ -151,6 +153,10 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       map(state => state.dirty),
       distinctUntilChanged(),
     );
+  }
+
+  get pending() {
+    return this.state.validity === 'pending';
   }
 
   // @todo get displayedErrors$(), ->touchedErrors?
@@ -244,7 +250,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     this.updateValidators({add: [validator]});
   }
 
-  // @todo run revalidate after zone tick?
   updateValidity() {
     this._updateValidityCall$.next();
   }
@@ -268,6 +273,8 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       ._updateValidityCall$
       .asObservable()
       .pipe(
+        // Makes validators run async from init and gather multiple sync calls.
+        debounce(() => timer(0)),
         switchMap(() => {
           let syncs: Observable<FeValidatorResult>[] = [];
           let asyncs: Observable<FeValidatorResult>[] = [];

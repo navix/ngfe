@@ -10,6 +10,7 @@ import { ModelPageComponent } from './model-page/model-page.component';
 import { TextPageComponent } from './text-page/text-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
+import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ValidatorsPageComponent } from './validators-page/validators-page.compo
     TextPageComponent,
     NumberPageComponent,
     ValidatorsPageComponent,
+    LifecyclePageComponent,
   ],
   imports: [
     BrowserModule,

@@ -70,11 +70,15 @@ imports: [
 
 ### Default value
 
-TODO
+```
+<input [feModel]="field || 'DEFAULT'" (feModelChange)="field = $event" feText>
+```
 
 ### Clean up
 
-TODO
+```
+<input *ngIf="show" [(feModel)]="field" (destroy)="field = undefined" feText>
+```
 
 ## Built-in controls
 
@@ -133,8 +137,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* `[default]` - not default, valueIfEmpty? Loops possibility. `(empty)="model = 'DEFAULT'"` event instead?
-* `(destroy)` event -- `(destroy)="model = undefined" || [destroyValue]="undefined"`. Still, loops possibilities. 
 * `reset()` - state not values
 * Rework `feFile` - file input handling and customization
 * Rework `(feDestroy)` - maybe add (clear) event to `feModel` instead
