@@ -12,6 +12,7 @@ import { NumberPageComponent } from './number-page/number-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { SelectPageComponent } from './select-page/select-page.component';
+import { CheckboxPageComponent } from './checkbox-page/checkbox-page.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { SelectPageComponent } from './select-page/select-page.component';
     ValidatorsPageComponent,
     LifecyclePageComponent,
     SelectPageComponent,
+    CheckboxPageComponent,
   ],
   imports: [
     BrowserModule,
