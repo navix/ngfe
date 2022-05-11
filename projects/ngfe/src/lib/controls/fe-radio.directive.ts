@@ -15,26 +15,21 @@ import { FeModel } from '../model';
 import { err, isString } from '../util';
 
 @Directive({
-  selector: 'input[type="radio"]',
+  selector: 'input[type="radio"][feRadio]',
 })
 export class FeRadio implements OnDestroy, OnChanges {
   @Input() value!: string;
 
-  private checked = '';
-
   private destroy$ = new Subject();
 
   constructor(
-    @Host() private model: FeModel<string>,
+    private model: FeModel<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    if (!this.model) {
-      return;
-    }
     this
       .model
-      .value$
+      .valueToControl$
       .pipe(
         takeUntil(this.destroy$),
         filter(value => this.value === value),
@@ -46,11 +41,8 @@ export class FeRadio implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.model) {
-      return;
-    }
     if ('value' in changes) {
-      if (!this.value) {
+      if (this.value == null) {
         err('FeRadio', '<radio> [value] should be defined.');
       }
       if (!isString(this.value)) {

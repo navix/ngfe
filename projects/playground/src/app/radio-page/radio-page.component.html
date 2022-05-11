@@ -1,0 +1,20 @@
+<h2>[feRadio]</h2>
+
+<form>
+  <div [(feModel)]="model1">
+    <input type="radio" feRadio name="model1" value="VAL1"> VAL1<br>
+    <input type="radio" feRadio name="model1" value="VAL2"> VAL2<br>
+    <input type="radio" feRadio name="model1" value="VAL3"> VAL3
+    <br>
+    {{ model1 | json }}
+  </div>
+
+  <div [(feModel)]="model2">
+    Undefined<br>
+    <input type="radio" feRadio name="model2" value="VAL1"> VAL1<br>
+    <input type="radio" feRadio name="model2" value="VAL2"> VAL2<br>
+    <input type="radio" feRadio name="model2" value="VAL3"> VAL3
+    <br>
+    {{ model2 | json }}
+  </div>
+</form>

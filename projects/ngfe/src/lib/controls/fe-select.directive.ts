@@ -20,7 +20,7 @@ export class FeSelect {
   options = new Set<FeSelectOption>();
 
   constructor(
-    @Host() private model: FeModel<string | undefined>,
+    private model: FeModel<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
@@ -60,7 +60,7 @@ export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
     private select: FeSelect,
   ) {
     if (!this.select) {
-      err('FeOption', 'Should be used only under [feSelect].');
+      err('FeOption', 'Should be used only on select with [feSelect].');
     }
     this.select.options.add(this);
   }

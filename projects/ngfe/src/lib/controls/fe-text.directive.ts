@@ -9,7 +9,7 @@ export class FeText {
   // @todo updateOn: 'change' | 'blur'
 
   constructor(
-    @Host() private model: FeModel<string | undefined>,
+    private model: FeModel<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {

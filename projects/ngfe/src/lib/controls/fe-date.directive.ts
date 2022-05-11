@@ -1,10 +1,10 @@
-import { Directive, ElementRef, Host, HostListener, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 import { filter, map } from 'rxjs/operators';
 import { FeModel } from '../model';
 import { checkStringErr } from '../util';
 
 @Directive({
-  selector: 'input[type="date"][feModel]',
+  selector: 'input[type="date"][feDate]',
 })
 export class FeDate {
   /**
@@ -18,7 +18,7 @@ export class FeDate {
   private value = '';
 
   constructor(
-    @Host() private model: FeModel<string | undefined>,
+    private model: FeModel<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {

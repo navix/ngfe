@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Host, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { FeModel } from '../model';
 
 @Directive({
@@ -6,7 +6,7 @@ import { FeModel } from '../model';
 })
 export class FeCheckbox {
   constructor(
-    @Host() private model: FeModel<boolean | undefined>,
+    private model: FeModel<boolean | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
