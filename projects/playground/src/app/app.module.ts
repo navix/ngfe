@@ -11,6 +11,7 @@ import { TextPageComponent } from './text-page/text-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
+import { SelectPageComponent } from './select-page/select-page.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.componen
     NumberPageComponent,
     ValidatorsPageComponent,
     LifecyclePageComponent,
+    SelectPageComponent,
   ],
   imports: [
     BrowserModule,

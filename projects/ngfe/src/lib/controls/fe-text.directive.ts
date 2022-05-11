@@ -3,7 +3,7 @@ import { FeModel } from '../model';
 import { checkStringErr } from '../util';
 
 @Directive({
-  selector: '[feText]',
+  selector: 'input[feText],textarea[feText]',
 })
 export class FeText {
   // @todo updateOn: 'change' | 'blur'
