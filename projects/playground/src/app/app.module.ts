@@ -16,6 +16,7 @@ import { CheckboxPageComponent } from './checkbox-page/checkbox-page.component';
 import { RadioPageComponent } from './radio-page/radio-page.component';
 import { FieldPageComponent } from './field-page/field-page.component';
 import { FormPageComponent } from './form-page/form-page.component';
+import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FormPageComponent } from './form-page/form-page.component';
     RadioPageComponent,
     FieldPageComponent,
     FormPageComponent,
+    DisabledPageComponent,
   ],
   imports: [
     BrowserModule,

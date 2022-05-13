@@ -6,9 +6,7 @@
   <input
     *ngIf="show1"
     [(feModel)]="val1"
-    [default]="'321'"
     (destroy)="val1 = undefined"
-    (empty)="val1 = '321'"
     feText
   >
   {{ val1 | json }}

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Host, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, Renderer2 } from '@angular/core';
 import { FeModel } from '../model';
 import { checkStringErr } from '../util';
 
@@ -24,6 +24,10 @@ export class FeText {
         }
         this.renderer.setProperty(this.elementRef.nativeElement, 'value', value == null ? '' : value);
       });
+  }
+
+  @HostBinding('attr.disabled') get disabled() {
+    return this.model.disabled || null;
   }
 
   @HostListener('input', ['$event']) inputHandler(event: any) {

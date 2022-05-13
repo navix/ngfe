@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, forkJoin, from, Observable, of, Subject, timer } from 'rxjs';
 import { debounce, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
-import { diff } from '../util';
+import { coerceToBoolean, diff } from '../util';
 import { FeField } from './fe-field.directive';
 import { FeForm } from './fe-form.directive';
 import { FeModelState } from './fe-model-state';
@@ -25,9 +25,12 @@ import { FeErrors, FeValidator, FeValidatorResult } from './fe-validator';
 export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   @Input() feModel!: T;
 
-  @Input() default?: T;
-
   @Input() name?: string;
+
+  /**
+   * Disabled model is removed from the FeForm.
+   */
+  @Input() disabled?: boolean | string;
 
   @Input() validators?: FeValidator<T>[];
 
@@ -66,7 +69,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       this.updateValidity();
     });
     this._state$.subscribe(state => {
-      console.log('STATE$', state);
+//      console.log('STATE$', state);
     }, error => {
       console.log('ERR RLY');
     }, () => {
@@ -104,6 +107,13 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     if ('feModel' in changes) {
       if (this.feModel !== this.state.value) {
         this.write(this.feModel);
+      }
+    }
+    if ('disabled' in changes) {
+      if (coerceToBoolean(this.disabled)) {
+        this.form?.removeModel(this);
+      } else {
+        this.form?.addModel(this);
       }
     }
     if ('validators' in changes) {
@@ -312,7 +322,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
         // Makes validators run async from init and gather multiple sync calls.
         debounce(() => timer(0)),
         switchMap(() => {
-          console.log('RUN VLDTU');
           let syncs: Observable<FeValidatorResult>[] = [];
           let asyncs: Observable<FeValidatorResult>[] = [];
           for (const validator of this.state.validators) {
@@ -353,7 +362,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
         }
         const isValid = Object.keys(errors).length === 0;
         const validity = isValid ? 'valid' : 'invalid';
-        console.log('VLDT', isValid, validity, errors);
         if (this.state.validity === validity && diff(this.state.errors || {}, errors, {cyclesFix: false}).length === 0) {
           return;
         }

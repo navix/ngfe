@@ -48,7 +48,9 @@ export class FeForm {
   }
 
   addModel(model: FeModel) {
-    this.modelsMap.set(model, model.value$.subscribe(this._change$));
+    if (!this.modelsMap.has(model)) {
+      this.modelsMap.set(model, model.value$.subscribe(this._change$));
+    }
   }
 
   removeModel(model: FeModel) {

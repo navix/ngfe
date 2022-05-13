@@ -145,12 +145,12 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Handle `disabled`
+* Add `Input` suffix to model input fields
 * Rework `feFile` - file input handling and customization
 * Rx service to with noDestroy helpers, use them in all controls.
 * Complete built-in controls (value accessors)
 * Complete built-in validators
-* Debug mode
+* Debug mode ??
 * Labs:
   * `DisplayedErrorsStrategy`
   * `DisabledStrategy`
@@ -169,6 +169,7 @@ Model and Controller can be declared of different elements, you do not always ne
     * `| errors`
     * `<app-field>`
     * UI kit demo: field, errors, styled inputs
+    * TODO MVC demo
     * Place links in the README
   * Fancy hacks
     * Dynamic forms 

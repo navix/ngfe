@@ -1,0 +1,15 @@
+<h2>Disabled</h2>
+
+<div>
+  <form feForm #f1="feForm">
+    <input [(feModel)]="model1" feText [disabled]="model1disabled" #m1="feModel" required>
+    <div>
+      DISABLED: {{ m1.disabled | json }}<br>
+      VALID: {{ m1.validity | json }}
+    </div>
+    <button (click)="model1disabled = !model1disabled">D_TOGGLE</button>
+    <div>
+      FORM_VALID: {{ f1.valid | json }}
+    </div>
+  </form>
+</div>

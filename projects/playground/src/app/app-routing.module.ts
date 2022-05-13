@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CheckboxPageComponent } from './checkbox-page/checkbox-page.component';
+import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldPageComponent } from './field-page/field-page.component';
 import { FilePageComponent } from './file-page/file-page.component';
 import { FormPageComponent } from './form-page/form-page.component';
@@ -56,6 +57,10 @@ const routes: Routes = [
   {
     path: 'form',
     component: FormPageComponent,
+  },
+  {
+    path: 'disabled',
+    component: DisabledPageComponent,
   },
 ];
 
