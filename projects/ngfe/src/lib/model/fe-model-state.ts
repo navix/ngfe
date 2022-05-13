@@ -7,5 +7,5 @@ export interface FeModelState<T> {
   dirty: boolean;
   validators: FeValidator<T>[];
   validity: 'initial' | 'pending' | 'valid' | 'invalid';
-  errors: FeErrors;
+  errors?: FeErrors;
 }

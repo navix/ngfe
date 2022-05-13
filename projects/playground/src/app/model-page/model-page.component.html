@@ -83,21 +83,6 @@
 </form>
 
 
-<h3>Field Proto</h3>
-
-<form>
-  <app-field label="Req field">
-    <input #model3_1="feModel" [(feModel)]="form3.text1" feText name="t1" required type="text">
-    <div *ngIf="model3_1.displayedErrors as errors" errors>
-      {{ errors | json }}
-    </div>
-  </app-field>
-  <app-field label="Non-req field">
-    <input [(feModel)]="form3.text2" feText name="t2" type="text"><br>
-  </app-field>
-</form>
-
-
 <h4>Errors output</h4>
 <form (feSubmit)="submit()" feForm>
   <input #model3_3="feModel" [(feModel)]="form3.text3" feText name="t1" required type="text">

@@ -20,8 +20,9 @@ It is an alternative for the original `FormsModule`.
 * Nice submit directive which touches all fields and checks validity.
 * Reduce bundle size dropping @angular/forms.
 * Native date input value transform to/from Date. ??
-* Stricter data type checks in controls. 
+* Stricter data type checks in controls.
 * Built-in debounce.
+* Helper directive for build a custom field component.
 * Does not conflict with the native `FormsModule`.
 * Explicit native controls binding (input, select, etc). 
 * `OnPush` mode support.
@@ -58,6 +59,7 @@ imports: [
   * State - ...
   * Value - ...
 * Control - ...
+* Field - ...
 * Validator - ...
 * Validity - ...
 * Error - ...
@@ -87,13 +89,13 @@ imports: [
 ### `[feNumber]`
 
 
-### Validation
+## Validation
 
 ```
 <input [(feModel)]="field" required>
 ```
 
-#### Display Errors
+### Display Errors
 
 ```
 <input #model="feModel" [(feModel)]="field" required>
@@ -104,34 +106,39 @@ imports: [
 
 You can move errors displaying in a separated component or use pipe to reduce boilerplate.
 
-#### Built-in validators
-
-#### Function validator
+### Built-in validators
 
 TODO
 
-#### Custom validator directive
+### Function validator
 
 TODO
 
-
-
-### Submit
-
-#### On button
-
-TODO
-
-#### On form
+### Custom validator
 
 TODO
 
 
-### Custom controls
+
+## Submit
+
+### On button
+
+TODO
+
+### On form
+
+TODO
+
+
+## Custom controls
 
 TODO
 
 Model and Controller can be declared of different elements, you do not always need to define a custom control to create a component with a native input.
+
+
+## Custom field
 
 
 
@@ -148,7 +155,7 @@ Model and Controller can be declared of different elements, you do not always ne
 * `FeAdapterModule`
   * Integration with native ValueAccessor
   * Integration with native Validator
-* Labs:
+* Labs: 
   * `DisplayedErrorsStrategy`
   * `DisabledStrategy`
   * Optional scroll to first invalid field.

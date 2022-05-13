@@ -13,6 +13,7 @@ import {
 import { BehaviorSubject, forkJoin, from, Observable, of, Subject, timer } from 'rxjs';
 import { debounce, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { diff } from '../util';
+import { FeField } from './fe-field.directive';
 import { FeForm } from './fe-form.directive';
 import { FeModelState } from './fe-model-state';
 import { FeErrors, FeValidator, FeValidatorResult } from './fe-validator';
@@ -47,7 +48,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     dirty: false,
     validators: [],
     validity: 'initial',
-    errors: {},
   });
 
   private readonly _writeFromControl$ = new Subject<T | any>();
@@ -56,8 +56,12 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     @Optional() @Inject(FeForm) public form: FeForm | undefined,
+    @Optional() @Inject(FeField) public field: FeField<T> | undefined,
   ) {
     this.form?.models.add(this);
+    if (this.field) {
+      this.field.model = this;
+    }
     this.value$.pipe().subscribe(() => {
       this.updateValidity();
     });
@@ -113,6 +117,9 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.form?.models.delete(this);
+    if (this.field) {
+      this.field.model = undefined;
+    }
     this.destroy.emit();
   }
 
@@ -324,13 +331,14 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
             };
           }
         }
-        if (diff(this.state.errors, errors, {cyclesFix: false}).length === 0) {
+        if (diff(this.state.errors || {}, errors, {cyclesFix: false}).length === 0) {
           return;
         }
+        const isValid = Object.keys(errors).length === 0;
         this._state$.next({
           ...this.state,
-          errors,
-          validity: Object.keys(errors).length > 0 ? 'invalid' : 'valid',
+          errors: isValid ? undefined : errors,
+          validity: isValid ? 'valid' : 'invalid',
         });
       });
   }

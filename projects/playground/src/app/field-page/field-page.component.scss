@@ -1,0 +1,20 @@
+.field {
+  > div {
+    display: none;
+  }
+  &.-fe-touched .touched {
+      display: block;
+  }
+  &.-fe-dirty .dirty {
+    display: block;
+  }
+  &.-fe-invalid .invalid {
+    display: block;
+  }
+  &.-fe-pending .pending {
+    display: block;
+  }
+  &.-fe-valid .valid {
+    display: block;
+  }
+}

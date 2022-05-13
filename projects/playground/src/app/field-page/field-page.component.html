@@ -1,0 +1,27 @@
+<h2>[feField]</h2>
+
+<form>
+  <div feField class="field">
+    <input [(feModel)]="model1" feText required>
+    <div class="touched">TOUCHED</div>
+    <div class="dirty">DIRTY</div>
+    <div class="invalid">INVALID</div>
+    <div class="pending">PENDING</div>
+    <div class="valid">VALID</div>
+  </div>
+</form>
+
+<form>
+  <h4>Custom field</h4>
+  <form>
+    <app-custom-field feField label="Req field">
+      <input #model3_1="feModel" [(feModel)]="model2" feText name="t1" required type="text">
+      <div *ngIf="model3_1.displayedErrors as errors" errors>
+        {{ errors | json }}
+      </div>
+    </app-custom-field>
+    <app-custom-field feField label="Non-req field">
+      <input [(feModel)]="model3" feText name="t2" type="text"><br>
+    </app-custom-field>
+  </form>
+</form>
