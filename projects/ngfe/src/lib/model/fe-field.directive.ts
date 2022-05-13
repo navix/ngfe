@@ -23,7 +23,7 @@ export class FeField<T> {
   }
 
   set model(model: FeModel<T> | undefined) {
-    if (this._model) {
+    if (model && this._model) {
       err('FeField', 'Only one model can be bound inside [feField].');
     }
     this._model = model;
@@ -44,6 +44,7 @@ export class FeField<T> {
       this.updateClasses(dirty ? {add: [this.classes.dirty]} : {remove: [this.classes.dirty]});
     });
     this._model!.validity$.subscribe(validity => {
+      console.log('VLDT', validity);
       switch (validity) {
         case 'initial':
           this.updateClasses({remove: [this.classes.invalid, this.classes.pending, this.classes.valid]});

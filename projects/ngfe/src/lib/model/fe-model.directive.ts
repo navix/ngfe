@@ -58,7 +58,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     @Optional() @Inject(FeForm) public form: FeForm | undefined,
     @Optional() @Inject(FeField) public field: FeField<T> | undefined,
   ) {
-    this.form?.models.add(this);
+    this.form?.addModel(this);
     if (this.field) {
       this.field.model = this;
     }
@@ -102,7 +102,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if ('feModel' in changes) {
-      if (this.feModel !== this.value) {
+      if (this.feModel !== this.state.value) {
         this.write(this.feModel);
       }
     }
@@ -116,7 +116,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.form?.models.delete(this);
+    this.form?.removeModel(this);
     if (this.field) {
       this.field.model = undefined;
     }
@@ -162,8 +162,8 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  // @todo get displayedErrors$(), ->touchedErrors?
   get displayedErrors() {
+    // @todo displayed strategy config
     return this.touched ? this.errors : undefined;
   }
 
@@ -275,12 +275,27 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     this._updateValidityCall$.next();
   }
 
+  /**
+   * Reset state (touched, dirty, etc), not the value.
+   */
+  reset() {
+    this._state$.next({
+      ...this.state,
+      valueFromControl: undefined, // ???
+      touched: false,
+      dirty: false,
+      validity: 'initial',
+      errors: undefined,
+    });
+    this.updateValidity();
+  }
+
   private initWriteFromControlHandler() {
     this
       ._writeFromControl$
       .asObservable()
       .pipe(
-        // @todo makes this always ASYNC!!! even when debounce === 0
+        // @todo next line makes this always ASYNC!!! even when debounce === 0
         debounce(() => timer(this.debounce)),
       )
       .subscribe(value => {
@@ -289,7 +304,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   }
 
   private initValidityHandler() {
-    // @todo properly handle errors in stream
+    // @todo properly handle throws in stream
     this
       ._updateValidityCall$
       .asObservable()
@@ -297,6 +312,7 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
         // Makes validators run async from init and gather multiple sync calls.
         debounce(() => timer(0)),
         switchMap(() => {
+          console.log('RUN VLDTU');
           let syncs: Observable<FeValidatorResult>[] = [];
           let asyncs: Observable<FeValidatorResult>[] = [];
           for (const validator of this.state.validators) {
@@ -317,8 +333,12 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
               errors: {},
               validity: 'pending',
             });
+            return forkJoin([...syncs, ...asyncs]);
+          } else if (syncs.length > 0) {
+            return forkJoin([...syncs]);
+          } else {
+            return of([]);
           }
-          return forkJoin([...syncs, ...asyncs]);
         }),
       )
       .subscribe(errorsArray => {
@@ -331,14 +351,16 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
             };
           }
         }
-        if (diff(this.state.errors || {}, errors, {cyclesFix: false}).length === 0) {
+        const isValid = Object.keys(errors).length === 0;
+        const validity = isValid ? 'valid' : 'invalid';
+        console.log('VLDT', isValid, validity, errors);
+        if (this.state.validity === validity && diff(this.state.errors || {}, errors, {cyclesFix: false}).length === 0) {
           return;
         }
-        const isValid = Object.keys(errors).length === 0;
         this._state$.next({
           ...this.state,
           errors: isValid ? undefined : errors,
-          validity: isValid ? 'valid' : 'invalid',
+          validity,
         });
       });
   }

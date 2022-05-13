@@ -16,15 +16,16 @@ It is an alternative for the original `FormsModule`.
 * Simple custom validators creation.
 * Single interface for sync and async validators.
 * Direct way to control model in validators.
-* Handy ways to display validation errors.
-* Nice submit directive which touches all fields and checks validity.
 * Reduce bundle size dropping @angular/forms.
-* Native date input value transform to/from Date. ??
 * Stricter data type checks in controls.
+* Explicit native controls binding (input, select, etc).
 * Built-in debounce.
+* Nice submit directive which touches all fields and checks validity.
+* Handy ways to display validation errors.
 * Helper directive for build a custom field component.
+* Allows to create wrapper components without additional value accessors.
 * Does not conflict with the native `FormsModule`.
-* Explicit native controls binding (input, select, etc). 
+* Native date input value transform to/from Date. ??
 * `OnPush` mode support.
 * SSR support.
 
@@ -144,38 +145,36 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* `reset()` - state not values
 * Handle `disabled`
-* `FeForm` todos
 * Rework `feFile` - file input handling and customization
 * Rx service to with noDestroy helpers, use them in all controls.
 * Complete built-in controls (value accessors)
 * Complete built-in validators
 * Debug mode
-* `FeAdapterModule`
-  * Integration with native ValueAccessor
-  * Integration with native Validator
-* Labs: 
+* Labs:
   * `DisplayedErrorsStrategy`
   * `DisabledStrategy`
   * Optional scroll to first invalid field.
   * textarea autoresize (`[feText][autoresize]` separated directive)
   * input text mask
   * focus control
-  * feMath
   * detect situation when no controls bind -- it could improve DX
+  * Integration with native ValueAccessor and Validator
+  * feMath control
+  * feButton control - to use on group buttons, tabs
 * Docs
   * README 
   * Stackblitz demos
     * `<app-errors>`
     * `| errors`
     * `<app-field>`
+    * UI kit demo: field, errors, styled inputs
     * Place links in the README
   * Fancy hacks
     * Dynamic forms 
     * Combine custom control with custom validators under one component. 
     * Type convert: `[feModel]="dateToString(someDate)" (feModelChange)="stringToDate($event)"`
     * Register validator from child component // How to debug this sheesh?
-  * Links to forms UX articles 
+  * Links to forms UX articles
 * Specs
 * CI release

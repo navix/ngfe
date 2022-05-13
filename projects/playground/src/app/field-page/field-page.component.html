@@ -2,13 +2,14 @@
 
 <form>
   <div feField class="field">
-    <input [(feModel)]="model1" feText required>
+    <input [(feModel)]="model1" feText required #m1="feModel">
     <div class="touched">TOUCHED</div>
     <div class="dirty">DIRTY</div>
     <div class="invalid">INVALID</div>
     <div class="pending">PENDING</div>
     <div class="valid">VALID</div>
   </div>
+  <button (click)="m1.reset()">Reset</button>
 </form>
 
 <form>

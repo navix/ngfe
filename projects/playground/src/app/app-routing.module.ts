@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CheckboxPageComponent } from './checkbox-page/checkbox-page.component';
 import { FieldPageComponent } from './field-page/field-page.component';
 import { FilePageComponent } from './file-page/file-page.component';
+import { FormPageComponent } from './form-page/form-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { ModelPageComponent } from './model-page/model-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
@@ -51,6 +52,10 @@ const routes: Routes = [
   {
     path: 'field',
     component: FieldPageComponent,
+  },
+  {
+    path: 'form',
+    component: FormPageComponent,
   },
 ];
 
