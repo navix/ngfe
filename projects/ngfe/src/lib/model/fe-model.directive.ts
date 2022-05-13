@@ -29,16 +29,23 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy, AfterView
 
   @Input() name?: string;
 
+  @Input() validators?: FeValidator<T>[];
+
   /**
    * Disabled model is removed from the FeForm.
    */
-  @Input() disabled?: boolean | string;
+  @Input() set disabled(disabled: boolean | string) {
+    this._disabled = coerceToBoolean(disabled);
+  }
 
-  @Input() validators?: FeValidator<T>[];
+  /**
+   * Standalone model is removed from the FeForm.
+   */
+  @Input() set standalone(standalone: boolean | string) {
+    this._standalone = coerceToBoolean(standalone);
+  }
 
-  // @todo impl - do not register in the form
-  @Input() standalone = false;
-
+  // @todo fix
   @Input() debounce?: number;
 
   @Output() feModelChange = new EventEmitter<T>();
@@ -56,6 +63,10 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy, AfterView
     validators: [],
     validity: 'initial',
   });
+
+  private _disabled = false;
+
+  private _standalone = false;
 
   private readonly _writeFromControl$ = new Subject<T | any>();
 
@@ -113,10 +124,10 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy, AfterView
         this.write(this.feModel);
       }
     }
-    if ('disabled' in changes) {
-      if (coerceToBoolean(this.disabled)) {
+    if (('disabled' in changes) || ('standalone' in changes)) {
+      if (this._disabled || this._standalone) {
         this.form?.removeModel(this);
-      } else {
+      } else if (!this._disabled && !this._standalone) {
         this.form?.addModel(this);
       }
     }
@@ -245,6 +256,14 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy, AfterView
    */
   get pending() {
     return this.state.validity === 'pending';
+  }
+
+  get disabled() {
+    return this._disabled;
+  }
+
+  get standalone() {
+    return this._standalone;
   }
 
   isInitialValue(value: T | symbol): value is symbol {

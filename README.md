@@ -150,7 +150,6 @@ Model and Controller can be declared of different elements, you do not always ne
 * Complete built-in controls (value accessors)
 * Complete built-in validators (explicit names?? feRequired)
 * Debug mode ??
-* `standalone`
 * Labs:
   * `DisplayedErrorsStrategy`
   * `DisabledStrategy`
