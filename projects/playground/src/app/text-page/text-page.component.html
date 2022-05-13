@@ -6,7 +6,22 @@
     {{ text1 | json }}
   </div>
   <div>
+    On type="number"
     <input [(feModel)]="text2" feText name="text2" type="number">
     {{ text2 | json }}
+  </div>
+  <div>
+    updateOn="blur"
+    <input [(feModel)]="text3" feText updateOn="blur">
+    {{ text3 | json }}
+  </div>
+  <div>
+    Unsub control
+    <input [(feModel)]="text4" feText>
+    <div [(feModel)]="text4">
+      <input *ngIf="text4show" feText>
+    </div>
+    <input type="checkbox" feCheckbox [(feModel)]="text4show">
+    {{ text4 | json }}
   </div>
 </form>

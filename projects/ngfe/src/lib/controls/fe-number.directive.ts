@@ -1,18 +1,18 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
-import { FeModel } from '../model';
+import { FeControlRef, FeModel } from '../model';
 import { checkNumberErr } from '../util';
 
 @Directive({
-  selector: '[feNumber]',
+  selector: 'input[feNumber],textarea[feNumber]',
+  providers: [FeControlRef],
 })
 export class FeNumber {
   constructor(
-    private model: FeModel<number | undefined>,
+    private ref: FeControlRef<number | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this.model.valueToControl$.subscribe(value => {
-      console.log('FeNumber:Value', value);
+    this.ref.value$.subscribe(value => {
       if (value != null) {
         checkNumberErr('FeText', value);
       }
@@ -22,10 +22,10 @@ export class FeNumber {
 
   @HostListener('input', ['$event']) inputHandler(event: any) {
     const inputValue = event?.target?.value;
-    this.model.writeFromControl(inputValue !== '' && !isNaN(+inputValue) ? +inputValue : undefined);
+    this.ref.write(inputValue !== '' && !isNaN(+inputValue) ? +inputValue : undefined);
   }
 
   @HostListener('focusout') focusoutHandler() {
-    this.model.touched = true;
+    this.ref.touch();
   }
 }

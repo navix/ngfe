@@ -1,7 +1,6 @@
 import {
   Directive,
   ElementRef,
-  Host,
   HostListener,
   Input,
   OnChanges,
@@ -10,41 +9,39 @@ import {
   Renderer2,
   SimpleChanges,
 } from '@angular/core';
-import { FeModel } from '../model';
+import { FeControlRef } from '../model';
 import { checkStringErr, err } from '../util';
 
 @Directive({
   selector: 'select[feSelect]',
+  providers: [FeControlRef],
 })
 export class FeSelect {
   options = new Set<FeSelectOption>();
 
   constructor(
-    private model: FeModel<string | undefined>,
+    private ref: FeControlRef<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this
-      .model
-      .valueToControl$
-      .subscribe(value => {
-        if (value != null) {
-          checkStringErr('FeSelect', value);
-        }
-        this.bindValue();
-      });
+    this.ref.value$.subscribe(value => {
+      if (value != null) {
+        checkStringErr('FeSelect', value);
+      }
+      this.bindValue();
+    });
   }
 
   @HostListener('change', ['$event']) inputHandler(event: any) {
-    this.model.write(event?.target?.value || '');
+    this.ref.write(event?.target?.value || '');
   }
 
   bindValue() {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.model.value);
+    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.ref.model.value);
   }
 
   @HostListener('focusout') focusoutHandler() {
-    this.model.touched = true;
+    this.ref.touch();
   }
 }
 

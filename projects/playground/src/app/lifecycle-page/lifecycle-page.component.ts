@@ -9,4 +9,5 @@ export class LifecyclePageComponent {
   show1 = true;
 
   val1?: string = '123';
+  model2 = '';
 }

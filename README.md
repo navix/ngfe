@@ -60,6 +60,7 @@ imports: [
   * State - ...
   * Value - ...
 * Control - ...
+* ControlRef - ...
 * Field - ...
 * Validator - ...
 * Validity - ...
@@ -145,12 +146,11 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Add `Input` suffix to model input fields
 * Rework `feFile` - file input handling and customization
-* Rx service to with noDestroy helpers, use them in all controls.
 * Complete built-in controls (value accessors)
-* Complete built-in validators
+* Complete built-in validators (explicit names?? feRequired)
 * Debug mode ??
+* `standalone`
 * Labs:
   * `DisplayedErrorsStrategy`
   * `DisabledStrategy`
@@ -158,7 +158,6 @@ Model and Controller can be declared of different elements, you do not always ne
   * textarea autoresize (`[feText][autoresize]` separated directive)
   * input text mask
   * focus control
-  * detect situation when no controls bind -- it could improve DX
   * Integration with native ValueAccessor and Validator
   * feMath control
   * feButton control - to use on group buttons, tabs

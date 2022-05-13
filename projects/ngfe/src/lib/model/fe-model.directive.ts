@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Directive,
   EventEmitter,
   Inject,
@@ -13,6 +14,7 @@ import {
 import { BehaviorSubject, forkJoin, from, Observable, of, Subject, timer } from 'rxjs';
 import { debounce, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { coerceToBoolean, diff } from '../util';
+import { FeControlRef } from './fe-control-ref';
 import { FeField } from './fe-field.directive';
 import { FeForm } from './fe-form.directive';
 import { FeModelState } from './fe-model-state';
@@ -22,7 +24,7 @@ import { FeErrors, FeValidator, FeValidatorResult } from './fe-validator';
   selector: '[feModel]',
   exportAs: 'feModel',
 })
-export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
+export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() feModel!: T;
 
   @Input() name?: string;
@@ -42,6 +44,8 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   @Output() feModelChange = new EventEmitter<T>();
 
   @Output() destroy = new EventEmitter<undefined>();
+
+  readonly controlRefs = new Set<FeControlRef<T>>();
 
   readonly initialValue = Symbol('initial');
 
@@ -125,6 +129,12 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  ngAfterViewInit() {
+    if (this.controlRefs.size === 0) {
+      console.warn('FeModel: place a control inside OR on element with [feModel].');
+    }
+  }
+
   ngOnDestroy() {
     this.form?.removeModel(this);
     if (this.field) {
@@ -199,17 +209,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       );
   }
 
-  get valueToControl$(): Observable<T> {
-    return this
-      .state$
-      .pipe(
-        filter(state => state.value !== state.valueFromControl),
-        map(state => state.value),
-        distinctUntilChanged(),
-        filter((value): value is T => !this.isInitialValue(value)),
-      );
-  }
-
   get errors() {
     return this.state.errors;
   }
@@ -259,16 +258,15 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
       fromControl?: boolean;
     } = {},
   ) {
+    if (value === this.value) {
+      return;
+    }
     this._state$.next({
       ...this.state,
       ...fromControl ? {valueFromControl: value} : {},
       ...markAsDirty ? {dirty: true} : {},
       value,
     });
-  }
-
-  writeFromControl(value: T | any) {
-    this._writeFromControl$.next(value);
   }
 
   updateValidators({add = [], remove = []}: {
@@ -291,7 +289,6 @@ export class FeModel<T = any> implements OnInit, OnChanges, OnDestroy {
   reset() {
     this._state$.next({
       ...this.state,
-      valueFromControl: undefined, // ???
       touched: false,
       dirty: false,
       validity: 'initial',

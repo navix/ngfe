@@ -5,13 +5,10 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './text-page.component.html',
   styleUrls: ['./text-page.component.scss']
 })
-export class TextPageComponent implements OnInit {
+export class TextPageComponent {
   text1 = '';
   text2 = '123';
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  text3 = '';
+  text4 = '';
+  text4show = true;
 }

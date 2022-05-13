@@ -1,3 +1,4 @@
+export * from './fe-control-ref';
 export * from './fe-field.directive';
 export * from './fe-form.directive';
 export * from './fe-model.directive';

@@ -1,40 +1,42 @@
-import { Directive, ElementRef, HostBinding, HostListener, Renderer2 } from '@angular/core';
-import { FeModel } from '../model';
+import { Directive, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
+import { FeControlRef } from '../model';
 import { checkStringErr } from '../util';
 
 @Directive({
   selector: 'input[feText],textarea[feText]',
+  providers: [FeControlRef],
 })
 export class FeText {
-  // @todo updateOn: 'change' | 'blur'
+  @Input() updateOn: 'change' | 'blur' = 'change';
 
   constructor(
-    private model: FeModel<string | undefined>,
+    private ref: FeControlRef<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this
-      .model
-      .valueToControl$
-      .subscribe(value => {
-        console.log('FeText:Value', value);
-        if (value != null) {
-          checkStringErr('FeText', value);
-          // @todo show message about other controls that can fit better
-        }
-        this.renderer.setProperty(this.elementRef.nativeElement, 'value', value == null ? '' : value);
-      });
+    this.ref.value$.subscribe(value => {
+      if (value != null) {
+        checkStringErr('FeText', value);
+        // @todo show message about other controls that can fit better
+      }
+      this.renderer.setProperty(this.elementRef.nativeElement, 'value', value == null ? '' : value);
+    });
   }
 
   @HostBinding('attr.disabled') get disabled() {
-    return this.model.disabled || null;
+    return this.ref.model.disabled || null;
   }
 
   @HostListener('input', ['$event']) inputHandler(event: any) {
-    this.model.writeFromControl(event?.target?.value);
+    if (this.updateOn === 'change') {
+      this.ref.write(event?.target?.value);
+    }
   }
 
-  @HostListener('focusout') focusoutHandler() {
-    this.model.touched = true;
+  @HostListener('focusout', ['$event']) focusoutHandler(event: any) {
+    if (this.updateOn === 'blur') {
+      this.ref.write(event?.target?.value);
+    }
+    this.ref.touch();
   }
 }

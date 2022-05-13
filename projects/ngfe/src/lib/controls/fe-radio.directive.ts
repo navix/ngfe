@@ -1,37 +1,21 @@
-import {
-  Directive,
-  ElementRef,
-  Host,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Renderer2,
-  SimpleChanges,
-} from '@angular/core';
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-import { FeModel } from '../model';
+import { Directive, ElementRef, HostListener, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { filter } from 'rxjs/operators';
+import { FeControlRef } from '../model';
 import { err, isString } from '../util';
 
 @Directive({
   selector: 'input[type="radio"][feRadio]',
+  providers: [FeControlRef],
 })
-export class FeRadio implements OnDestroy, OnChanges {
+export class FeRadio implements OnChanges {
   @Input() value!: string;
 
-  private destroy$ = new Subject();
-
   constructor(
-    private model: FeModel<string | undefined>,
+    private ref: FeControlRef<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this
-      .model
-      .valueToControl$
-      .pipe(
-        takeUntil(this.destroy$),
+    this.ref.value$.pipe(
         filter(value => this.value === value),
       )
       .subscribe(() => {
@@ -54,17 +38,9 @@ export class FeRadio implements OnDestroy, OnChanges {
     }
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   @HostListener('change', ['$event']) inputHandler(event: any) {
-    if (!this.model) {
-      return;
-    }
     if (event?.target?.checked) {
-      this.model.write(this.value);
+      this.ref.write(this.value);
     }
   }
 
