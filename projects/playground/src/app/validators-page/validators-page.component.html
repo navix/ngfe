@@ -3,29 +3,35 @@
 <form>
   Required
   <div>
-    <input #m0="feModel" [(feModel)]="model0" feText required>
+    <input #m0="feControl" [(feControl)]="model0" feText required>
+    <div *ngIf="m0.touched && m0.errors as errors">
+      TOUCHED+ERRORS: {{ errors | json }}
+    </div>
+    <div *ngIf="m0.visibleErrors as errors">
+      VISIBLE_ERRORS: {{ errors | json }}
+    </div>
   </div>
-  {{ m0.validity }}<br>
-  touched={{ m0.touched }}<br>
-  {{ m0.errors | json }}
+  VALIDITY: {{ m0.validity | json }}<br>
+  TOUCHED: {{ m0.touched | json }}<br>
+  ERRORS: {{ m0.errors | json }}
 </form>
 
 <form>
   Asyncs
   <div>
     <input
-        #m="feModel"
-        [(feModel)]="model1"
+        #m="feControl"
+        [(feControl)]="model1"
         [debounce]="debounce"
-        [validators]="[asyncValObs, asyncValProm, optAsyncObs]"
+        [extraValidators]="[asyncValObs, asyncValProm, optAsyncObs]"
         feText
         name="model1"
         [disabled]="m.pending"
     >
-    <br>{{ m.validity | json }}
-    <br>{{ m.errors | json }}
+    <br>VALIDITY: {{ m.validity | json }}
+    <br>ERRORS: {{ m.errors | json }}
   </div>
   <div>
-    DEBOUNCE: <input [(feModel)]="debounce" feNumber>
+    DEBOUNCE: <input [(feControl)]="debounce" feNumber>
   </div>
 </form>

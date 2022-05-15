@@ -1,11 +1,11 @@
 <h2>Lifecycle</h2>
 
 <form>
-  <button (click)="show1 = !show1">Toggle</button>
+  <button type="button" (click)="show1 = !show1">Toggle</button>
   <br>
   <input
     *ngIf="show1"
-    [(feModel)]="val1"
+    [(feControl)]="val1"
     (destroy)="val1 = undefined"
     feText
   >
@@ -15,5 +15,5 @@
 
 <form>
   No controls warning.
-  <div [(feModel)]="model2"></div>
+  <div [(feControl)]="model2"></div>
 </form>

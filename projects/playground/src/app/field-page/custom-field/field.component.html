@@ -4,7 +4,10 @@
     <span *ngIf="required">*</span>
   </label>
   <ng-content></ng-content>
-  <div *ngIf="model?.errors" class="errors">
+  <div *ngIf="control.invalid" class="errors">
     <ng-content select="[errors]"></ng-content>
+  </div>
+  <div *ngIf="control.pending" class="errors">
+    loading...
   </div>
 </div>

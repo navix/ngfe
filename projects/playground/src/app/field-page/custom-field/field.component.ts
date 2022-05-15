@@ -1,5 +1,5 @@
-import { Component, Host, Input } from '@angular/core';
-import { FeField } from 'ngfe';
+import { Component, ContentChild, Input } from '@angular/core';
+import { FeControl, FeRequiredValidatorDirective } from 'ngfe';
 
 @Component({
   selector: 'app-custom-field',
@@ -9,18 +9,10 @@ import { FeField } from 'ngfe';
 export class FieldComponent<T> {
   @Input() label?: string;
 
-  constructor(
-    @Host() private field: FeField<T>,
-  ) {
-    console.log('MODEL', this.field.model);
-  }
-
-  get model() {
-    return this.field.model;
-  }
+  @ContentChild(FeControl, {static: true}) control!: FeControl;
+  @ContentChild(FeRequiredValidatorDirective, {static: true}) requiredValidator?: FeRequiredValidatorDirective;
 
   get required() {
-    return false;
-//    return !!this.model?.getValidator('required');
+    return this.requiredValidator?.isRequired;
   }
 }

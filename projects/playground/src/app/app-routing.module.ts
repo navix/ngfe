@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CheckboxPageComponent } from './checkbox-page/checkbox-page.component';
+import { CustomControlPageComponent } from './custom-control-page/custom-control-page.component';
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldPageComponent } from './field-page/field-page.component';
 import { FilePageComponent } from './file-page/file-page.component';
@@ -61,6 +62,10 @@ const routes: Routes = [
   {
     path: 'disabled',
     component: DisabledPageComponent,
+  },
+  {
+    path: 'custom-control',
+    component: CustomControlPageComponent,
   },
 ];
 

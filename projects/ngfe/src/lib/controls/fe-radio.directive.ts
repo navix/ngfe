@@ -1,21 +1,20 @@
 import { Directive, ElementRef, HostListener, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { FeControlRef } from '../model';
+import { FeControl } from '../core';
 import { err, isString } from '../util';
 
 @Directive({
   selector: 'input[type="radio"][feRadio]',
-  providers: [FeControlRef],
 })
 export class FeRadio implements OnChanges {
   @Input() value!: string;
 
   constructor(
-    private ref: FeControlRef<string | undefined>,
+    private control: FeControl<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this.ref.value$.pipe(
+    this.control.inputValue$.pipe(
         filter(value => this.value === value),
       )
       .subscribe(() => {
@@ -40,7 +39,7 @@ export class FeRadio implements OnChanges {
 
   @HostListener('change', ['$event']) inputHandler(event: any) {
     if (event?.target?.checked) {
-      this.ref.write(this.value);
+      this.control.input(this.value);
     }
   }
 

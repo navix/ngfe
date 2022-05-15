@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { RequiredValidator } from './fe-required-validator.directive';
+import { FeRequiredValidatorDirective } from './fe-required-validator.directive';
 
 @NgModule({
   declarations: [
-    RequiredValidator,
+    FeRequiredValidatorDirective,
   ],
   exports: [
-    RequiredValidator,
+    FeRequiredValidatorDirective,
   ],
 })
 export class FeValidatorsModule {

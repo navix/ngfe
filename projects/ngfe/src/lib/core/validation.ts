@@ -4,6 +4,8 @@ export type FeValidator<T> = (args: {value: T}) => FeValidatorResult | Promise<F
 
 export type FeValidatorResult = void | undefined | FeErrors;
 
+export type FeValidity = 'initial' | 'pending' | 'valid' | 'invalid';
+
 export type FeErrors = {
   [key: string]: any;
 }

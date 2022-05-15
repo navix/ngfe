@@ -1,0 +1,13 @@
+<h2>Adapter</h2>
+
+<form>
+  <h4>VALUES_ACCESSOR</h4>
+  <app-custom-ng-va [(feControl)]="model1"></app-custom-ng-va>
+  <input [(feControl)]="model1" feText>
+</form>
+
+<form>
+  <h4>VALIDATOR</h4>
+  <app-custom-ng-va [(feControl)]="model2" #c1="feControl" appCustomNgValidator></app-custom-ng-va>
+  <div>ERRORS: {{ c1.errors | json }}</div>
+</form>

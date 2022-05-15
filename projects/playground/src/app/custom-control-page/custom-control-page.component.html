@@ -1,0 +1,11 @@
+<h2>Custom Control</h2>
+
+<form feGroup #f="feGroup">
+  <app-custom-control [(feControl)]="field1" #c1="feControl"></app-custom-control><br>
+  VALUE: {{ field1 | json }}<br>
+  TOUCHED: {{ c1.touched | json }}
+  <div>
+    GROUP:<br>
+    CONTROLS: {{ f.controls.length | json }}
+  </div>
+</form>

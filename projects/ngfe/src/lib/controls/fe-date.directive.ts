@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
-import { filter, map } from 'rxjs/operators';
-import { FeModel } from '../model';
+import { map } from 'rxjs/operators';
+import { FeControl } from '../core';
 import { checkStringErr } from '../util';
 
 @Directive({
@@ -18,16 +18,15 @@ export class FeDate {
   private value = '';
 
   constructor(
-    private model: FeModel<string | undefined>,
+    private control: FeControl<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
     this
-      .model
-      .value$
+      .control
+      .inputValue$
       .pipe(
         map(value => value == null ? '' : value),
-        filter(value => value !== this.value),
       )
       .subscribe(value => {
         checkStringErr('FeDate', value);
@@ -38,10 +37,10 @@ export class FeDate {
 
   @HostListener('input', ['$event']) inputHandler(event: any) {
     this.value = event?.target?.value;
-    this.model.write(this.value);
+    this.control.input(this.value);
   }
 
   @HostListener('focusout') focusoutHandler() {
-    this.model.touched = true;
+    this.control.touched = true;
   }
 }

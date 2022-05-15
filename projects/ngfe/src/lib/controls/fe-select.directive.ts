@@ -9,22 +9,21 @@ import {
   Renderer2,
   SimpleChanges,
 } from '@angular/core';
-import { FeControlRef } from '../model';
+import { FeControl } from '../core';
 import { checkStringErr, err } from '../util';
 
 @Directive({
   selector: 'select[feSelect]',
-  providers: [FeControlRef],
 })
 export class FeSelect {
   options = new Set<FeSelectOption>();
 
   constructor(
-    private ref: FeControlRef<string | undefined>,
+    private control: FeControl<string | undefined>,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this.ref.value$.subscribe(value => {
+    this.control.inputValue$.subscribe(value => {
       if (value != null) {
         checkStringErr('FeSelect', value);
       }
@@ -33,15 +32,15 @@ export class FeSelect {
   }
 
   @HostListener('change', ['$event']) inputHandler(event: any) {
-    this.ref.write(event?.target?.value || '');
+    this.control.input(event?.target?.value || '');
   }
 
   bindValue() {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.ref.model.value);
+    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.control.value);
   }
 
   @HostListener('focusout') focusoutHandler() {
-    this.ref.touch();
+    this.control.touch();
   }
 }
 

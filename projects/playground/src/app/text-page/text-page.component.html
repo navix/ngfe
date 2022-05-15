@@ -2,26 +2,27 @@
 
 <form>
   <div>
-    <input [(feModel)]="text1" feText name="text1">
-    {{ text1 | json }}
+    <input
+      [(feControl)]="text1"
+      feText
+      name="text1"
+      [(touched)]="text1touched"
+      (touchedChange)="itstouched($event)"
+      #c1="feControl"
+      [disabled]="text1disabled"
+    >
+    VAL: {{ text1 | json }}<br>
+    TOUCHED: {{ text1touched | json }}, {{ c1.touched | json }}, <input type="checkbox" [(feControl)]="text1touched" feCheckbox><br>
+    DISABLED: {{ text1disabled | json }}, {{ c1.disabled | json }}, <input type="checkbox" [(feControl)]="text1disabled" feCheckbox>
   </div>
   <div>
     On type="number"
-    <input [(feModel)]="text2" feText name="text2" type="number">
+    <input [(feControl)]="text2" feText name="text2" type="number">
     {{ text2 | json }}
   </div>
   <div>
     updateOn="blur"
-    <input [(feModel)]="text3" feText updateOn="blur">
+    <input [(feControl)]="text3" feText updateOn="blur">
     {{ text3 | json }}
-  </div>
-  <div>
-    Unsub control
-    <input [(feModel)]="text4" feText>
-    <div [(feModel)]="text4">
-      <input *ngIf="text4show" feText>
-    </div>
-    <input type="checkbox" feCheckbox [(feModel)]="text4show">
-    {{ text4 | json }}
   </div>
 </form>

@@ -1,15 +1,14 @@
-import { Directive, Host, Input, OnChanges } from '@angular/core';
-import { FeModel, FeValidator } from '../model';
+import { Directive, Input, OnChanges, Self } from '@angular/core';
+import { FeControl, FeValidator } from '../core';
 import { coerceToBoolean } from '../util';
 
 @Directive({
-  selector: '[feModel][required]',
+  selector: '[feControl][required]',
 })
-export class RequiredValidator implements OnChanges {
+export class FeRequiredValidatorDirective implements OnChanges {
   @Input() required!: boolean | string;
-
   validator: FeValidator<any> = ({value}) => {
-    if (!coerceToBoolean(this.required)) {
+    if (!this.isRequired) {
       return;
     }
     if (!value) {
@@ -19,12 +18,16 @@ export class RequiredValidator implements OnChanges {
   };
 
   constructor(
-    @Host() private model: FeModel,
+    @Self() private control: FeControl,
   ) {
-    this.model.updateValidators({add: [this.validator]});
+    this.control.updateValidators({add: [this.validator]});
   }
 
   ngOnChanges() {
-    this.model.updateValidity();
+    this.control.updateValidity();
+  }
+
+  get isRequired() {
+    return coerceToBoolean(this.required);
   }
 }

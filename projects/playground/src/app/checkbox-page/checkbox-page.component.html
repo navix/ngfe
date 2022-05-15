@@ -3,17 +3,17 @@
 <form>
   <div>
     false<br>
-    <input type="checkbox" feCheckbox [(feModel)]="model1">
+    <input type="checkbox" feCheckbox [(feControl)]="model1">
     <br>{{ model1 | json }}
   </div>
   <div>
     true<br>
-    <input type="checkbox" feCheckbox [(feModel)]="model2">
+    <input type="checkbox" feCheckbox [(feControl)]="model2">
     <br>{{ model2 | json }}
   </div>
   <div>
     undefined<br>
-    <input type="checkbox" feCheckbox [(feModel)]="model3">
+    <input type="checkbox" feCheckbox [(feControl)]="model3">
     <br>{{ model3 | json }}
   </div>
 </form>

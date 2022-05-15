@@ -1,8 +1,8 @@
 <h2>Disabled</h2>
 
 <div>
-  <form feForm #f1="feForm">
-    <input [(feModel)]="model1" feText [disabled]="model1disabled" #m1="feModel" required>
+  <form feGroup #f1="feGroup">
+    <input [(feControl)]="model1" feText [disabled]="model1disabled" #m1="feControl" required>
     <div>
       DISABLED: {{ m1.disabled | json }}<br>
       VALID: {{ m1.validity | json }}
@@ -15,13 +15,13 @@
 </div>
 
 <div>
-  <form feForm #f2="feForm">
-    <input [(feModel)]="model2" feText #m2="feModel" disabled>
+  <form feGroup #f2="feGroup">
+    <input [(feControl)]="model2" feText #m2="feControl" disabled>
     <div>
       DISABLED: {{ m2.disabled | json }}<br>
     </div>
     <div>
-      FORM_MODELS_LENGHT: {{ f2.models.length | json }}
+      FORM_MODELS_LENGHT: {{ f2.controls.length | json }}
     </div>
   </form>
 </div>

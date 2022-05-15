@@ -15,6 +15,10 @@
       "ngfe": [
         "dist/ngfe/ngfe",
         "dist/ngfe"
+      ],
+      "ngfe-ng-adapter": [
+        "dist/ngfe-ng-adapter/ngfe-ng-adapter",
+        "dist/ngfe-ng-adapter"
       ]
     },
     "experimentalDecorators": true,

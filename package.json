@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "playground:serve": "ng run playground:serve",
+    "playground:build": "ng run playground:build:development",
+    "playground:stats": "npx webpack-bundle-analyzer dist/playground/stats.json",
     "lib:build": "ng run ngfe:build:production && cpx ./README.md ./dist/ngfe",
     "lib:publish": "npm publish ./dist/ngfe --access=public",
     "lib:publish:beta": "npm publish ./dist/ngfe --access=public --tag=beta"
@@ -36,6 +38,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "ng-packagr": "^12.1.0",
-    "typescript": "~4.3.2"
+    "typescript": "~4.3.2",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }

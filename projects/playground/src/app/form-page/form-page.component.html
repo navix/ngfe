@@ -1,9 +1,9 @@
 <h2>[feForm]</h2>
 
-<form feForm #feForm1="feForm">
+<form feGroup #feForm1="feGroup">
   <div>
     model1:
-    <input [(feModel)]="model1" feText required #m1="feModel">
+    <input [(feControl)]="model1" feText required #m1="feControl">
     <div>
       <span>TOUCHED: {{ m1.touched }}</span>
       <span>DIRTY: {{ m1.dirty }}</span>
@@ -12,7 +12,7 @@
   </div>
   <div>
     model2:
-    <input [(feModel)]="model2" feText #m2="feModel">
+    <input [(feControl)]="model2" feText #m2="feControl">
     <div>
       <span>TOUCHED: {{ m2.touched }}</span>
       <span>DIRTY: {{ m2.dirty }}</span>

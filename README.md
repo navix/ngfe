@@ -26,6 +26,7 @@ It is an alternative for the original `FormsModule`.
 * Allows to create wrapper components without additional value accessors.
 * Does not conflict with the native `FormsModule`.
 * Native date input value transform to/from Date. ??
+* Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 * `OnPush` mode support.
 * SSR support.
 
@@ -34,7 +35,6 @@ It is an alternative for the original `FormsModule`.
 
 * 3rd party lib.
 * Non-standard way to do things.
-* Does not support `Validator` and `ValueAccessor` interfaces. [TODO FeFormsAdapter]
 * Not battle-tested enough yet.
 * Sometimes too much freedom for developers.
 
@@ -56,15 +56,16 @@ imports: [
 
 ## Terms
 
-* Model - ...
+* Control - ...
   * State - ...
   * Value - ...
-* Control - ...
-* ControlRef - ...
+  * InputValue
+  * Control implementation (Value accessor)
 * Field - ...
 * Validator - ...
-* Validity - ...
 * Error - ...
+* Validity - ...
+* Form - ...
 
 ## Binding
 
@@ -146,22 +147,26 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Rework `feFile` - file input handling and customization
+* Check `OnPush`
+* Playwright tests
+* Rework `feFile` - file input handling and customization.
 * Complete built-in controls (value accessors)
+  * implicit binding + disabling provider
+  * rework input text/number/date// (generic directive?) -- restrictions are not working good here
+  * `readonly: boolean` support
 * Complete built-in validators (explicit names?? feRequired)
-* Debug mode ??
+* Complete ng adapter, release.
 * Labs:
   * `DisplayedErrorsStrategy`
-  * `DisabledStrategy`
-  * Optional scroll to first invalid field.
+  * Scroll to first invalid field.
   * textarea autoresize (`[feText][autoresize]` separated directive)
   * input text mask
   * focus control
-  * Integration with native ValueAccessor and Validator
   * feMath control
   * feButton control - to use on group buttons, tabs
+  * feControl `[extraErrors]` input with custom errors that will be merged to the state.
 * Docs
-  * README 
+  * README
   * Stackblitz demos
     * `<app-errors>`
     * `| errors`

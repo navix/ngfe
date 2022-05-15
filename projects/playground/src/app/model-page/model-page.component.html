@@ -1,14 +1,14 @@
-<h2>[(feModel)]</h2>
+<h2>[(feControl)]</h2>
 
 <h3>Default controls</h3>
 
 <form>
   <h4>text</h4>
-  INP_TEXT1: <input [(feModel)]="form.inputText" name="t1" type="text"><br>
-  INP_TEXT1: <input [(feModel)]="form.inputText" name="t12" type="text"><br>
-  INP_TEXT2: <input [(feModel)]="form.inputText2" name="t2" type="text"><br>
-  INP_TEXT3: <input [(feModel)]="form.inputText3" feText name="t3" type="text"><br>
-  TEXTAREA: <textarea [(feModel)]="form.textarea" name="ta1"></textarea><br>
+  INP_TEXT1: <input [(feControl)]="form.inputText" name="t1" type="text"><br>
+  INP_TEXT1: <input [(feControl)]="form.inputText" name="t12" type="text"><br>
+  INP_TEXT2: <input [(feControl)]="form.inputText2" name="t2" type="text"><br>
+  INP_TEXT3: <input [(feControl)]="form.inputText3" feText name="t3" type="text"><br>
+  TEXTAREA: <textarea [(feControl)]="form.textarea" name="ta1"></textarea><br>
   {{ form | json }}
   <hr>
   <h4>input - number</h4>
@@ -24,35 +24,35 @@
   <h4>input - range</h4>
   <hr>
   <h4>checkbox</h4>
-  <input [(feModel)]="form.checkbox1" name="cb1" type="checkbox"> CHECKY 1<br>
-  <input [(feModel)]="form.checkbox2" name="cb2" type="checkbox"> CHECKY 2<br>
+  <input [(feControl)]="form.checkbox1" name="cb1" type="checkbox"> CHECKY 1<br>
+  <input [(feControl)]="form.checkbox2" name="cb2" type="checkbox"> CHECKY 2<br>
   <hr>
   <h4>radio - each | {{ form.radio1 | json }}</h4>
-  <input [(feModel)]="form.radio1" name="r1" type="radio" value="one"> RADIO1-1<br>
-  <input [(feModel)]="form.radio1" name="r1" type="radio" value="two"> RADIO1-2<br>
+  <input [(feControl)]="form.radio1" name="r1" type="radio" value="one"> RADIO1-1<br>
+  <input [(feControl)]="form.radio1" name="r1" type="radio" value="two"> RADIO1-2<br>
   <hr>
   <h4>radio - host | {{ form.radio2 | json }}</h4>
-  <div [(feModel)]="form.radio2" name="r2">
+  <div [(feControl)]="form.radio2" name="r2">
     <input name="r2" type="radio" value="1"> RADIO2-1<br>
     <input name="r2" type="radio" value="2"> RADIO2-2<br>
     <input name="r2" type="radio" value="5"> RADIO2-5<br>
   </div>
   <hr>
   <h4>radio - null | {{ form.radio3 | json }}</h4>
-  <div [(feModel)]="form.radio3" name="r3">
-    <input [(feModel)]="form.radio3" name="r3" type="radio" value="one"> RADIO1-1<br>
-    <input [(feModel)]="form.radio3" name="r3" type="radio" value="two"> RADIO1-2<br>
+  <div [(feControl)]="form.radio3" name="r3">
+    <input [(feControl)]="form.radio3" name="r3" type="radio" value="one"> RADIO1-1<br>
+    <input [(feControl)]="form.radio3" name="r3" type="radio" value="two"> RADIO1-2<br>
   </div>
   <hr>
   <h4>select - single string</h4>
-  <select [(feModel)]="form.select1" name="select1">
+  <select [(feControl)]="form.select1" name="select1">
     <option value="one">ONE</option>
     <option value="two">TWO</option>
     <option value="three">THREE</option>
   </select>
   <hr>
   <h4>select - empty value without empty options</h4>
-  <select [(feModel)]="form.select2" name="select2">
+  <select [(feControl)]="form.select2" name="select2">
     <option value="one">ONE</option>
     <option value="two">TWO</option>
     <option value="three">THREE</option>
@@ -70,27 +70,15 @@
 
 <form>
   <h4>required</h4>
-  <input #m="feModel" [(feModel)]="form2.text1" name="t1" required type="text">
+  <input #m="feControl" [(feControl)]="form2.text1" name="t1" required type="text">
   {{ m.errors | json }}<br>
-  <input #m2="feModel" [(feModel)]="form2.text2" [required]="true" name="t2" type="text">
+  <input #m2="feControl" [(feControl)]="form2.text2" [required]="true" name="t2" type="text">
   {{ m2.errors | json }}<br>
-  <input #m3="feModel" [(feModel)]="form2.text3" [required]="form2.text3_req" name="t3" type="text">
+  <input #m3="feControl" [(feControl)]="form2.text3" [required]="form2.text3_req" name="t3" type="text">
   {{ m3.errors | json }}
-  <input [(feModel)]="form2.text3_req" name="t3c" type="checkbox"><br>
-  <input #m4="feModel" [(feModel)]="form2.text4" [validators]="[text4validator]" name="t4" type="text">
+  <input [(feControl)]="form2.text3_req" name="t3c" type="checkbox"><br>
+  <input #m4="feControl" [(feControl)]="form2.text4" [extraValidators]="[text4validator]" name="t4" type="text">
   {{ m4.errors | json }}<br>
   <br>
 </form>
 
-
-<h4>Errors output</h4>
-<form (feSubmit)="submit()" feForm>
-  <input #model3_3="feModel" [(feModel)]="form3.text3" feText name="t1" required type="text">
-  touched$: {{ model3_3.touched$ | async | json }}
-  touched: {{ model3_3.touched | json }}
-  <div *ngIf="model3_3.displayedErrors as errors">
-    <span *ngIf="errors.has('required')">Required.</span>
-  </div>
-  <br>
-  <button (feSubmit)="submit()" type="button">SUBM</button>
-</form>
