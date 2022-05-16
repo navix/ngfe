@@ -8,7 +8,10 @@
     "playground:stats": "npx webpack-bundle-analyzer dist/playground/stats.json",
     "lib:build": "ng run ngfe:build:production && cpx ./README.md ./dist/ngfe",
     "lib:publish": "npm publish ./dist/ngfe --access=public",
-    "lib:publish:beta": "npm publish ./dist/ngfe --access=public --tag=beta"
+    "lib:publish:beta": "npm publish ./dist/ngfe --access=public --tag=beta",
+    "e2e": "start-server-and-test playground:serve http://localhost:4200 e2e-test",
+    "e2e-test": "playwright test -c e2e/playwright.config.ts",
+    "e2e-test:chromium": "npm run e2e-test -- --project=chromium"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +31,7 @@
     "@angular-devkit/build-angular": "~12.1.3",
     "@angular/cli": "~12.1.3",
     "@angular/compiler-cli": "~12.1.0-",
+    "@playwright/test": "^1.22.0",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "cpx": "^1.5.0",
@@ -38,6 +42,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "ng-packagr": "^12.1.0",
+    "start-server-and-test": "^1.14.0",
     "typescript": "~4.3.2",
     "webpack-bundle-analyzer": "^4.5.0"
   }
