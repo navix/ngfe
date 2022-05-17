@@ -1,0 +1,98 @@
+<h2>FeSelectDirective</h2>
+
+<div class="case">
+  <h4>1 - Base select</h4>
+  <div>
+    <select [(feControl)]="value1" feSelect id="select-1">
+      <option feOption value="1">VAL1</option>
+      <option feOption value="2">VAL2</option>
+      <option feOption value="3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-1-value">
+    VAL: {{ value1 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - Base with undefined init</h4>
+  <div>
+    <select [(feControl)]="value2" feSelect id="select-2">
+      <option feOption value="1">VAL1</option>
+      <option feOption value="2">VAL2</option>
+      <option feOption value="3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-2-value">
+    VAL: {{ value2 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>3 - Base with undefined init and empty option</h4>
+  <div>
+    <select [(feControl)]="value3" feSelect id="select-3">
+      <option feOption value="" id="select-3-empty-opt">VAL_</option>
+      <option feOption value="1">VAL1</option>
+      <option feOption value="2">VAL2</option>
+      <option feOption value="3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-3-value">
+    VAL: {{ value3 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>4 - Base multiple</h4>
+  <div>
+    <select [(feControl)]="value4" feSelect id="select-4" multiple>
+      <option feOption value="1" id="select-4-1">VAL1</option>
+      <option feOption value="2" id="select-4-2">VAL2</option>
+      <option feOption value="3" id="select-4-3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-4-value">
+    VAL: {{ value4 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>5 - Multiple select with number values</h4>
+  <div>
+    <select [(feControl)]="value5" feSelect id="select-5" multiple>
+      <option feOption [value]="10">VAL10</option>
+      <option feOption [value]="20">VAL20</option>
+      <option feOption [value]="30">VAL30</option>
+    </select>
+  </div>
+  <div id="select-5-value">
+    VAL: {{ value5 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>6 - Select with number values</h4>
+  <div>
+    <select [(feControl)]="value6" feSelect id="select-6">
+      <option feOption [value]="100">VAL100</option>
+      <option feOption [value]="200">VAL200</option>
+      <option feOption [value]="300">VAL300</option>
+    </select>
+  </div>
+  <div id="select-6-value">
+    VAL: {{ value6 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>7 - Select with objects values</h4>
+  <div>
+    <select [(feControl)]="value7" feSelect id="select-7">
+      <option *ngFor="let o of value7objects" feOption [value]="o">{{ o.field }}</option>
+    </select>
+  </div>
+  <div id="select-7-value">
+    VAL: {{ value7 | json }}
+  </div>
+</div>

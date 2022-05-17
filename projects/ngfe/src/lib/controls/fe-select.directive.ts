@@ -10,33 +10,64 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FeControl } from '../core';
-import { checkStringErr, err } from '../util';
+import { coerceToBoolean, err } from '../util';
 
 @Directive({
   selector: 'select[feSelect]',
 })
-export class FeSelect {
-  options = new Set<FeSelectOption>();
+export class FeSelectDirective {
+  @Input() multiple?: boolean | string;
+
+  // @todo readonly
+  // @todo updateOn
+
+  options = new Set<FeSelectOptionDirective>();
+  private _value: string[] = [''];
 
   constructor(
-    private control: FeControl<string | undefined>,
+    private control: FeControl,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
     this.control.inputValue$.subscribe(value => {
-      if (value != null) {
-        checkStringErr('FeSelect', value);
-      }
+      this._value = value != null
+        ? Array.isArray(value)
+          ? value : [value]
+        : [''];
       this.bindValue();
     });
   }
 
-  @HostListener('change', ['$event']) inputHandler(event: any) {
-    this.control.input(event?.target?.value || '');
+  get isMultiple() {
+    return coerceToBoolean(this.multiple);
+  }
+
+  @HostListener('change', ['$event']) inputHandler() {
+    if (this.isMultiple) {
+      this.control.input(Array.from(this.options).filter(s => s.selected && s.value).map(s => s.value!));
+    } else {
+      const selected = Array.from(this.options).find(o => o.selected);
+      this.control.input(selected?.value || undefined);
+    }
   }
 
   bindValue() {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.control.value);
+    if (this.isMultiple) {
+      this.options.forEach(option => {
+        if (this._value.find(v => v === option.value)) {
+          option.selected = true;
+        } else {
+          option.selected = false;
+        }
+      });
+    } else {
+      const selected = Array.from(this.options).find(o => o.value === this._value[0]);
+      if (selected) {
+        selected.selected = true;
+      } else {
+        this.renderer.setProperty(this.elementRef.nativeElement, 'value', '');
+      }
+    }
   }
 
   @HostListener('focusout') focusoutHandler() {
@@ -47,13 +78,13 @@ export class FeSelect {
 @Directive({
   selector: 'option[feOption]',
 })
-export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
-  @Input() value?: string;
-
-  @Input() selected?: any;
+export class FeSelectOptionDirective implements OnInit, OnChanges, OnDestroy {
+  @Input() value?: any;
 
   constructor(
-    private select: FeSelect,
+    private select: FeSelectDirective,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
   ) {
     if (!this.select) {
       err('FeOption', 'Should be used only on select with [feSelect].');
@@ -67,18 +98,19 @@ export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('value' in changes) {
-      if (this.value != null) {
-        checkStringErr('FeOption', this.value);
-      }
-    }
-    if ('selected' in changes) {
-      err('FeOption', 'Do not bind [selected], set value to [feModel] on <select>.');
-    }
+    this.select.bindValue();
   }
 
   ngOnDestroy() {
     this.select.options.delete(this);
     this.select.bindValue();
+  }
+
+  get selected() {
+    return this.elementRef.nativeElement.selected;
+  }
+
+  @Input() set selected(selected: boolean) {
+    this.renderer.setProperty(this.elementRef.nativeElement, 'selected', selected);
   }
 }

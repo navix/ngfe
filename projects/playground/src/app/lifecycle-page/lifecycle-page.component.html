@@ -17,3 +17,40 @@
   No controls warning.
   <div [(feControl)]="model2"></div>
 </form>
+
+<form>
+  <div>
+    <input
+        #c1="feControl"
+        (touchedChange)="itstouched($event)"
+        [(feControl)]="value1"
+        [(touched)]="text1touched"
+        [disabled]="text1disabled"
+        feInput
+        name="text1"
+    >
+    <div>
+      VAL: {{ value1 | json }}
+    </div>
+    TOUCHED: {{ text1touched | json }}, {{ c1.touched | json }}, <input
+    [(feControl)]="text1touched"
+    feCheckbox
+    type="checkbox"
+  ><br>
+    DISABLED: {{ text1disabled | json }}, {{ c1.disabled | json }}, <input
+    [(feControl)]="text1disabled"
+    feCheckbox
+    type="checkbox"
+  >
+  </div>
+  <div>
+    On type="number"
+    <input [(feControl)]="value2" feText name="text2" type="number">
+    {{ value2 | json }}
+  </div>
+  <div>
+    updateOn="blur"
+    <input [(feControl)]="value3" feText updateOn="blur">
+    {{ value3 | json }}
+  </div>
+</form>

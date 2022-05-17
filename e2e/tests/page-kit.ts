@@ -10,6 +10,10 @@ export class PageKit {
     this.page.goto(url);
   }
 
+  $(selector: string) {
+    return this.page.locator(selector);
+  }
+
   get subTitle() {
     return this.page.locator('h2');
   }

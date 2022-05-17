@@ -1,29 +1,32 @@
 import { Inject, Injectable, OnDestroy, Optional, SkipSelf } from '@angular/core';
 import { BehaviorSubject, forkJoin, from, merge, Observable, of, Subject, timer } from 'rxjs';
-import { debounce, delay, filter, switchMap } from 'rxjs/operators';
+import { debounce, delay, filter, map, switchMap } from 'rxjs/operators';
 import { diff } from '../util';
+import { FeAdapter } from './adapters';
 import { FeGroupDirective } from './fe-group.directive';
 import { FeErrors, FeValidator, FeValidatorResult, FeValidity } from './validation';
 
 @Injectable()
-export class FeControl<T = any> implements OnDestroy {
+export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   debounce = 0;
+  adapter?: FeAdapter<MODEL, INPUT>;
 
   readonly initialValue = Symbol('initial');
 
-  private readonly _value$ = new BehaviorSubject<T | symbol>(this.initialValue);
-  private readonly _input$ = new Subject<T>();
+  private readonly _value$ = new BehaviorSubject<MODEL | symbol>(this.initialValue);
+  private readonly _input$ = new Subject<INPUT>();
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
   private readonly _standalone$ = new BehaviorSubject<boolean>(false);
   private readonly _touched$ = new BehaviorSubject<boolean>(false);
   private readonly _dirty$ = new BehaviorSubject<boolean>(false);
-  private readonly _validators$ = new BehaviorSubject<FeValidator<T>[]>([]);
+  private readonly _validators$ = new BehaviorSubject<FeValidator<MODEL>[]>([]);
   private readonly _validity$ = new BehaviorSubject<FeValidity>('initial');
   private readonly _errors$ = new BehaviorSubject<FeErrors | undefined>(undefined);
   private readonly _updateValidityCall$ = new Subject<undefined>();
+  private readonly _adapter$ = new Subject<undefined>();
   private readonly _destroy$ = new Subject<undefined>();
 
-  private inputValue?: T;
+  private inputValue?: INPUT;
 
   constructor(
     @Optional() @Inject(FeGroupDirective) private group: FeGroupDirective | undefined,
@@ -53,7 +56,7 @@ export class FeControl<T = any> implements OnDestroy {
    * Returns current value.
    * Undefined if initial.
    */
-  get value(): T | undefined {
+  get value(): MODEL | undefined {
     const value = this._value$.value;
     return this.isInitialValue(value) ? undefined : value;
   }
@@ -61,16 +64,19 @@ export class FeControl<T = any> implements OnDestroy {
   /**
    * Stream with current value, does not emit initial value.
    */
-  get value$(): Observable<T> {
+  get value$(): Observable<MODEL> {
     return this
       ._value$
       .pipe(
-        filter((value): value is T => !this.isInitialValue(value)),
+        filter((value): value is MODEL => !this.isInitialValue(value)),
       );
   }
 
   get inputValue$() {
-    return this.value$.pipe(filter(value => value !== this.inputValue));
+    return this.value$.pipe(
+      map(value => this.adapter ? this.adapter.toInput(value) : (value as any)),
+      filter(value => value !== this.inputValue),
+    );
   }
 
   get disabled() {
@@ -179,18 +185,19 @@ export class FeControl<T = any> implements OnDestroy {
     return this._destroy$.asObservable();
   }
 
-  isInitialValue(value: T | symbol): value is symbol {
+  isInitialValue(value: MODEL | symbol): value is symbol {
     return value === this.initialValue;
   }
 
-  updateValue(value: T) {
+  updateValue(value: MODEL) {
     if (value === this.value) {
       return;
     }
     this._value$.next(value);
   }
 
-  input(value: T) {
+  input(value: INPUT) {
+    console.log('INP', value);
     this._input$.next(value);
   }
 
@@ -199,8 +206,8 @@ export class FeControl<T = any> implements OnDestroy {
   }
 
   updateValidators({add = [], remove = []}: {
-    add?: FeValidator<T>[];
-    remove?: FeValidator<T>[];
+    add?: FeValidator<MODEL>[];
+    remove?: FeValidator<MODEL>[];
   }) {
     this._validators$.next([...new Set([...this.validators, ...add])].filter(v => remove.indexOf(v) === -1));
   }
@@ -232,7 +239,9 @@ export class FeControl<T = any> implements OnDestroy {
     this._input$.pipe(
       debounce(() => timer(this.debounce)),
     ).subscribe(value => {
-      this.updateValue(value);
+      this.inputValue = value;
+      const adapted = this.adapter ? this.adapter.fromInput(value) : (value as any);
+      this.updateValue(adapted);
       this.dirty = true;
     });
   }

@@ -1,29 +1,17 @@
 import { NgModule } from '@angular/core';
-import { FeCheckbox } from './fe-checkbox.directive';
-import { FeDate } from './fe-date.directive';
-import { FeNumber } from './fe-number.directive';
-import { FeRadio } from './fe-radio.directive';
-import { FeSelect, FeSelectOption } from './fe-select.directive';
-import { FeTextDirective } from './fe-text.directive';
+import { FeInputDirective } from './fe-input.directive';
+import { FeSelectDirective, FeSelectOptionDirective } from './fe-select.directive';
 
 @NgModule({
   declarations: [
-    FeCheckbox,
-    FeDate,
-    FeNumber,
-    FeRadio,
-    FeTextDirective,
-    FeSelect,
-    FeSelectOption,
+    FeInputDirective,
+    FeSelectDirective,
+    FeSelectOptionDirective,
   ],
   exports: [
-    FeCheckbox,
-    FeDate,
-    FeNumber,
-    FeRadio,
-    FeTextDirective,
-    FeSelect,
-    FeSelectOption,
+    FeInputDirective,
+    FeSelectDirective,
+    FeSelectOptionDirective,
   ],
 })
 export class FeControlsModule {

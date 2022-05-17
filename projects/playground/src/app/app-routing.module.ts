@@ -10,11 +10,19 @@ import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.componen
 import { ModelPageComponent } from './model-page/model-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
 import { RadioPageComponent } from './radio-page/radio-page.component';
-import { SelectPageComponent } from './select-page/select-page.component';
-import { TextPageComponent } from './text-page/text-page.component';
+import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
+import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
 
 const routes: Routes = [
+  {
+    path: 'input-control',
+    component: InputControlPageComponent,
+  },
+  {
+    path: 'select-control',
+    component: SelectControlPageComponent,
+  },
   {
     path: 'file',
     component: FilePageComponent,
@@ -22,10 +30,6 @@ const routes: Routes = [
   {
     path: 'model',
     component: ModelPageComponent,
-  },
-  {
-    path: 'text',
-    component: TextPageComponent,
   },
   {
     path: 'number',
@@ -38,10 +42,6 @@ const routes: Routes = [
   {
     path: 'lifecycle',
     component: LifecyclePageComponent,
-  },
-  {
-    path: 'select',
-    component: SelectPageComponent,
   },
   {
     path: 'checkbox',

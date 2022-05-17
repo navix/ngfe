@@ -15,8 +15,8 @@ import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.componen
 import { ModelPageComponent } from './model-page/model-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
 import { RadioPageComponent } from './radio-page/radio-page.component';
-import { SelectPageComponent } from './select-page/select-page.component';
-import { TextPageComponent } from './text-page/text-page.component';
+import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
+import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
 
 @NgModule({
@@ -25,11 +25,11 @@ import { ValidatorsPageComponent } from './validators-page/validators-page.compo
     FilePageComponent,
     ModelPageComponent,
     FieldComponent,
-    TextPageComponent,
+    InputControlPageComponent,
     NumberPageComponent,
     ValidatorsPageComponent,
     LifecyclePageComponent,
-    SelectPageComponent,
+    SelectControlPageComponent,
     CheckboxPageComponent,
     RadioPageComponent,
     FieldPageComponent,

@@ -70,7 +70,7 @@ imports: [
 ## Binding
 
 ```
-<input [(feModel)]="field" feText>
+<input [(feControl)]="field" feInput>
 ```
 
 ### Default value
@@ -86,6 +86,9 @@ imports: [
 ```
 
 ## Built-in controls
+
+All controls for native elements have explicit binding. 
+It is one additional keyword, but this solution has long-term compatibility benefits.
 
 ### `[feText]`
 
@@ -147,8 +150,9 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Check `OnPush`
 * Playwright tests
+* Middleware pls? -- bind as function not a directive!
+* Check `OnPush`
 * Rework `feFile` - file input handling and customization.
 * Complete built-in controls (value accessors)
   * implicit binding + disabling provider
@@ -179,6 +183,7 @@ Model and Controller can be declared of different elements, you do not always ne
     * Combine custom control with custom validators under one component. 
     * Type convert: `[feModel]="dateToString(someDate)" (feModelChange)="stringToDate($event)"`
     * Register validator from child component // How to debug this sheesh?
+    * Change input type on-the-fly.
   * Links to forms UX articles
 * Specs
 * CI release

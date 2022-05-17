@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
+.case {
+  border: 1px solid #aaaaaa;
+  padding: 1rem;
+  margin: 1rem 0;
+  h4 {
+    margin: 0;
+  }
+}
