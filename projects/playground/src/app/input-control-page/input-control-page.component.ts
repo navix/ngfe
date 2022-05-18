@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { compileFileList, FeInputFile, FeLoadedFile, readFiles } from 'ngfe';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { compileFileList, FeLoadedFile, readFiles } from 'ngfe';
 
 @Component({
   selector: 'app-input-control-page',
   templateUrl: './input-control-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputControlPageComponent {
   value1 = '';
@@ -37,10 +38,16 @@ export class InputControlPageComponent {
     }
   ]);
 
+  constructor(
+    private cdr: ChangeDetectorRef,
+  ) {
+  }
+
   loadFiles2(files?: FileList) {
     this.files2 = files;
     readFiles(files || []).subscribe(loadedFiles => {
       this.files2loaded = loadedFiles;
+      this.cdr.markForCheck();
     });
   }
 }

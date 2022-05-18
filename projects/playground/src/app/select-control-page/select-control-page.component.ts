@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-select-control-page',
   templateUrl: './select-control-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectControlPageComponent {
   value1 = '2';

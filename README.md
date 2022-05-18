@@ -168,8 +168,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Async adapter?
-* Check `OnPush`
 * Complete built-in controls (value accessors)
   * `readonly: boolean` support
   * `updateOn` 
@@ -187,6 +185,7 @@ Model and Controller can be declared of different elements, you do not always ne
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
   * Playwright helpers
   * `(afterChange)` - desync emit, called after model change applied
+  * Async adapter -- need to re-create streams after adapter registration
 * Docs
   * README
   * Stackblitz demos

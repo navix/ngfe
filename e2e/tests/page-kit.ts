@@ -1,7 +1,7 @@
 import { Browser, Page } from '@playwright/test';
 
 export class PageKit {
-  proxyConsole = true;
+  proxyConsole = false;
 
   constructor(
     public page: Page,
