@@ -44,6 +44,10 @@ export class PageKit {
     ]);
     await fileChooser.setFiles(files);
   }
+
+  screenshot() {
+    return this.page.screenshot({path: 'scr.png', fullPage: true});
+  }
 }
 
 export class PageKitFactory {

@@ -37,6 +37,11 @@ export class InputControlPageComponent {
       data: 'data:text/plain;base64,RklMRSBURVNU',
     }
   ]);
+  value21?: string;
+  value22?: string;
+  value23?: string;
+  value24 = 33;
+  value25 = 'jkl';
 
   constructor(
     private cdr: ChangeDetectorRef,

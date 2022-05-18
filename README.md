@@ -168,9 +168,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Complete built-in controls (value accessors)
-  * `readonly: boolean` support
-  * `updateOn` 
 * Complete built-in validators (explicit names?? feRequired)
 * Specs for all playground pages.
 * Complete ng adapter, release.

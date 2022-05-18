@@ -110,3 +110,17 @@
     VAL: {{ value8 | json }}
   </div>
 </div>
+
+<div class="case">
+  <h4>9 - Update on blur</h4>
+  <div>
+    <select [(feControl)]="value9" feSelect id="select-9" updateOn="blur">
+      <option feOption value="1">VAL1</option>
+      <option feOption value="2">VAL2</option>
+      <option feOption value="3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-9-value">
+    VAL: {{ value9 | json }}
+  </div>
+</div>

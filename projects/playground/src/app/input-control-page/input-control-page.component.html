@@ -308,7 +308,7 @@
 <div class="case">
   <h4>18 - Base file</h4>
   <div>
-    <input [(feControl)]="files1" feInput type="file" id="input-18">
+    <input [(feControl)]="files1" feInput id="input-18" type="file">
   </div>
   <div id="input-18-value">
     VAL: {{ files1 }}, LEN: {{ files1?.length | json }}
@@ -318,7 +318,7 @@
 <div class="case">
   <h4>19 - File + readFiles</h4>
   <div>
-    <input (feControlChange)="loadFiles2($event)" [feControl]="files2" feInput type="file" multiple id="input-19">
+    <input (feControlChange)="loadFiles2($event)" [feControl]="files2" feInput id="input-19" multiple type="file">
   </div>
   <div id="input-19-value">
     VAL: {{ files2 | json }}, LEN: {{ files2?.length | json }}
@@ -338,5 +338,77 @@
   </div>
 </div>
 
-// TODO: Range
-// TODO: Textarea
+<div class="case">
+  <h4>21 - Update on blur</h4>
+  <div>
+    <input
+      [(feControl)]="value21"
+      feInput
+      id="input-21"
+      updateOn="blur"
+    >
+    <div id="input-21-value">
+      VAL: {{ value21 | json }}
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>22 - Textarea</h4>
+  <div>
+    <textarea
+      [(feControl)]="value22"
+      feInput
+      id="input-22"
+    ></textarea>
+    <div id="input-22-value">
+      VAL: {{ value22 | json }}
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>23 - Range</h4>
+  <div>
+    <input
+      [(feControl)]="value23"
+      feInput
+      id="input-23"
+      type="range"
+    >
+    <div id="input-23-value">
+      VAL: {{ value23 | json }}
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>24 - Range with number adapter</h4>
+  <div>
+    <input
+      [(feControl)]="value24"
+      adapter="numberToString"
+      feInput
+      id="input-24"
+      type="range"
+    >
+    <div id="input-24-value">
+      VAL: {{ value24 | json }}
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>25 - Readonly</h4>
+  <div>
+    <input
+      [(feControl)]="value25"
+      feInput
+      id="input-25"
+      readonly
+    >
+    <div id="input-25-value">
+      VAL: {{ value25 | json }}
+    </div>
+  </div>
+</div>

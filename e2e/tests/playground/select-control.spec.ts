@@ -93,4 +93,13 @@ test.describe.serial('FeSelectDirective', () => {
     expect(await kit.isSelected('#select-8-1')).toBeTruthy();
     expect(await kit.isSelected('#select-8-2')).not.toBeTruthy();
   });
+
+  test('select 9 - update on blur', async () => {
+    await expect(kit.$('#select-9-value')).toHaveText('VAL: "1"');
+    await kit.$('#select-9').focus();
+    await kit.$('#select-9').selectOption({label: 'VAL2'});
+    await expect(kit.$('#select-9-value')).toHaveText('VAL: "1"');
+    await kit.$('#select-1').focus();
+    await expect(kit.$('#select-9-value')).toHaveText('VAL: "2"');
+  });
 });

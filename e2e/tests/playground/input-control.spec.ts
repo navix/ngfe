@@ -181,4 +181,18 @@ test.describe.serial('FeInputDirective', () => {
     await expect(kit.$('#input-19-value')).toHaveText('VAL: { "0": {}, "1": {} }, LEN: 2');
     await expect(kit.$('#input-19-value-2')).toHaveText('LOADED FILES: [ { "file": {}, "data": "data:text/plain;base64,RklMRSBURVNU" }, { "file": {}, "data": "data:text/plain;base64,RklMRSBURVNUIDIK" } ], LEN: 2');
   });
+
+  test('input 21 - update on blur', async () => {
+    await expect(kit.$('#input-21')).toHaveValue('');
+    await kit.$('#input-21').fill('abc');
+    await expect(kit.$('#input-21-value')).toHaveText('VAL: ');
+    await kit.$('#input-1').focus();
+    await expect(kit.$('#input-21-value')).toHaveText('VAL: "abc"');
+  });
+
+  test('input 22 - textarea', async () => {
+    await expect(kit.$('#input-22')).toHaveValue('');
+    await kit.$('#input-22').fill('xyz');
+    await expect(kit.$('#input-22-value')).toHaveText('VAL: "xyz"');
+  });
 });

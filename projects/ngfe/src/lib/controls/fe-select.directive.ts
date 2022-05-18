@@ -19,8 +19,7 @@ import { coerceToBoolean, err } from '../util';
 export class FeSelectDirective {
   @Input() multiple?: boolean | string;
 
-  // @todo readonly
-  // @todo updateOn
+  @Input() updateOn: 'change' | 'blur' = 'change';
 
   options = new Set<FeSelectOptionDirective>();
   private _value: any[] = [undefined];
@@ -40,12 +39,9 @@ export class FeSelectDirective {
     return coerceToBoolean(this.multiple);
   }
 
-  @HostListener('change', ['$event']) inputHandler() {
-    if (this.isMultiple) {
-      this.control.input(Array.from(this.options).filter(s => s.selected && s.value).map(s => s.value!));
-    } else {
-      const selected = Array.from(this.options).find(o => o.selected);
-      this.control.input(selected !== undefined ? selected.value : undefined);
+  @HostListener('change') inputHandler() {
+    if (this.updateOn === 'change') {
+      this.input();
     }
   }
 
@@ -70,6 +66,18 @@ export class FeSelectDirective {
 
   @HostListener('focusout') focusoutHandler() {
     this.control.touch();
+    if (this.updateOn === 'blur') {
+      this.input();
+    }
+  }
+
+  private input() {
+    if (this.isMultiple) {
+      this.control.input(Array.from(this.options).filter(s => s.selected && s.value).map(s => s.value!));
+    } else {
+      const selected = Array.from(this.options).find(o => o.selected);
+      this.control.input(selected !== undefined ? selected.value : undefined);
+    }
   }
 }
 

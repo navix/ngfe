@@ -15,4 +15,5 @@ export class SelectControlPageComponent {
   value7objects = [{field: 123}, {field: 456}, {field: 789}];
   value7 = this.value7objects[1];
   value8 = undefined;
+  value9 = '1';
 }

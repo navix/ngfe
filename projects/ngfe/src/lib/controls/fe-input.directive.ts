@@ -10,11 +10,6 @@ import {
 } from '@angular/core';
 import { FeControl } from '../core';
 
-export interface FeInputFile {
-  file: File;
-  data: any;
-}
-
 @Directive({
   selector: 'input[feInput],textarea[feInput]',
   exportAs: 'feInput',
@@ -34,8 +29,6 @@ export class FeInputDirective {
   @Input() value?: any;
 
   @Input() updateOn: 'change' | 'blur' = 'change';
-
-  // @todo readonly?: boolean;
 
   @Input() readFileAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL';
 
@@ -81,10 +74,10 @@ export class FeInputDirective {
   }
 
   @HostListener('focusout', ['$event']) focusoutHandler(event: any) {
+    this.control.touch();
     if (this.updateOn === 'blur') {
       this.input(event);
     }
-    this.control.touch();
   }
 
   private input(event: any) {
