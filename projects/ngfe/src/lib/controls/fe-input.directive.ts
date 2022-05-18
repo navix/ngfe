@@ -47,14 +47,12 @@ export class FeInputDirective {
   }
 
   @HostListener('input', ['$event']) inputHandler(event: any) {
-    console.log('ev.INPUT', event);
     if (this.type !== 'checkbox' && this.type !== 'radio' && this.updateOn === 'change') {
       this.input(event);
     }
   }
 
   @HostListener('change', ['$event']) changeHandler(event: any) {
-    console.log('ev.CHANGE', event);
     if ((this.type === 'checkbox' || this.type === 'radio') && this.updateOn === 'change') {
       this.input(event);
     }

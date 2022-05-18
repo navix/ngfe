@@ -12,9 +12,6 @@ export class FeNgAdapterDirective {
     @Self() @Optional() @Inject(NG_VALIDATORS) private ngValidators: Validator[],
     @Self() @Optional() @Inject(NG_ASYNC_VALIDATORS) private ngAsyncValidators: Validator[],
   ) {
-    console.log('CONTROL', this.control);
-    console.log('VAS', this.ngValueAccessors);
-    console.log('VALS', this.ngValidators);
     // @todo use selectValueAccessor
     // https://github.com/angular/angular/blob/3a60063a54d850c50ce962a8a39ce01cfee71398/packages/forms/src/directives/shared.ts#L326
     const va = this.ngValueAccessors?.[0];

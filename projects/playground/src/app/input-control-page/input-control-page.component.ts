@@ -22,4 +22,5 @@ export class InputControlPageComponent {
   value15 = new Date('2022-03-03');
   value16 = '2022-02-24T05:00';
   value17 = new Date('2022-08-24T18:00');
+  value18?: any;
 }

@@ -16,42 +16,81 @@ test.describe.serial('FeSelectDirective', () => {
   test('select 1 - base select', async () => {
     await expect(kit.$('#select-1-value')).toHaveText('VAL: "2"');
     await expect(kit.$('#select-1')).toHaveValue('2');
+    expect(await kit.isSelected('#select-1-2')).toBeTruthy();
     await kit.$('#select-1').selectOption('3');
     await expect(kit.$('#select-1-value')).toHaveText('VAL: "3"');
+    expect(await kit.isSelected('#select-1-3')).toBeTruthy();
   });
 
   test('select 2 - select with undefined init', async () => {
     await expect(kit.$('#select-2-value')).toHaveText('VAL: ');
     await expect(kit.$('#select-2')).toHaveValue('');
+    expect(await kit.isSelected('#select-2-1')).not.toBeTruthy();
+    expect(await kit.isSelected('#select-2-2')).not.toBeTruthy();
+    expect(await kit.isSelected('#select-2-3')).not.toBeTruthy();
     await kit.$('#select-2').selectOption('2');
     await expect(kit.$('#select-2-value')).toHaveText('VAL: "2"');
+    expect(await kit.isSelected('#select-2-2')).toBeTruthy();
   });
 
   test('select 3 - select with undefined init and empty options', async () => {
     await expect(kit.$('#select-3-value')).toHaveText('VAL: ');
     await expect(kit.$('#select-3')).toHaveValue('');
-//    await expect(await kit.$('#select-3-empty-opt').getAttribute('selected')).toBeTruthy();
+    expect(await kit.isSelected('#select-3-0')).toBeTruthy();
     await kit.$('#select-3').selectOption('2');
     await expect(kit.$('#select-3-value')).toHaveText('VAL: "2"');
+    expect(await kit.isSelected('#select-3-2')).toBeTruthy();
   });
 
   test('select 4 - base multiple', async () => {
     await expect(kit.$('#select-4-value')).toHaveText('VAL: [ "1", "2" ]');
+    expect(await kit.isSelected('#select-4-1')).toBeTruthy();
+    expect(await kit.isSelected('#select-4-2')).toBeTruthy();
+    expect(await kit.isSelected('#select-4-3')).not.toBeTruthy();
     await kit.$('#select-4').selectOption('3');
     await expect(kit.$('#select-4-value')).toHaveText('VAL: [ "3" ]');
+    expect(await kit.isSelected('#select-4-3')).toBeTruthy();
     await kit.$('#select-4').selectOption(['1', '3']);
     await expect(kit.$('#select-4-value')).toHaveText('VAL: [ "1", "3" ]');
+    expect(await kit.isSelected('#select-4-1')).toBeTruthy();
+    expect(await kit.isSelected('#select-4-2')).not.toBeTruthy();
+    expect(await kit.isSelected('#select-4-3')).toBeTruthy();
+  });
+
+  test('select 5 - multiple with number values', async () => {
+    await expect(kit.$('#select-5-value')).toHaveText('VAL: [ 10, 30 ]');
+    expect(await kit.isSelected('#select-5-1')).toBeTruthy();
+    expect(await kit.isSelected('#select-5-2')).not.toBeTruthy();
+    expect(await kit.isSelected('#select-5-3')).toBeTruthy();
+    await kit.$('#select-5').selectOption({label: 'VAL30'});
+    await expect(kit.$('#select-5-value')).toHaveText('VAL: [ 30 ]');
+    expect(await kit.isSelected('#select-5-3')).toBeTruthy();
+    await kit.$('#select-5').selectOption([{label: 'VAL10'}, {label: 'VAL20'}]);
+    await expect(kit.$('#select-5-value')).toHaveText('VAL: [ 10, 20 ]');
+    expect(await kit.isSelected('#select-5-1')).toBeTruthy();
+    expect(await kit.isSelected('#select-5-2')).toBeTruthy();
+    expect(await kit.isSelected('#select-5-3')).not.toBeTruthy();
   });
 
   test('select 6 - select with number values', async () => {
     await expect(kit.$('#select-6-value')).toHaveText('VAL: 100');
+    expect(await kit.isSelected('#select-6-1')).toBeTruthy();
     await kit.$('#select-6').selectOption({label: 'VAL200'});
     await expect(kit.$('#select-6-value')).toHaveText('VAL: 200');
+    expect(await kit.isSelected('#select-6-2')).toBeTruthy();
   });
 
   test('select 7 - select with object values', async () => {
     await expect(kit.$('#select-7-value')).toHaveText('VAL: { "field": 456 }');
+    expect(await kit.isSelected('#select-7-1')).toBeTruthy();
     await kit.$('#select-7').selectOption({label: '123'});
     await expect(kit.$('#select-7-value')).toHaveText('VAL: { "field": 123 }');
+    expect(await kit.isSelected('#select-7-0')).toBeTruthy();
+  });
+
+  test('select 8 - select with undefined init and undefined option bind', async () => {
+    await expect(kit.$('#select-8-value')).toHaveText('VAL: ');
+    expect(await kit.isSelected('#select-8-1')).toBeTruthy();
+    expect(await kit.isSelected('#select-8-2')).not.toBeTruthy();
   });
 });

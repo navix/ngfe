@@ -25,6 +25,10 @@ export class PageKit {
   fill(name: string, value: string) {
 //    return this.page.fi
   }
+
+  isSelected(locator: string) {
+    return this.page.locator(locator).evaluate((el: any) => el.selected);
+  }
 }
 
 export class PageKitFactory {

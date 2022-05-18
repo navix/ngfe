@@ -150,14 +150,11 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Playwright tests
-* Middleware pls? -- bind as function not a directive!
-* Check `OnPush`
-* Rework `feFile` - file input handling and customization.
+* Move `feFile` to controls, remove ui stuff
 * Complete built-in controls (value accessors)
-  * implicit binding + disabling provider
-  * rework input text/number/date// (generic directive?) -- restrictions are not working good here
   * `readonly: boolean` support
+  * `updateOn`
+* Check `OnPush`
 * Complete built-in validators (explicit names?? feRequired)
 * Complete ng adapter, release.
 * Labs:
@@ -169,6 +166,7 @@ Model and Controller can be declared of different elements, you do not always ne
   * feMath control
   * feButton control - to use on group buttons, tabs
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
+  * Playwright helpers
 * Docs
   * README
   * Stackblitz demos

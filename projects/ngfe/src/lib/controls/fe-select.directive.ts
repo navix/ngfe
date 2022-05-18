@@ -22,7 +22,7 @@ export class FeSelectDirective {
   // @todo updateOn
 
   options = new Set<FeSelectOptionDirective>();
-  private _value: string[] = [''];
+  private _value: any[] = [undefined];
 
   constructor(
     private control: FeControl,
@@ -30,10 +30,7 @@ export class FeSelectDirective {
     private elementRef: ElementRef,
   ) {
     this.control.inputValue$.subscribe(value => {
-      this._value = value != null
-        ? Array.isArray(value)
-          ? value : [value]
-        : [''];
+      this._value = Array.isArray(value) ? value : [value];
       this.bindValue();
     });
   }
@@ -47,7 +44,7 @@ export class FeSelectDirective {
       this.control.input(Array.from(this.options).filter(s => s.selected && s.value).map(s => s.value!));
     } else {
       const selected = Array.from(this.options).find(o => o.selected);
-      this.control.input(selected?.value || undefined);
+      this.control.input(selected !== undefined ? selected.value : undefined);
     }
   }
 
@@ -87,7 +84,7 @@ export class FeSelectOptionDirective implements OnInit, OnChanges, OnDestroy {
     private elementRef: ElementRef,
   ) {
     if (!this.select) {
-      err('FeOption', 'Should be used only on select with [feSelect].');
+      err('FeSelectOptionDirective', 'Should be used only on select with [feSelect].');
     }
     this.select.options.add(this);
   }

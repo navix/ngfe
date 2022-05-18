@@ -197,7 +197,6 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   }
 
   input(value: INPUT) {
-    console.log('INP', value);
     this._input$.next(value);
   }
 
