@@ -3,7 +3,7 @@ export interface FeAdapter<MODEL, INPUT> {
   fromInput: (value: INPUT) => MODEL;
 }
 
-const feNumberStringAdapter: FeAdapter<number | undefined, string> = {
+const numberToString: FeAdapter<number | undefined, string> = {
   toInput(value) {
     return value == null ? '' : value + '';
   },
@@ -12,7 +12,7 @@ const feNumberStringAdapter: FeAdapter<number | undefined, string> = {
   },
 };
 
-const feDateToStringAdapter: FeAdapter<Date | undefined, string> = {
+const dateToDateString: FeAdapter<Date | undefined, string> = {
   toInput(value) {
     return value == null ? '' : value.toISOString().substring(0, 10);
   },
@@ -21,7 +21,7 @@ const feDateToStringAdapter: FeAdapter<Date | undefined, string> = {
   },
 };
 
-const feDateLocalToStringAdapter: FeAdapter<Date | undefined, string> = {
+const dateToDateLocalString: FeAdapter<Date | undefined, string> = {
   toInput(value) {
     return value == null ? '' : value.toISOString().substring(0, 16);
   },
@@ -31,7 +31,7 @@ const feDateLocalToStringAdapter: FeAdapter<Date | undefined, string> = {
 };
 
 export const feAdapters = {
-  numberToString: feNumberStringAdapter,
-  dateToDateString: feDateToStringAdapter,
-  dateToDateLocalString: feDateLocalToStringAdapter,
+  numberToString,
+  dateToDateString,
+  dateToDateLocalString,
 } as const;

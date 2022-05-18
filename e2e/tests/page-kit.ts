@@ -1,9 +1,16 @@
 import { Browser, Page } from '@playwright/test';
 
 export class PageKit {
+  proxyConsole = true;
+
   constructor(
     public page: Page,
   ) {
+    page.on('console', message => {
+      if (this.proxyConsole) {
+        console.log('PAGE CONSOLE >>', message);
+      }
+    });
   }
 
   goto(url: string) {
@@ -28,6 +35,14 @@ export class PageKit {
 
   isSelected(locator: string) {
     return this.page.locator(locator).evaluate((el: any) => el.selected);
+  }
+
+  async chooseFiles(locator: string, files: string[]) {
+    const [fileChooser] = await Promise.all([
+      this.page.waitForEvent('filechooser'),
+      this.page.locator(locator).click(),
+    ]);
+    await fileChooser.setFiles(files);
   }
 }
 

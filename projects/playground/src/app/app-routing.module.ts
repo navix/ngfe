@@ -4,14 +4,13 @@ import { CheckboxPageComponent } from './checkbox-page/checkbox-page.component';
 import { CustomControlPageComponent } from './custom-control-page/custom-control-page.component';
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldPageComponent } from './field-page/field-page.component';
-import { FilePageComponent } from './file-page/file-page.component';
 import { FormPageComponent } from './form-page/form-page.component';
+import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { ModelPageComponent } from './model-page/model-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
 import { RadioPageComponent } from './radio-page/radio-page.component';
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
-import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
 
 const routes: Routes = [
@@ -22,10 +21,6 @@ const routes: Routes = [
   {
     path: 'select-control',
     component: SelectControlPageComponent,
-  },
-  {
-    path: 'file',
-    component: FilePageComponent,
   },
   {
     path: 'model',

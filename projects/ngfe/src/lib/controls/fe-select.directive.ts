@@ -14,6 +14,7 @@ import { coerceToBoolean, err } from '../util';
 
 @Directive({
   selector: 'select[feSelect]',
+  exportAs: 'feSelect',
 })
 export class FeSelectDirective {
   @Input() multiple?: boolean | string;

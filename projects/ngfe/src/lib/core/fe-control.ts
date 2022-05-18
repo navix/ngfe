@@ -23,7 +23,6 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private readonly _validity$ = new BehaviorSubject<FeValidity>('initial');
   private readonly _errors$ = new BehaviorSubject<FeErrors | undefined>(undefined);
   private readonly _updateValidityCall$ = new Subject<undefined>();
-  private readonly _adapter$ = new Subject<undefined>();
   private readonly _destroy$ = new Subject<undefined>();
 
   private inputValue?: INPUT;
@@ -183,6 +182,10 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
 
   get destroy$() {
     return this._destroy$.asObservable();
+  }
+
+  get visibleErrors() {
+    return this.touched && this.errors;
   }
 
   isInitialValue(value: MODEL | symbol): value is symbol {

@@ -1,7 +1,7 @@
 <h2>FeInputDirective</h2>
 
 <div class="case">
-  <h4>Basic text input</h4>
+  <h4>1 - Basic text input</h4>
   <div>
     <input
       [(feControl)]="value1"
@@ -15,7 +15,7 @@
 </div>
 
 <div class="case">
-  <h4>Bind value on init</h4>
+  <h4>2 - Bind value on init</h4>
   <div>
     <input
       [(feControl)]="value2"
@@ -29,7 +29,7 @@
 </div>
 
 <div class="case">
-  <h4>Bind undefined on init</h4>
+  <h4>3 - Bind undefined on init</h4>
   <div>
     <input
       [(feControl)]="value3"
@@ -43,7 +43,7 @@
 </div>
 
 <div class="case">
-  <h4>Number input</h4>
+  <h4>4 - Number input</h4>
   <div>
     <input
       [(feControl)]="value4"
@@ -58,7 +58,7 @@
 </div>
 
 <div class="case">
-  <h4>Number input with forced type</h4>
+  <h4>5 - Number input with forced type</h4>
   <div>
     <input
       [(feControl)]="value5"
@@ -74,7 +74,7 @@
 </div>
 
 <div class="case">
-  <h4>Text input with forced number type</h4>
+  <h4>6 - Text input with forced number type</h4>
   <div>
     <input
       [(feControl)]="value6"
@@ -90,7 +90,7 @@
 </div>
 
 <div class="case">
-  <h4>Base checkbox</h4>
+  <h4>7 - Base checkbox</h4>
   <div>
     <input
       [(feControl)]="value7"
@@ -105,7 +105,7 @@
 </div>
 
 <div class="case">
-  <h4>Checkbox with true init</h4>
+  <h4>8 - Checkbox with true init</h4>
   <div>
     <input
       [(feControl)]="value8"
@@ -120,7 +120,7 @@
 </div>
 
 <div class="case">
-  <h4>Checkbox with undefined init</h4>
+  <h4>9 - Checkbox with undefined init</h4>
   <div>
     <input
       [(feControl)]="value9"
@@ -135,7 +135,7 @@
 </div>
 
 <div class="case">
-  <h4>Base radio</h4>
+  <h4>10 - Base radio</h4>
   <div>
     1<input
     [(feControl)]="value10"
@@ -168,7 +168,7 @@
 </div>
 
 <div class="case">
-  <h4>Radio without name</h4>
+  <h4>11 - Radio without name</h4>
   <div>
     1<input
     [(feControl)]="value11"
@@ -198,7 +198,7 @@
 </div>
 
 <div class="case">
-  <h4>Radio with undefined init</h4>
+  <h4>12 - Radio with undefined init</h4>
   <div>
     1<input
     [(feControl)]="value12"
@@ -221,7 +221,7 @@
 </div>
 
 <div class="case">
-  <h4>Radio with number value</h4>
+  <h4>13 - Radio with number value</h4>
   <div>
     1<input
     [(feControl)]="value13"
@@ -244,7 +244,7 @@
 </div>
 
 <div class="case">
-  <h4>Base date</h4>
+  <h4>14 - Base date</h4>
   <div>
     <input
       [(feControl)]="value14"
@@ -259,7 +259,7 @@
 </div>
 
 <div class="case">
-  <h4>Date with Date type</h4>
+  <h4>15 - Date with Date type</h4>
   <div>
     <input
       [(feControl)]="value15"
@@ -275,7 +275,7 @@
 </div>
 
 <div class="case">
-  <h4>Datetime-local</h4>
+  <h4>16 - Datetime-local</h4>
   <div>
     <input
       [(feControl)]="value16"
@@ -290,7 +290,7 @@
 </div>
 
 <div class="case">
-  <h4>Datetime-local with Date type</h4>
+  <h4>17 - Datetime-local with Date type</h4>
   <div>
     <input
       [(feControl)]="value17"
@@ -306,20 +306,37 @@
 </div>
 
 <div class="case">
-  <h4>File</h4>
+  <h4>18 - Base file</h4>
   <div>
-    <input
-      [(feControl)]="value18"
-      feInput
-      id="input-18"
-      type="file"
-    >
-    <div id="input-18-value">
-      VAL: {{ value18 | json }}
-    </div>
+    <input [(feControl)]="files1" feInput type="file" id="input-18">
+  </div>
+  <div id="input-18-value">
+    VAL: {{ files1 }}, LEN: {{ files1?.length | json }}
   </div>
 </div>
 
-// TODO: File
+<div class="case">
+  <h4>19 - File + readFiles</h4>
+  <div>
+    <input (feControlChange)="loadFiles2($event)" [feControl]="files2" feInput type="file" multiple id="input-19">
+  </div>
+  <div id="input-19-value">
+    VAL: {{ files2 | json }}, LEN: {{ files2?.length | json }}
+  </div>
+  <div id="input-19-value-2">
+    LOADED FILES: {{ files2loaded | json }}, LEN: {{ files2loaded?.length | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>20 - File from control</h4>
+  <div>
+    <input [(feControl)]="files3" feInput type="file">
+  </div>
+  <div>
+    VAL: {{ files3 | json }}, LEN: {{ files3?.length | json }}
+  </div>
+</div>
+
 // TODO: Range
 // TODO: Textarea

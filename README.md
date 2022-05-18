@@ -90,9 +90,27 @@ imports: [
 All controls for native elements have explicit binding. 
 It is one additional keyword, but this solution has long-term compatibility benefits.
 
-### `[feText]`
+### `[feInput]`
 
-### `[feNumber]`
+#### number
+
+TODO: Adapters
+
+#### date, date-local
+
+TODO: Adapters
+
+#### checkbox
+
+#### radio
+
+#### file
+
+TODO: Info about `readFiles()`, `FeLoadedFile`, `compileFileList()`
+
+#### textarea
+
+### `[feSelect]`
 
 
 ## Validation
@@ -150,12 +168,13 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Move `feFile` to controls, remove ui stuff
+* Async adapter?
+* Check `OnPush`
 * Complete built-in controls (value accessors)
   * `readonly: boolean` support
-  * `updateOn`
-* Check `OnPush`
+  * `updateOn` 
 * Complete built-in validators (explicit names?? feRequired)
+* Specs for all playground pages.
 * Complete ng adapter, release.
 * Labs:
   * `DisplayedErrorsStrategy`
@@ -167,6 +186,7 @@ Model and Controller can be declared of different elements, you do not always ne
   * feButton control - to use on group buttons, tabs
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
   * Playwright helpers
+  * `(afterChange)` - desync emit, called after model change applied
 * Docs
   * README
   * Stackblitz demos

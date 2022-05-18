@@ -164,4 +164,21 @@ test.describe.serial('FeInputDirective', () => {
     await expect(kit.$('#input-17')).toHaveValue('2023-01-02T02:22');
     await expect(kit.$('#input-17-value')).toHaveText('VAL: "2023-01-02T02:22:00.000Z"');
   });
+
+  test('input 18 - base file', async () => {
+    await expect(kit.$('#input-18-value')).toHaveText('VAL: , LEN: null');
+    await kit.chooseFiles('#input-18', ['./e2e/file-test.txt']);
+    await expect(kit.$('#input-18-value')).toHaveText('VAL: [object FileList], LEN: 1');
+  });
+
+  test('input 19 - file + readFiles', async () => {
+    await expect(kit.$('#input-19-value')).toHaveText('VAL: , LEN: null');
+    await expect(kit.$('#input-19-value-2')).toHaveText('LOADED FILES: , LEN: null');
+    await kit.chooseFiles('#input-19', ['./e2e/file-test.txt']);
+    await expect(kit.$('#input-19-value')).toHaveText('VAL: { "0": {} }, LEN: 1');
+    await expect(kit.$('#input-19-value-2')).toHaveText('LOADED FILES: [ { "file": {}, "data": "data:text/plain;base64,RklMRSBURVNU" } ], LEN: 1');
+    await kit.chooseFiles('#input-19', ['./e2e/file-test.txt', './e2e/file-test-2.txt']);
+    await expect(kit.$('#input-19-value')).toHaveText('VAL: { "0": {}, "1": {} }, LEN: 2');
+    await expect(kit.$('#input-19-value-2')).toHaveText('LOADED FILES: [ { "file": {}, "data": "data:text/plain;base64,RklMRSBURVNU" }, { "file": {}, "data": "data:text/plain;base64,RklMRSBURVNUIDIK" } ], LEN: 2');
+  });
 });

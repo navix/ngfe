@@ -4,6 +4,7 @@ import { FeGroupDirective } from './fe-group.directive';
 
 @Directive({
   selector: 'button[feSubmit]',
+  exportAs: 'feSubmit',
 })
 export class FeButtonSubmitDirective {
   @Output() feSubmit = new EventEmitter();
@@ -12,7 +13,7 @@ export class FeButtonSubmitDirective {
     @Optional() @Inject(FeGroupDirective) private group: FeGroupDirective,
   ) {
     if (!this.group) {
-      err('FeSubmit', 'Should be used inside element with [feGroup].');
+      err('FeButtonSubmitDirective', 'Should be used inside element with [feGroup].');
     }
   }
 

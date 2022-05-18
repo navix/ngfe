@@ -1,8 +1,23 @@
-import { Directive, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  Output,
+  Renderer2,
+} from '@angular/core';
 import { FeControl } from '../core';
+
+export interface FeInputFile {
+  file: File;
+  data: any;
+}
 
 @Directive({
   selector: 'input[feInput],textarea[feInput]',
+  exportAs: 'feInput',
 })
 export class FeInputDirective {
   @Input() type:
@@ -22,6 +37,10 @@ export class FeInputDirective {
 
   // @todo readonly?: boolean;
 
+  @Input() readFileAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL';
+
+  @Output() fileError = new EventEmitter<string>();
+
   constructor(
     private control: FeControl,
     private renderer: Renderer2,
@@ -35,6 +54,9 @@ export class FeInputDirective {
           break;
         case 'radio':
           this.renderer.setProperty(this.elementRef.nativeElement, 'checked', this.value === inputValue);
+          break;
+        case 'file':
+          this.renderer.setProperty(this.elementRef.nativeElement, 'files', inputValue);
           break;
         default:
           this.renderer.setProperty(this.elementRef.nativeElement, 'value', inputValue == null ? '' : inputValue);
@@ -72,6 +94,9 @@ export class FeInputDirective {
         break;
       case 'radio':
         this.control.input(this.value);
+        break;
+      case 'file':
+        this.control.input(event.target.files);
         break;
       default:
         this.control.input(event?.target?.value);

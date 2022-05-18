@@ -9,20 +9,18 @@ import { CustomControlComponent } from './custom-control-page/custom-control/cus
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldComponent } from './field-page/custom-field/field.component';
 import { FieldPageComponent } from './field-page/field-page.component';
-import { FilePageComponent } from './file-page/file-page.component';
 import { FormPageComponent } from './form-page/form-page.component';
+import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { ModelPageComponent } from './model-page/model-page.component';
 import { NumberPageComponent } from './number-page/number-page.component';
 import { RadioPageComponent } from './radio-page/radio-page.component';
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
-import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { ValidatorsPageComponent } from './validators-page/validators-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FilePageComponent,
     ModelPageComponent,
     FieldComponent,
     InputControlPageComponent,

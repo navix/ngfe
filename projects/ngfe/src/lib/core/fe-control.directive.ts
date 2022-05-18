@@ -136,8 +136,7 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
     return this.control.errors;
   }
 
-  // @todo move to service ??
   get visibleErrors() {
-    return this.control.touched && this.control.errors;
+    return this.control.visibleErrors;
   }
 }

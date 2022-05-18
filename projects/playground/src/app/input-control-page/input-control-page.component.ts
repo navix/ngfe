@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { compileFileList, FeInputFile, FeLoadedFile, readFiles } from 'ngfe';
 
 @Component({
   selector: 'app-input-control-page',
@@ -23,4 +24,23 @@ export class InputControlPageComponent {
   value16 = '2022-02-24T05:00';
   value17 = new Date('2022-08-24T18:00');
   value18?: any;
+  files1?: FileList;
+  files2?: FileList;
+  files2loaded?: FeLoadedFile[];
+  files3?: FileList = compileFileList([
+    {
+      file: new File(['123'], 'test2.txt', {
+        lastModified: 2222222,
+        type: "text/plain"
+      }),
+      data: 'data:text/plain;base64,RklMRSBURVNU',
+    }
+  ]);
+
+  loadFiles2(files?: FileList) {
+    this.files2 = files;
+    readFiles(files || []).subscribe(loadedFiles => {
+      this.files2loaded = loadedFiles;
+    });
+  }
 }
