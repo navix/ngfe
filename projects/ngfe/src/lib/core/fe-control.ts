@@ -1,20 +1,34 @@
 import { Inject, Injectable, OnDestroy, Optional, SkipSelf } from '@angular/core';
-import { BehaviorSubject, forkJoin, from, merge, Observable, of, Subject, timer } from 'rxjs';
+import { BehaviorSubject, forkJoin, from, merge, Observable, of, Subject, Subscription, timer } from 'rxjs';
 import { debounce, delay, filter, map, switchMap } from 'rxjs/operators';
 import { diff } from '../util';
 import { FeAdapter } from './adapters';
 import { FeGroupDirective } from './fe-group.directive';
 import { FeErrors, FeValidator, FeValidatorResult, FeValidity } from './validation';
 
+interface VcInitial {
+  mode: 'initial';
+}
+
+interface VcControl<MODEL> {
+  mode: 'control';
+  value: MODEL;
+}
+
+interface VcInput<MODEL> {
+  value: MODEL;
+  mode: 'input';
+}
+
 @Injectable()
 export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   debounce = 0;
-  adapter?: FeAdapter<MODEL, INPUT>;
 
-  readonly initialValue = Symbol('initial');
-
-  private readonly _value$ = new BehaviorSubject<MODEL | symbol>(this.initialValue);
+  private readonly _vc$ = new BehaviorSubject<VcInitial | VcControl<MODEL> | VcInput<MODEL>>({mode: 'initial'});
   private readonly _input$ = new Subject<INPUT>();
+  private inputHandlerSubscription?: Subscription;
+  private readonly _toInputValue$ = new BehaviorSubject<INPUT | undefined>(undefined);
+  private inputValueHandlerSubscription?: Subscription;
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
   private readonly _standalone$ = new BehaviorSubject<boolean>(false);
   private readonly _touched$ = new BehaviorSubject<boolean>(false);
@@ -22,10 +36,10 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private readonly _validators$ = new BehaviorSubject<FeValidator<MODEL>[]>([]);
   private readonly _validity$ = new BehaviorSubject<FeValidity>('initial');
   private readonly _errors$ = new BehaviorSubject<FeErrors | undefined>(undefined);
-  private readonly _updateValidityCall$ = new Subject<undefined>();
+  private readonly _updateValidity$ = new Subject<undefined>();
   private readonly _destroy$ = new Subject<undefined>();
 
-  private inputValue?: INPUT;
+  private _adapter?: FeAdapter<MODEL, INPUT>;
 
   constructor(
     @Optional() @Inject(FeGroupDirective) private group: FeGroupDirective | undefined,
@@ -37,6 +51,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
       });
     }
     this.initInputHandler();
+    this.initInputValueHandler();
     this.initValidityHandler();
     merge(this.value$, this.validators$).subscribe(() => {
       this.updateValidity();
@@ -56,8 +71,8 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
    * Undefined if initial.
    */
   get value(): MODEL | undefined {
-    const value = this._value$.value;
-    return this.isInitialValue(value) ? undefined : value;
+    const vc = this._vc$.value;
+    return vc.mode === 'initial' ? undefined : vc.value;
   }
 
   /**
@@ -65,17 +80,15 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
    */
   get value$(): Observable<MODEL> {
     return this
-      ._value$
+      ._vc$
       .pipe(
-        filter((value): value is MODEL => !this.isInitialValue(value)),
+        filter((value): value is VcControl<MODEL> => value.mode !== 'initial'),
+        map(value => value.value),
       );
   }
 
-  get inputValue$() {
-    return this.value$.pipe(
-      map(value => this.adapter ? this.adapter.toInput(value) : (value as any)),
-      filter(value => value !== this.inputValue),
-    );
+  get toInputValue$() {
+    return this._toInputValue$.asObservable();
   }
 
   get disabled() {
@@ -188,15 +201,20 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this.touched && this.errors;
   }
 
-  isInitialValue(value: MODEL | symbol): value is symbol {
-    return value === this.initialValue;
+  set adapter(adapter: FeAdapter<MODEL, INPUT> | undefined) {
+    this._adapter = adapter;
+    this.initInputHandler();
+    this.initInputValueHandler();
   }
 
   updateValue(value: MODEL) {
     if (value === this.value) {
       return;
     }
-    this._value$.next(value);
+    this._vc$.next({
+      mode: 'control',
+      value,
+    });
   }
 
   input(value: INPUT) {
@@ -215,7 +233,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   }
 
   updateValidity() {
-    this._updateValidityCall$.next();
+    this._updateValidity$.next();
   }
 
   /**
@@ -238,20 +256,34 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   }
 
   private initInputHandler() {
-    this._input$.pipe(
+    this.inputHandlerSubscription?.unsubscribe();
+    this.inputHandlerSubscription = this._input$.pipe(
       debounce(() => timer(this.debounce)),
+      this._adapter ? this._adapter.fromInput : map((v): MODEL => v as any),
     ).subscribe(value => {
-      this.inputValue = value;
-      const adapted = this.adapter ? this.adapter.fromInput(value) : (value as any);
-      this.updateValue(adapted);
+      this._vc$.next({
+        mode: 'input',
+        value: value,
+      });
       this.dirty = true;
+    });
+  }
+
+  private initInputValueHandler() {
+    this.inputValueHandlerSubscription?.unsubscribe();
+    this.inputValueHandlerSubscription = this._vc$.pipe(
+      filter((vc): vc is VcControl<MODEL> => vc.mode === 'control'),
+      map(vc => vc.value),
+      this._adapter ? this._adapter.toInput : map((v): INPUT => v as any),
+    ).subscribe(value => {
+      this._toInputValue$.next(value);
     });
   }
 
   private initValidityHandler() {
     // @todo properly handle throws in stream
     this
-      ._updateValidityCall$
+      ._updateValidity$
       .asObservable()
       .pipe(
         // Makes validators run async from init and gather multiple sync calls.

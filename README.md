@@ -56,8 +56,9 @@ imports: [
 
 ## Terms
 
-* Control - ...
-  * State - ...
+* Control - a bridge between Model and Input.
+  * Model - field that you bind in an Angular template to Control.
+  * Input - HTML element allows you to input data or any other custom implementation.
   * Value - ...
   * InputValue
   * Control implementation (Value accessor)
@@ -66,6 +67,11 @@ imports: [
 * Error - ...
 * Validity - ...
 * Form - ...
+
+Control has 3 crucial parts:
+* `FeControl` - service that handle all communication and states.
+* `FeControlDirective` provides `FeControl` and bind Model to it to define fields of your form.
+* Value accessor implementations (for example, `FeInputDirective`, that connects `FeControl` with HTML `<input>` element).
 
 ## Binding
 
@@ -182,7 +188,6 @@ Model and Controller can be declared of different elements, you do not always ne
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
   * Playwright helpers
   * `(afterChange)` - desync emit, called after model change applied
-  * Async adapter -- need to re-create streams after adapter registration
 * Docs
   * README
   * Stackblitz demos

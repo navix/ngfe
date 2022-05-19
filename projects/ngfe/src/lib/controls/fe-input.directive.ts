@@ -39,7 +39,7 @@ export class FeInputDirective {
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this.control.inputValue$.subscribe(value => {
+    this.control.toInputValue$.subscribe(value => {
       let inputValue = value;
       switch (this.type) {
         case 'checkbox':

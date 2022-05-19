@@ -29,7 +29,7 @@ export class FeSelectDirective {
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
-    this.control.inputValue$.subscribe(value => {
+    this.control.toInputValue$.subscribe(value => {
       this._value = Array.isArray(value) ? value : [value];
       this.bindValue();
     });
