@@ -32,7 +32,7 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   constructor(
     private control: FeControl,
   ) {
-    this.control.value$
+    this.control.modelValue$
       .pipe(filter(value => this.feControl !== value))
       .subscribe(value => {
         this.feControl = value;
@@ -105,15 +105,19 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
       });
     }
     if ('debounce' in changes) {
-      this.control.debounce = this.debounce || 0;
+      this.control.debounce = this.debounce;
     }
     if ('feControl' in changes) {
-      this.control.updateValue(this.feControl);
+      this.control.update(this.feControl);
     }
   }
 
-  get value() {
-    return this.control.value;
+  get modelValue() {
+    return this.control.modelValue;
+  }
+
+  get inputValue() {
+    return this.control.inputValue;
   }
 
   get validity() {

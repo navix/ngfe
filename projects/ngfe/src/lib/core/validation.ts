@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 
-export type FeValidator<T> = (args: {value: T}) => FeValidatorResult | Promise<FeValidatorResult> | Observable<FeValidatorResult>;
+export type FeValidator<MODEL = any, INPUT = any> = (args: {modelValue: MODEL, inputValue?: INPUT})
+  => FeValidatorResult | Promise<FeValidatorResult> | Observable<FeValidatorResult>;
 
 export type FeValidatorResult = void | undefined | FeErrors;
 

@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2021 AsyncBanana
- * https://github.com/AsyncBanana/microdiff
- */
-
 interface Difference {
   type: 'CREATE' | 'REMOVE' | 'CHANGE';
   path: (string | number)[];
@@ -16,6 +11,12 @@ interface Options {
 
 const richTypes = {Date: true, RegExp: true, String: true, Number: true};
 
+/**
+ * Compare objects and arrays.
+ *
+ * Copyright (c) 2021 AsyncBanana
+ * https://github.com/AsyncBanana/microdiff
+ */
 export function diff(
   obj: Record<string, any> | any[],
   newObj: Record<string, any> | any[],

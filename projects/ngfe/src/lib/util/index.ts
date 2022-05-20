@@ -1,4 +1,2 @@
-export * from './coercion';
-export * from './diff';
+export * from './public-index';
 export * from './err';
-export * from './read-files';

@@ -7,14 +7,12 @@ import { coerceToBoolean } from '../util';
 })
 export class FeRequiredValidatorDirective implements OnChanges {
   @Input() required!: boolean | string;
-  validator: FeValidator<any> = ({value}) => {
-    if (!this.isRequired) {
+
+  validator: FeValidator<any> = ({modelValue}) => {
+    if (!this.isEnabled || modelValue) {
       return;
     }
-    if (!value) {
-      return {required: true};
-    }
-    return;
+    return {required: true};
   };
 
   constructor(
@@ -27,7 +25,7 @@ export class FeRequiredValidatorDirective implements OnChanges {
     this.control.updateValidity();
   }
 
-  get isRequired() {
+  get isEnabled() {
     return coerceToBoolean(this.required);
   }
 }

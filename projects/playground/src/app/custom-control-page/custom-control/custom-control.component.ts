@@ -16,7 +16,7 @@ export class CustomControlComponent {
   }
 
   get viewValue() {
-    return this.control.value;
+    return this.control.modelValue;
   }
 
   input(value: string) {

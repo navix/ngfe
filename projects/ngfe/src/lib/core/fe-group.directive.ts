@@ -50,7 +50,7 @@ export class FeGroupDirective {
 
   addControl(control: FeControl) {
     if (!this.controlsMap.has(control)) {
-      this.controlsMap.set(control, control.value$.subscribe(this._change$));
+      this.controlsMap.set(control, control.modelValue$.subscribe(this._change$));
     }
   }
 

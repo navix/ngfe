@@ -13,6 +13,6 @@ export class FieldComponent<T> {
   @ContentChild(FeRequiredValidatorDirective, {static: true}) requiredValidator?: FeRequiredValidatorDirective;
 
   get required() {
-    return this.requiredValidator?.isRequired;
+    return this.requiredValidator?.isEnabled;
   }
 }

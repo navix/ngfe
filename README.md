@@ -174,7 +174,8 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Complete built-in validators (explicit names?? feRequired)
+* deepCopyAdapter, adapters tests
+* Drop all subs on control destroy 
 * Specs for all playground pages.
 * Complete ng adapter, release.
 * Labs:
@@ -183,7 +184,7 @@ Model and Controller can be declared of different elements, you do not always ne
   * textarea autoresize (`[feText][autoresize]` separated directive)
   * input text mask
   * focus control
-  * feMath control
+  * feMath control -- adapter?
   * feButton control - to use on group buttons, tabs
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
   * Playwright helpers
@@ -203,6 +204,7 @@ Model and Controller can be declared of different elements, you do not always ne
     * Type convert: `[feModel]="dateToString(someDate)" (feModelChange)="stringToDate($event)"`
     * Register validator from child component // How to debug this sheesh?
     * Change input type on-the-fly.
+    * Luxon-Date adapter
   * Links to forms UX articles
 * Specs
 * CI release
