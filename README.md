@@ -8,35 +8,52 @@ It is an alternative for the original `FormsModule`.
 
 ## Features
 
-* Focused on template-driven approach.
-* Single source of truth for your forms - templates.
-* Less abstractions, ultimate control.
-* More freedom for developers.
+* **Focused on template-driven approach.**
+* **Single source of truth for your forms - templates.**
+* **Less abstractions, ultimate control.**
+* **More freedom for developers.**
+* Nothing exceptionally new for Angular developers.
 * Simple custom value accessors creation.
 * Simple custom validators creation.
 * Single interface for sync and async validators.
-* Direct way to control model in validators.
-* Reduce bundle size dropping @angular/forms.
+* Direct way to control model in value accessors and validators.
 * Stricter data type checks in controls.
-* Explicit native controls binding (input, select, etc).
+* Explicit native controls binding (input, select).
 * Built-in debounce.
 * Nice submit directive which touches all fields and checks validity.
 * Handy ways to display validation errors.
-* Helper directive for build a custom field component.
 * Allows to create wrapper components without additional value accessors.
 * Does not conflict with the native `FormsModule`.
 * Native date input value transform to/from Date. ??
-* Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 * `OnPush` mode support.
 * SSR support.
+* Reduced bundle size without @angular/forms.
+* Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 
 
 ### Caveats
 
 * 3rd party lib.
-* Non-standard way to do things.
 * Not battle-tested enough yet.
 * Sometimes too much freedom for developers.
+
+## Terms
+
+* **Form** - tool for displaying and manipulating data in Browser.
+* **Model** - variable that represents state of data.
+* **Input** - HTML element (or custom component) allows you to display and change some state.
+* **Control** - a bridge between **Model** and **Input**.
+* **Value accessor** - directive or component that connects **Input** to the **Control**.
+* **Adapter** - functions that convert state when it flows between **Model** and **Input**. 
+* **Validator** - function to check **Model** or **Input** state to meet some conditions.
+* **Error** - returner by **Validator** if state is invalid. 
+* **Validity** - represents current state of control: 
+  * `pending` - one or more async **Validators** are running,
+  * `invalid` - one or more **Validators** return errors,
+  * `valid` - all **Validators** return no errors.
+* **Touched** - **Input** had interaction with user (was focused in default **Value accessors**).
+* **Dirty** - **Input** was changed by user.
+* **Group** - set of **Controls**, **Form** is also a **Group**.
 
 
 ## Installation
@@ -53,25 +70,6 @@ imports: [
   ...
 ]
 ```
-
-## Terms
-
-* Control - a bridge between Model and Input.
-  * Model - field that you bind in an Angular template to Control.
-  * Input - HTML element allows you to input data or any other custom implementation.
-  * Value - ...
-  * InputValue
-  * Control implementation (Value accessor)
-* Field - ...
-* Validator - ...
-* Error - ...
-* Validity - ...
-* Form - ...
-
-Control has 3 crucial parts:
-* `FeControl` - service that handle all communication and states.
-* `FeControlDirective` provides `FeControl` and bind Model to it to define fields of your form.
-* Value accessor implementations (for example, `FeInputDirective`, that connects `FeControl` with HTML `<input>` element).
 
 ## Binding
 
@@ -174,7 +172,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* deepCopyAdapter, adapters tests
 * Drop all subs on control destroy 
 * Specs for all playground pages.
 * Complete ng adapter, release.
@@ -189,6 +186,7 @@ Model and Controller can be declared of different elements, you do not always ne
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
   * Playwright helpers
   * `(afterChange)` - desync emit, called after model change applied
+  * Performance test, compare with native.
 * Docs
   * README
   * Stackblitz demos

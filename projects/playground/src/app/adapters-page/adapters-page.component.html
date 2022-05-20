@@ -1,0 +1,71 @@
+<h2>Adapters</h2>
+
+<div class="case">
+  <h4>1 - deepCopy adapter</h4>
+  <div>
+    <input
+      #c1="feControl"
+      [(feControl)]="value1"
+      [adapter]="value1dc ? 'deepCopy' : undefined"
+      feInput
+      id="control-1"
+    >
+    <div id="control-1-value">
+      VAL: {{ value1 | json }}, MODEL_VALUE: {{ c1.modelValue | json }}, INPUT_VALUE: {{ c1.inputValue | json }}
+    </div>
+    <div id="control-1-eq">
+      EQ: {{ c1.modelValue === c1.inputValue }}
+    </div>
+    <div>
+      <input [(feControl)]="value1dc" type="checkbox" feInput id="control-value1dc">
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - numberToString adapter</h4>
+  <div>
+    <input
+        #c2="feControl"
+        [(feControl)]="value2"
+        feInput
+        adapter="numberToString"
+        id="control-2"
+    >
+    <div id="control-2-value">
+      VAL: {{ value2 | json }}, MODEL_VALUE: {{ c2.modelValue | json }}, INPUT_VALUE: {{ c2.inputValue | json }}
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>3 - dateToDateString adapter</h4>
+  <div>
+    <input
+        #c3="feControl"
+        [(feControl)]="value3"
+        feInput
+        adapter="dateToDateString"
+        id="control-3"
+    >
+    <div id="control-3-value">
+      VAL: {{ value3 | json }}, MODEL_VALUE: {{ c3.modelValue | json }}, INPUT_VALUE: {{ c3.inputValue | json }}
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h4>4 - dateToDateLocalString adapter</h4>
+  <div>
+    <input
+        #c4="feControl"
+        [(feControl)]="value4"
+        feInput
+        adapter="dateToDateLocalString"
+        id="control-4"
+    >
+    <div id="control-4-value">
+      VAL: {{ value4 | json }}, MODEL_VALUE: {{ c4.modelValue | json }}, INPUT_VALUE: {{ c4.inputValue | json }}
+    </div>
+  </div>
+</div>
