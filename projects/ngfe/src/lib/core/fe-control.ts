@@ -52,6 +52,17 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     if (this.group) {
       this.group.removeControl(this);
     }
+    this._vc$.complete();
+    this._modelValueUpdate$.complete();
+    this._inputValueUpdate$.complete();
+    this._disabled$.complete();
+    this._standalone$.complete();
+    this._touched$.complete();
+    this._dirty$.complete();
+    this._validators$.complete();
+    this._validity$.complete();
+    this._errors$.complete();
+    this._updateValidity$.complete();
     this._destroy$.next();
     this._destroy$.complete();
   }

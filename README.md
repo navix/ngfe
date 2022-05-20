@@ -40,7 +40,7 @@ It is an alternative for the original `FormsModule`.
 ## Terms
 
 * **Form** - tool for displaying and manipulating data in Browser.
-* **Model** - variable that represents state of data.
+* **Model** - variable that represents a field of data.
 * **Input** - HTML element (or custom component) allows you to display and change some state.
 * **Control** - a bridge between **Model** and **Input**.
 * **Value accessor** - directive or component that connects **Input** to the **Control**.
@@ -172,8 +172,13 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Drop all subs on control destroy 
 * Specs for all playground pages.
+* PG demos:
+  * TODO MVC
+  * Registration form
+  * Dynamic form
+  * Form with array of objects
+  * Sub forms
 * Complete ng adapter, release.
 * Labs:
   * `DisplayedErrorsStrategy`

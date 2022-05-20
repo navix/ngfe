@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { FeControl } from './fe-control';
@@ -7,10 +7,14 @@ import { FeControl } from './fe-control';
   selector: '[feGroup]',
   exportAs: 'feGroup',
 })
-export class FeGroupDirective {
+export class FeGroupDirective implements OnDestroy {
   private controlsMap = new Map<FeControl, Subscription>();
 
   private _change$ = new Subject<undefined>();
+
+  ngOnDestroy() {
+    this._change$.complete();
+  }
 
   get controls() {
     return [...this.controlsMap.keys()];
