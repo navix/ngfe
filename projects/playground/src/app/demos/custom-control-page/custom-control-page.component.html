@@ -1,0 +1,16 @@
+<h2>Demo:CustomControl</h2>
+
+<button id="unfocus">UNFCS</button>
+
+<div class="case">
+  <h4>1 - Basic custom control</h4>
+  <div>
+    <app-custom-control [(feControl)]="value1" #c1="feControl" id="control-1"></app-custom-control>
+  </div>
+  <div id="control-1-value">
+    VALUE: {{ value1 | json }}
+  </div>
+  <div id="control-1-touched">
+    TOUCHED: {{ c1.touched | json }}
+  </div>
+</div>

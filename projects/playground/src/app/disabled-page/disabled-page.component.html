@@ -1,27 +1,41 @@
 <h2>Disabled</h2>
 
-<div>
-  <form feGroup #f1="feGroup">
-    <input [(feControl)]="model1" feText [disabled]="model1disabled" #m1="feControl" required>
-    <div>
-      DISABLED: {{ m1.disabled | json }}<br>
-      VALID: {{ m1.validity | json }}
-    </div>
-    <button (click)="model1disabled = !model1disabled">D_TOGGLE</button>
-    <div>
-      FORM_VALID: {{ f1.valid | json }}
-    </div>
-  </form>
+<div class="case">
+  <h4>1 - Control disabled handling</h4>
+  <div>
+    <input #c1="feControl" [(feControl)]="value1" feInput id="control-1" disabled>
+  </div>
+  <div id="control-1-disabled">
+    DISABLED: {{ c1.disabled | json }}
+  </div>
 </div>
 
-<div>
-  <form feGroup #f2="feGroup">
-    <input [(feControl)]="model2" feText #m2="feControl" disabled>
-    <div>
-      DISABLED: {{ m2.disabled | json }}<br>
-    </div>
-    <div>
-      FORM_MODELS_LENGHT: {{ f2.controls.length | json }}
-    </div>
-  </form>
+<div class="case">
+  <h4>2 - Disabled toggle</h4>
+  <div>
+    <input #c2="feControl" [(feControl)]="value2" feInput id="control-2" [disabled]="disabled2">
+    <input [(feControl)]="disabled2" feInput type="checkbox" id="control-2-disabled-toggle">
+  </div>
+  <div id="control-2-disabled">
+    DISABLED: {{ c2.disabled | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>3 - Disabled in group</h4>
+  <div>
+    <form feGroup #f3="feGroup">
+      <input [(feControl)]="value3" feInput [disabled]="disabled3" #c3="feControl" required id="control-3">
+      <input [(feControl)]="disabled3" feInput type="checkbox" id="control-3-disabled-toggle">
+    </form>
+  </div>
+  <div id="control-3-disabled">
+    DISABLED: {{ c3.disabled | json }}
+  </div>
+  <div id="control-3-valid">
+    VAL: {{ c3.valid | json }}
+  </div>
+  <div id="form-3-valid">
+    FORM_VAL: {{ f3.valid | json }}
+  </div>
 </div>

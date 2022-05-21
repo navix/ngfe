@@ -22,6 +22,7 @@ export class FeButtonSubmitDirective {
     if (this.group.valid) {
       this.feSubmit.emit();
     }
+    return false;
   }
 }
 

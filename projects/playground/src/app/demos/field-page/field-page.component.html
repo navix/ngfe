@@ -1,0 +1,25 @@
+<h2>Demo:Field</h2>
+
+<button id="unfocus">UNFCS</button>
+
+<div class="case">
+  <h4>1 - Errors on touch</h4>
+  <div>
+    <app-custom-field label="Field-1" id="field-1">
+      <input #c1="feControl" [(feControl)]="value1" feInput equal="123" id="control-1">
+      <div errors>
+        {{ c1.errors | json }}
+      </div>
+    </app-custom-field>
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - Required mark</h4>
+  <div>
+    <app-custom-field label="Field-2" id="field-2">
+      <input [(feControl)]="value2" feInput [required]="required2">
+      <input [(feControl)]="required2" feInput type="checkbox" id="control-2-required-toggle">
+    </app-custom-field>
+  </div>
+</div>

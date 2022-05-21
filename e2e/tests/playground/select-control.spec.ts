@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { delay } from '../../util';
 import { PageKit, PageKitFactory } from '../page-kit';
 
 test.describe.serial('FeSelectDirective', () => {
@@ -101,5 +102,14 @@ test.describe.serial('FeSelectDirective', () => {
     await expect(kit.$('#select-9-value')).toHaveText('VAL: "1"');
     await kit.$('#select-1').focus();
     await expect(kit.$('#select-9-value')).toHaveText('VAL: "2"');
+  });
+
+  test('10 - Disabled handling', async () => {
+    await expect(await kit.$('#select-10').isDisabled()).toBeFalsy();
+    await expect(kit.$('#select-10-disabled')).toHaveText('DISABLED: false ');
+    await kit.$('#select-10-disabled-toggle').check();
+    await delay(10);
+    await expect(await kit.$('#select-10').isDisabled()).toBeTruthy();
+    await expect(kit.$('#select-10-disabled')).toHaveText('DISABLED: true ');
   });
 });

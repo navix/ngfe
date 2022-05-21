@@ -16,4 +16,6 @@ export class SelectControlPageComponent {
   value7 = this.value7objects[1];
   value8 = undefined;
   value9 = '1';
+  value10 = '1';
+  disabled10 = false;
 }

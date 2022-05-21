@@ -124,3 +124,18 @@
     VAL: {{ value9 | json }}
   </div>
 </div>
+
+<div class="case">
+  <h4>10 - Disabled handling</h4>
+  <div>
+    <select [(feControl)]="value10" feSelect id="select-10" #c10="feControl" [disabled]="disabled10">
+      <option feOption value="1">VAL1</option>
+      <option feOption value="2">VAL2</option>
+      <option feOption value="3">VAL3</option>
+    </select>
+    <input [(feControl)]="disabled10" feInput type="checkbox" id="select-10-disabled-toggle">
+  </div>
+  <div id="select-10-disabled">
+    DISABLED: {{ c10.disabled | json }}
+  </div>
+</div>

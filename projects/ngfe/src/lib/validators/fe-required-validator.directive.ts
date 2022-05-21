@@ -1,4 +1,5 @@
 import { Directive, Input, OnChanges, Self } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { FeControl, FeValidator } from '../core';
 import { coerceToBoolean } from '../util';
 
@@ -15,6 +16,8 @@ export class FeRequiredValidatorDirective implements OnChanges {
     return {required: true};
   };
 
+  private readonly _isEnabled$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     @Self() private control: FeControl,
   ) {
@@ -22,10 +25,15 @@ export class FeRequiredValidatorDirective implements OnChanges {
   }
 
   ngOnChanges() {
+    this._isEnabled$.next(coerceToBoolean(this.required));
     this.control.updateValidity();
   }
 
   get isEnabled() {
-    return coerceToBoolean(this.required);
+    return this._isEnabled$.value;;
+  }
+
+  get isEnabled$() {
+    return this._isEnabled$.asObservable();
   }
 }

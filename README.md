@@ -27,6 +27,7 @@ It is an alternative for the original `FormsModule`.
 * Native date input value transform to/from Date. ??
 * `OnPush` mode support.
 * SSR support.
+* Zero deps, only Angular and RxJS.
 * Reduced bundle size without @angular/forms.
 * Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 
@@ -172,7 +173,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Specs for all playground pages.
 * PG demos:
   * TODO MVC
   * Registration form

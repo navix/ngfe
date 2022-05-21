@@ -1,56 +1,50 @@
 <h2>Lifecycle</h2>
 
-<form>
-  <button type="button" (click)="show1 = !show1">Toggle</button>
-  <br>
-  <input
-    *ngIf="show1"
-    [(feControl)]="val1"
-    (destroy)="val1 = undefined"
-    feText
-  >
-  {{ val1 | json }}
-</form>
-
-
-<form>
-  No controls warning.
-  <div [(feControl)]="model2"></div>
-</form>
-
-<form>
+<div class="case">
+  <h4>1 - (destroy)</h4>
   <div>
     <input
-        #c1="feControl"
-        (touchedChange)="itstouched($event)"
-        [(feControl)]="value1"
-        [(touched)]="text1touched"
-        [disabled]="text1disabled"
-        feInput
-        name="text1"
+      *ngIf="show1"
+      [(feControl)]="value1"
+      (destroy)="value1 = undefined"
+      feInput
+      id="control-1"
     >
-    <div>
-      VAL: {{ value1 | json }}
-    </div>
-    TOUCHED: {{ text1touched | json }}, {{ c1.touched | json }}, <input
-    [(feControl)]="text1touched"
-    feCheckbox
-    type="checkbox"
-  ><br>
-    DISABLED: {{ text1disabled | json }}, {{ c1.disabled | json }}, <input
-    [(feControl)]="text1disabled"
-    feCheckbox
-    type="checkbox"
-  >
+    <button type="button" (click)="show1 = !show1" id="control-1-toggle">Toggle</button>
   </div>
+  <div id="control-1-value">
+    VAL: {{ value1 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - Touch handle</h4>
   <div>
-    On type="number"
-    <input [(feControl)]="value2" feText name="text2" type="number">
-    {{ value2 | json }}
+    <input
+      #c2="feControl"
+      [(feControl)]="value2"
+      feInput
+      id="control-2"
+    >
   </div>
+  <div id="control-2-touched">
+    TOUCHED: {{ c2.touched | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>3 - Dirty handle</h4>
   <div>
-    updateOn="blur"
-    <input [(feControl)]="value3" feText updateOn="blur">
-    {{ value3 | json }}
+    <input
+        #c3="feControl"
+        [(feControl)]="value3"
+        feInput
+        id="control-3"
+    >
   </div>
-</form>
+  <div id="control-3-dirty">
+    DIRTY: {{ c3.dirty | json }}
+  </div>
+</div>
+
+// TODO: Reset

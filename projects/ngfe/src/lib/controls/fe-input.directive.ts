@@ -1,13 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  Input,
-  Output,
-  Renderer2,
-} from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
 import { FeControl } from '../core';
 
 @Directive({
@@ -55,10 +46,9 @@ export class FeInputDirective {
           this.renderer.setProperty(this.elementRef.nativeElement, 'value', inputValue == null ? '' : inputValue);
       }
     });
-  }
-
-  @HostBinding('attr.disabled') get disabled() {
-    return this.control.disabled || null;
+    this.control.disabled$.subscribe(disabled => {
+      this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', disabled);
+    });
   }
 
   @HostListener('input', ['$event']) inputHandler(event: any) {

@@ -1,4 +1,4 @@
-import { Directive, OnDestroy } from '@angular/core';
+import { Directive, HostBinding, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { FeControl } from './fe-control';
@@ -15,6 +15,8 @@ export class FeGroupDirective implements OnDestroy {
   ngOnDestroy() {
     this._change$.complete();
   }
+
+  @HostBinding('attr.novalidate') novalidate = '';
 
   get controls() {
     return [...this.controlsMap.keys()];

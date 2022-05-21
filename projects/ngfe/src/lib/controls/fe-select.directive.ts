@@ -33,6 +33,9 @@ export class FeSelectDirective {
       this._value = Array.isArray(value) ? value : [value];
       this.bindValue();
     });
+    this.control.disabled$.subscribe(disabled => {
+      this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', disabled);
+    });
   }
 
   get isMultiple() {
