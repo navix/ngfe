@@ -1,0 +1,19 @@
+<h2>Demo:SubForm</h2>
+
+<form #f="feGroup" feGroup>
+  <div class="case">
+    <label>
+      Field1
+      <input [(feControl)]="form.field1" feInput id="field1" required>
+    </label>
+  </div>
+
+  <app-sub-form [subForm]="form.subForm"></app-sub-form>
+
+  <div class="case" id="form-valid">
+    FORM_VALID: {{ f.valid$ | async | json }}
+  </div>
+  <div class="case" id="form-value">
+    FORM_VALUE: {{ form | json }}
+  </div>
+</form>

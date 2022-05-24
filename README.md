@@ -171,7 +171,6 @@ Model and Controller can be declared of different elements, you do not always ne
 ## TODO
 
 * PG demos:
-  * Sub forms
   * TODO MVC
   * Registration form
 * Performance tests ?? 

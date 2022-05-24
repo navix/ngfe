@@ -14,7 +14,9 @@ import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.componen
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
 import { ValidationPageComponent } from './validation-page/validation-page.component';
 import { AdaptersPageComponent } from './adapters-page/adapters-page.component';
-import { DynamicFormComponent } from './demos/dynamic-form/dynamic-form.component';
+import { DynamicFormComponent } from './demos/dynamic-form-page/dynamic-form.component';
+import { SubFormPageComponent } from './demos/sub-form-page/sub-form-page.component';
+import { SubFormComponent } from './demos/sub-form-page/sub-form/sub-form.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { DynamicFormComponent } from './demos/dynamic-form/dynamic-form.componen
     CustomControlComponent,
     AdaptersPageComponent,
     DynamicFormComponent,
+    SubFormPageComponent,
+    SubFormComponent,
   ],
   imports: [
     BrowserModule,
