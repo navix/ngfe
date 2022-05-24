@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, HostBinding, Inject, Injectable, OnDestroy, Optional, SkipSelf } from '@angular/core';
+import { ChangeDetectorRef, Inject, Injectable, OnDestroy, Optional, SkipSelf } from '@angular/core';
 import { BehaviorSubject, forkJoin, from, merge, Observable, of, Subject, timer } from 'rxjs';
-import { debounce, debounceTime, filter, map, switchMap } from 'rxjs/operators';
+import { debounce, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { diff } from '../util';
 import { FeAdapter, feAdapters } from './adapters';
 import { FeGroupDirective } from './fe-group.directive';
@@ -15,17 +15,52 @@ interface Vc<MODEL, INPUT> {
 @Injectable()
 export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private readonly _vc$ = new BehaviorSubject<Vc<MODEL, INPUT>>({source: 'initial'});
+  /**
+   * Stream with current MODEL value.
+   * Does not emit initial value.
+   */
+  readonly modelValue$: Observable<MODEL> = this._vc$.pipe(
+    filter(value => value.source !== 'initial'),
+    map(value => value.modelValue!),
+  );
+  /**
+   * Get INPUT value stream which come from model.
+   */
+  readonly toInputValue$: Observable<INPUT | undefined> = this._vc$.pipe(
+    filter(vc => vc.source === 'model'),
+    map(vc => vc.inputValue),
+  );
+
   private readonly _modelValueUpdate$ = new Subject<MODEL>();
   private readonly _inputValueUpdate$ = new Subject<INPUT>();
+
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
+  readonly disabled$ = this._disabled$.pipe(distinctUntilChanged());
+
   private readonly _standalone$ = new BehaviorSubject<boolean>(false);
+  readonly standalone$ = this._standalone$.pipe(distinctUntilChanged());
+
   private readonly _touched$ = new BehaviorSubject<boolean>(false);
+  readonly touched$ = this._touched$.pipe(distinctUntilChanged());
+
   private readonly _dirty$ = new BehaviorSubject<boolean>(false);
+  readonly dirty$ = this._dirty$.pipe(distinctUntilChanged());
+
   private readonly _validators$ = new BehaviorSubject<FeValidator<MODEL>[]>([]);
-  private readonly _validity$ = new BehaviorSubject<FeValidity>('initial');
-  private readonly _errors$ = new BehaviorSubject<FeErrors | undefined>(undefined);
+  readonly validators$ = this._validators$.asObservable();
+
   private readonly _updateValidity$ = new Subject<undefined>();
+  private readonly _validity$ = new BehaviorSubject<FeValidity>('initial');
+  readonly validity$ = this._validity$.pipe(distinctUntilChanged());
+  readonly valid$ = this._validity$.pipe(map(v => v === 'valid'));
+  readonly invalid$ = this._validity$.pipe(map(v => v === 'invalid'));
+  readonly pending$ = this._validity$.pipe(map(v => v === 'pending'));
+
+  private readonly _errors$ = new BehaviorSubject<FeErrors | undefined>(undefined);
+  readonly errors$ = this._errors$.asObservable();
+
   private readonly _destroy$ = new Subject<undefined>();
+  readonly destroy$ = this._destroy$.asObservable();
 
   private _adapter: FeAdapter<MODEL, INPUT> = feAdapters.noop;
   private _debounce?: number;
@@ -71,29 +106,8 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this._vc$.value?.modelValue;
   }
 
-  /**
-   * Stream with current MODEL value.
-   * Does not emit initial value.
-   */
-  get modelValue$(): Observable<MODEL> {
-    return this._vc$.pipe(
-      filter(value => value.source !== 'initial'),
-      map(value => value.modelValue!),
-    );
-  }
-
   get inputValue(): INPUT | undefined {
     return this._vc$.value.inputValue;
-  }
-
-  /**
-   * Get INPUT value stream which come from model.
-   */
-  get toInputValue$() {
-    return this._vc$.pipe(
-      filter(vc => vc.source === 'model'),
-      map(vc => vc.inputValue),
-    );
   }
 
   get disabled() {
@@ -106,10 +120,6 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     }
   }
 
-  get disabled$() {
-    return this._disabled$.asObservable();
-  }
-
   get standalone() {
     return this._standalone$.value;
   }
@@ -118,10 +128,6 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     if (this.standalone !== standalone) {
       this._standalone$.next(standalone);
     }
-  }
-
-  get standalone$() {
-    return this._standalone$.asObservable();
   }
 
   get dirty() {
@@ -134,24 +140,12 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     }
   }
 
-  get dirty$() {
-    return this._dirty$.asObservable();
-  }
-
   get errors() {
     return this._errors$.value;
   }
 
-  get errors$() {
-    return this._errors$.asObservable();
-  }
-
   get validity() {
     return this._validity$.value;
-  }
-
-  get validity$() {
-    return this._validity$.asObservable();
   }
 
   /**
@@ -186,20 +180,8 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     }
   }
 
-  get touched$() {
-    return this._touched$.asObservable();
-  }
-
   get validators() {
     return this._validators$.value;
-  }
-
-  get validators$() {
-    return this._validators$.asObservable();
-  }
-
-  get destroy$() {
-    return this._destroy$.asObservable();
   }
 
   get visibleErrors() {
