@@ -13,19 +13,19 @@ test.describe.serial('Demo:SubForm', () => {
     await expect(kit.subTitle).toHaveText('Demo:SubForm');
   });
 
-  test('1 - Field 1', async () => {
+  test('Field 1', async () => {
     await expect(kit.$('#form-valid')).toHaveText('FORM_VALID: false ');
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "", "subForm": { "subField1": "" } }  ');
     await kit.$('#field1').fill('aaa');
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "subForm": { "subField1": "" } } ');
   });
 
-  test('2 - Sub Field 1', async () => {
+  test('Sub Field 1', async () => {
     await kit.$('#subField1').fill('bbb');
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "subForm": { "subField1": "bbb" } } ');
   });
 
-  test('3 - Sub Field 2', async () => {
+  test('Sub Field 2', async () => {
     await kit.$('#subField2').fill('123');
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "subForm": { "subField1": "bbb", "subField2": 123 } } ');
   });

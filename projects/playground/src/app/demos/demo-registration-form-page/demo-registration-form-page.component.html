@@ -1,0 +1,63 @@
+<h2>Demo:RegistrationForm</h2>
+
+<form feGroup #feForm="feGroup" [disabled]="submitted">
+  <div class="case">
+    Email:
+    <input [(feControl)]="form.email" feInput required email id="email" #emailControl="feControl">
+    <div *ngIf="emailControl.visibleErrors as errors" id="email-errors">
+      ERRORS: {{ errors | json }}
+    </div>
+  </div>
+
+  <div class="case">
+    Username:
+    <input
+      [(feControl)]="form.username"
+      feInput
+      required
+      [extraValidators]="[usernameAvailable]"
+      id="username"
+      #usernameControl="feControl"
+    >
+    <div *ngIf="usernameControl.pending" id="username-availability-loading">LOADING...</div>
+    <div *ngIf="(usernameControl.visibleErrors$ | async) as errors" id="username-errors">
+      ERRORS: {{ errors | json }}
+    </div>
+  </div>
+
+  <div class="case">
+    <div>
+      Password:
+      <input [(feControl)]="form.password" feInput required id="password" type="password">
+    </div>
+    <div>
+      Password confirm:
+      <input
+        [(feControl)]="form.passwordConfirm"
+        feInput
+        required
+        id="passwordConfirm"
+        type="password"
+        [equal]="form.password"
+        #passwordConfirmControl="feControl"
+      >
+    </div>
+    <div *ngIf="passwordConfirmControl.visibleErrors as errors" id="password-confirm-errors">
+      ERRORS: {{ errors | json }}
+    </div>
+  </div>
+
+  <div class="case">
+    <div id="form-validity">
+      FORM_VALIDITY: {{ feForm.validity | json }}
+    </div>
+    <div id="form-value">
+      FORM_VALUE: {{ form | json }}
+    </div>
+    <div id="form-submitted">
+      FORM_SUBMITTED: {{ submitted | json }}
+    </div>
+  </div>
+
+  <button (feSubmit)="submitted = !submitted" id="submit">Submit</button>
+</form>

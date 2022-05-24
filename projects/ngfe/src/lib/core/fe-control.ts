@@ -58,6 +58,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
 
   private readonly _errors$ = new BehaviorSubject<FeErrors | undefined>(undefined);
   readonly errors$ = this._errors$.asObservable();
+  readonly visibleErrors$ = merge(this.touched$, this.errors$).pipe(map(() => this.visibleErrors));
 
   private readonly _destroy$ = new Subject<undefined>();
   readonly destroy$ = this._destroy$.asObservable();
@@ -71,7 +72,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     private cdr: ChangeDetectorRef,
   ) {
     if (this.group) {
-      merge(this.disabled$, this.standalone$).subscribe(() => {
+      this.standalone$.subscribe(() => {
         this.handleGroupRegistration();
       });
     }
@@ -292,7 +293,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
           let asyncs: Observable<FeValidatorResult>[] = [];
           for (const validator of this.validators) {
             const vc = this._vc$.value;
-            const res = validator({modelValue: vc.modelValue!, inputValue: vc.inputValue});
+            const res = validator({modelValue: vc.modelValue!, inputValue: vc.inputValue, control: this});
             if (res instanceof Observable) {
               asyncs.push(res);
               continue;

@@ -17,6 +17,7 @@ import { AdaptersPageComponent } from './adapters-page/adapters-page.component';
 import { DynamicFormComponent } from './demos/dynamic-form-page/dynamic-form.component';
 import { SubFormPageComponent } from './demos/sub-form-page/sub-form-page.component';
 import { SubFormComponent } from './demos/sub-form-page/sub-form/sub-form.component';
+import { DemoRegistrationFormPageComponent } from './demos/demo-registration-form-page/demo-registration-form-page.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { SubFormComponent } from './demos/sub-form-page/sub-form/sub-form.compon
     DynamicFormComponent,
     SubFormPageComponent,
     SubFormComponent,
+    DemoRegistrationFormPageComponent,
   ],
   imports: [
     BrowserModule,

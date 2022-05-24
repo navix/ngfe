@@ -124,23 +124,47 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
     return this.control.validity;
   }
 
+  get validity$() {
+    return this.control.validity$;
+  }
+
   get invalid() {
     return this.control.invalid;
+  }
+
+  get invalid$() {
+    return this.control.invalid$;
   }
 
   get pending() {
     return this.control.pending;
   }
 
+  get pending$() {
+    return this.control.pending$;
+  }
+
   get valid() {
     return this.control.valid;
+  }
+
+  get valid$() {
+    return this.control.valid$;
   }
 
   get errors() {
     return this.control.errors;
   }
 
+  get errors$() {
+    return this.control.errors$;
+  }
+
   get visibleErrors() {
     return this.control.visibleErrors;
+  }
+
+  get visibleErrors$() {
+    return this.control.visibleErrors$;
   }
 }

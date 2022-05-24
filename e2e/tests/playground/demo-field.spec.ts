@@ -13,14 +13,14 @@ test.describe.serial('Demo:Field', () => {
     await expect(kit.subTitle).toHaveText('Demo:Field');
   });
 
-  test('1 - Errors on touch', async () => {
+  test('Errors on touch', async () => {
     await expect(kit.$('#field-1 [errors]')).not.toBeVisible();
     await kit.$('#control-1').focus();
     await kit.$('#unfocus').focus();
     await expect(kit.$('#field-1 [errors]')).toHaveText('{ "equal": { "equal": "123", "modelValue": "" } } ');
   });
 
-  test('2 - Required mark', async () => {
+  test('Required mark', async () => {
     await expect(kit.$('#field-2 label')).toHaveText('Field-2 *');
     await kit.$('#control-2-required-toggle').uncheck();
     await expect(kit.$('#field-2 label')).toHaveText('Field-2');

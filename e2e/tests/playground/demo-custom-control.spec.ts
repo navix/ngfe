@@ -13,7 +13,7 @@ test.describe.serial('Demo:CustomControl', () => {
     await expect(kit.subTitle).toHaveText('Demo:CustomControl');
   });
 
-  test('1 - Basic custom control', async () => {
+  test('Basic custom control', async () => {
     await expect(kit.$('#control-1-value')).toHaveText('VALUE: "" ');
     await expect(kit.$('#control-1-touched')).toHaveText('TOUCHED: false ');
     await kit.$('#control-1 input').fill('eee');

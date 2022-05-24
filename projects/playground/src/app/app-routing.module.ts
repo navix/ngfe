@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdaptersPageComponent } from './adapters-page/adapters-page.component';
 import { CustomControlPageComponent } from './demos/custom-control-page/custom-control-page.component';
+import {
+  DemoRegistrationFormPageComponent
+} from './demos/demo-registration-form-page/demo-registration-form-page.component';
 import { DynamicFormComponent } from './demos/dynamic-form-page/dynamic-form.component';
 import { SubFormPageComponent } from './demos/sub-form-page/sub-form-page.component';
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
@@ -56,6 +59,10 @@ const routes: Routes = [
   {
     path: 'demo-sub-form',
     component: SubFormPageComponent,
+  },
+  {
+    path: 'demo-registration-form',
+    component: DemoRegistrationFormPageComponent,
   },
 ];
 

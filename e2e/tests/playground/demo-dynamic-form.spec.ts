@@ -13,7 +13,7 @@ test.describe.serial('Demo:DynamicForm', () => {
     await expect(kit.subTitle).toHaveText('Demo:DynamicForm');
   });
 
-  test('1 - Field 1', async () => {
+  test('Field 1', async () => {
     await expect(kit.$('#form-valid')).toHaveText('FORM_VALID: false ');
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "", "showField2": false, "showField3": false } ');
     await kit.$('#field1').fill('aaa');
@@ -21,7 +21,7 @@ test.describe.serial('Demo:DynamicForm', () => {
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "showField2": false, "showField3": false } ');
   });
 
-  test('2 - Field 2', async () => {
+  test('Field 2', async () => {
     await kit.$('#showField2').check();
     await expect(kit.$('#form-valid')).toHaveText('FORM_VALID: false ');
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "showField2": true, "showField3": false } ');
@@ -33,7 +33,7 @@ test.describe.serial('Demo:DynamicForm', () => {
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "showField2": false, "showField3": false } ');
   });
 
-  test('3 - Field 3', async () => {
+  test('Field 3', async () => {
     await kit.$('#showField3').check();
     await expect(kit.$('#form-value')).toHaveText(' FORM_VALUE: { "field1": "aaa", "showField2": false, "showField3": true } ');
     await kit.$('#field1').fill('abc');

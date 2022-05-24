@@ -1,13 +1,16 @@
-import { Directive, HostBinding, OnDestroy } from '@angular/core';
+import { Directive, HostBinding, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { FeControl } from './fe-control';
+import { FeValidity } from './validation';
 
 @Directive({
   selector: '[feGroup]',
   exportAs: 'feGroup',
 })
-export class FeGroupDirective implements OnDestroy {
+export class FeGroupDirective implements OnChanges, OnDestroy {
+  @Input() disabled = false;
+
   @HostBinding('attr.novalidate') novalidate = '';
 
   private controlsMap = new Map<FeControl, Subscription[]>();
@@ -18,11 +21,22 @@ export class FeGroupDirective implements OnDestroy {
   );
 
   private _validityCheck$ = new ReplaySubject<undefined>(1);
+  readonly validity$ = this._validityCheck$.pipe(
+    debounceTime(0),
+    map(() => this.validity),
+    distinctUntilChanged(),
+  );
   readonly valid$ = this._validityCheck$.pipe(
     debounceTime(0),
     map(() => this.valid),
     distinctUntilChanged(),
   );
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ('disabled' in changes) {
+      this.controls.forEach(control => control.disabled = this.disabled);
+    }
+  }
 
   ngOnDestroy() {
     this._modelValueChange$.complete();
@@ -32,24 +46,36 @@ export class FeGroupDirective implements OnDestroy {
     return [...this.controlsMap.keys()];
   }
 
+  get enabledControls() {
+    return [...this.controlsMap.keys()].filter(control => !control.disabled);
+  }
+
+  get validity(): FeValidity {
+    return this.pending
+      ? 'pending'
+      : this.invalid
+        ? 'invalid'
+        : 'valid';
+  }
+
   get invalid() {
-    return this.controls.some(m => m.invalid);
+    return this.enabledControls.some(m => m.invalid);
   }
 
   get pending() {
-    return this.controls.some(m => m.pending);
+    return this.enabledControls.some(m => m.pending);
   }
 
   get valid() {
-    return this.controls.every(m => m.valid);
+    return this.enabledControls.every(m => m.valid);
   }
 
   get touched() {
-    return this.controls.some(m => m.touched);
+    return this.enabledControls.some(m => m.touched);
   }
 
   get dirty() {
-    return this.controls.some(m => m.dirty);
+    return this.enabledControls.some(m => m.dirty);
   }
 
   touchAll() {
