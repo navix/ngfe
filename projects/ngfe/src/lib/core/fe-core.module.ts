@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FeControlDirective } from './fe-control.directive';
-import { FeGroupDirective } from './fe-group.directive';
+import { FeFormDirective } from './fe-form.directive';
 import { FeButtonSubmitDirective, FeFormSubmitDirective } from './fe-submit.directive';
 import { FeEnsureDirective } from './fe-ensure.directive';
 
@@ -8,14 +8,14 @@ import { FeEnsureDirective } from './fe-ensure.directive';
   declarations: [
     FeControlDirective,
     FeEnsureDirective,
-    FeGroupDirective,
+    FeFormDirective,
     FeButtonSubmitDirective,
     FeFormSubmitDirective,
   ],
   exports: [
     FeControlDirective,
     FeEnsureDirective,
-    FeGroupDirective,
+    FeFormDirective,
     FeButtonSubmitDirective,
     FeFormSubmitDirective,
   ],

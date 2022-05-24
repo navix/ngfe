@@ -170,9 +170,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Sub-groups
-* PG demos:
-  * Registration form
 * Performance tests ?? 
 * Complete ng adapter, release.
 * Labs:

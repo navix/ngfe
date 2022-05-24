@@ -3,7 +3,7 @@ import { BehaviorSubject, forkJoin, from, merge, Observable, of, Subject, timer 
 import { debounce, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { diff } from '../util';
 import { FeAdapter, feAdapters } from './adapters';
-import { FeGroupDirective } from './fe-group.directive';
+import { FeFormDirective } from './fe-form.directive';
 import { FeErrors, FeValidator, FeValidatorResult, FeValidity } from './validation';
 
 interface Vc<MODEL, INPUT> {
@@ -67,7 +67,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private _debounce?: number;
 
   constructor(
-    @Optional() @Inject(FeGroupDirective) private group: FeGroupDirective | undefined,
+    @Optional() @Inject(FeFormDirective) private group: FeFormDirective | undefined,
     @Optional() @Inject(FeControl) @SkipSelf() private parentControl: FeControl | undefined,
     private cdr: ChangeDetectorRef,
   ) {

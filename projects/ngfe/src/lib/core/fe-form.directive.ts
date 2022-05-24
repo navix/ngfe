@@ -5,10 +5,10 @@ import { FeControl } from './fe-control';
 import { FeValidity } from './validation';
 
 @Directive({
-  selector: '[feGroup]',
-  exportAs: 'feGroup',
+  selector: '[feForm]',
+  exportAs: 'feForm',
 })
-export class FeGroupDirective implements OnChanges, OnDestroy {
+export class FeFormDirective implements OnChanges, OnDestroy {
   @Input() disabled = false;
 
   @HostBinding('attr.novalidate') novalidate = '';

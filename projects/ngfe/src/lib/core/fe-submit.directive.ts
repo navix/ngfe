@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, HostListener, Inject, Optional, Output } from '@angular/core';
 import { err } from '../util';
-import { FeGroupDirective } from './fe-group.directive';
+import { FeFormDirective } from './fe-form.directive';
 
 @Directive({
   selector: 'button[feSubmit]',
@@ -10,10 +10,10 @@ export class FeButtonSubmitDirective {
   @Output() feSubmit = new EventEmitter();
 
   constructor(
-    @Optional() @Inject(FeGroupDirective) private group: FeGroupDirective,
+    @Optional() @Inject(FeFormDirective) private group: FeFormDirective,
   ) {
     if (!this.group) {
-      err('FeButtonSubmitDirective', 'Should be used inside element with [feGroup].');
+      err('FeButtonSubmitDirective', 'Should be used inside element with [feForm].');
     }
   }
 
@@ -27,13 +27,13 @@ export class FeButtonSubmitDirective {
 }
 
 @Directive({
-  selector: 'form[feGroup][feSubmit]',
+  selector: 'form[feForm][feSubmit]',
 })
 export class FeFormSubmitDirective {
   @Output() feSubmit = new EventEmitter();
 
   constructor(
-    @Inject(FeGroupDirective) private group: FeGroupDirective,
+    @Inject(FeFormDirective) private group: FeFormDirective,
   ) {
   }
 
