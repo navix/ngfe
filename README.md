@@ -5,6 +5,7 @@
 Boosted template-driven Angular forms.
 
 It is an alternative for the original `FormsModule`.
+If your project have complex and dynamic forms this lib will save you a lot of time and lines of code.
 
 ## Features
 
@@ -24,7 +25,8 @@ It is an alternative for the original `FormsModule`.
 * Handy ways to display validation errors.
 * Allows to create wrapper components without additional value accessors.
 * Does not conflict with the native `FormsModule`.
-* Native date input value transform to/from Date. ??
+* Native date input value transform to/from Date.
+* Directive for easy value init/cleanup.
 * `OnPush` mode support.
 * SSR support.
 * Zero deps, only Angular and RxJS.
@@ -76,18 +78,6 @@ imports: [
 
 ```
 <input [(feControl)]="field" feInput>
-```
-
-### Default value
-
-```
-<input [feModel]="field || 'DEFAULT'" (feModelChange)="field = $event" feText>
-```
-
-### Clean up
-
-```
-<input *ngIf="show" [(feModel)]="field" (destroy)="field = undefined" feText>
 ```
 
 ## Built-in controls
@@ -160,6 +150,13 @@ TODO
 TODO
 
 
+## Init/cleanup values
+
+```
+<div *ngIf="someCheck" feEnsure>
+</div>
+```
+
 ## Custom controls
 
 TODO
@@ -174,11 +171,10 @@ Model and Controller can be declared of different elements, you do not always ne
 ## TODO
 
 * PG demos:
+  * Sub forms
   * TODO MVC
   * Registration form
-  * Dynamic form
-  * Form with array of objects
-  * Sub forms
+* Performance tests ?? 
 * Complete ng adapter, release.
 * Labs:
   * `DisplayedErrorsStrategy`

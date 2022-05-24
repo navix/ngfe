@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdaptersPageComponent } from './adapters-page/adapters-page.component';
 import { CustomControlPageComponent } from './demos/custom-control-page/custom-control-page.component';
+import { DynamicFormComponent } from './demos/dynamic-form/dynamic-form.component';
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldPageComponent } from './demos/field-page/field-page.component';
 import { GroupPageComponent } from './group-page/group-page.component';
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'demo-custom-control',
     component: CustomControlPageComponent,
+  },
+  {
+    path: 'demo-dynamic-form',
+    component: DynamicFormComponent,
   },
 ];
 

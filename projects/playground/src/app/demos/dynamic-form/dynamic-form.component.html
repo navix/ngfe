@@ -1,0 +1,74 @@
+<h2>Demo:DynamicForm</h2>
+
+<form #f="feGroup" feGroup>
+  <div class="case">
+    <label>
+      Field1
+      <input [(feControl)]="form.field1" feInput id="field1" required>
+    </label>
+  </div>
+
+  <div class="case">
+    <h4>Optional field</h4>
+    <div>
+      <label>
+        <input [(feControl)]="form.showField2" feInput id="showField2" type="checkbox">
+        Show Field2
+      </label>
+    </div>
+    <div
+      *ngIf="form.showField2"
+      [(feEnsure)]="form.field2"
+    >
+      <label>
+        Field2
+        <input
+          [(feControl)]="form.field2"
+          adapter="numberToString"
+          feInput
+          id="field2"
+          required
+          type="number"
+        >
+      </label>
+    </div>
+  </div>
+
+  <div class="case">
+    <h4>Array</h4>
+    <div>
+      <label>
+        <input [(feControl)]="form.showField3" feInput id="showField3" type="checkbox">
+        Show Field3 (Also field1 should be 'abc')
+      </label>
+    </div>
+    <div
+      *ngIf="form.showField3 && form.field1 === 'abc'"
+      [(feEnsure)]="form.field3"
+      [default]="[{subField: 'ph'}]"
+    >
+      <div *ngFor="let row of form.field3; let index = index">
+        <label>
+          Field3.{{ index }}
+          <input
+            [(feControl)]="row.subField"
+            feInput
+            id="subField-{{ index }}"
+            required
+          >
+        </label>
+        <button type="button" (click)="form.field3!.splice(index, 1)">Remove row</button>
+      </div>
+      <button type="button" (click)="form.field3!.push({subField: ''})" id="add-row">Add row</button>
+    </div>
+  </div>
+
+  <div class="case">
+    <div id="form-valid">
+      FORM_VALID: {{ f.valid$ | async | json }}
+    </div>
+    <div id="form-value">
+      FORM_VALUE: {{ form | json }}
+    </div>
+  </div>
+</form>
