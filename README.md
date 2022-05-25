@@ -173,17 +173,10 @@ Model and Controller can be declared of different elements, you do not always ne
 * Performance tests ?? 
 * Complete ng adapter, release.
 * Labs:
-  * `DisplayedErrorsStrategy`
+  * `VisibleErrorsStrategy`
   * Scroll to first invalid field.
-  * textarea autoresize (`[feText][autoresize]` separated directive)
-  * input text mask
-  * focus control
-  * feMath control -- adapter?
-  * feButton control - to use on group buttons, tabs
   * feControl `[extraErrors]` input with custom errors that will be merged to the state.
   * Playwright helpers
-  * `(afterChange)` - desync emit, called after model change applied
-  * Performance test, compare with native.
 * Docs
   * README
   * Stackblitz demos
@@ -191,8 +184,6 @@ Model and Controller can be declared of different elements, you do not always ne
     * `| errors`
     * `<app-field>`
     * UI kit demo: field, errors, styled inputs
-    * TODO MVC demo
-    * Place links in the README
   * Fancy hacks
     * Dynamic forms 
     * Combine custom control with custom validators under one component. 

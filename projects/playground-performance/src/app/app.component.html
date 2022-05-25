@@ -1,0 +1,48 @@
+<div>
+  <div *ngIf="show1_fe">
+    <div>
+      <input [(feControl)]="value1" feInput>
+      {{ value1 }}
+    </div>
+  </div>
+  <div *ngIf="show1_ng">
+    <div>
+      <input [(ngModel)]="value1">
+      {{ value1 }}
+    </div>
+  </div>
+</div>
+
+<div>
+  <div *ngIf="show2_fe">
+    <div>
+      <input [(feControl)]="value2" feInput>
+      <span #value2_fe>{{ value2 }}</span>
+    </div>
+  </div>
+  <div *ngIf="show2_ng">
+    <div>
+      <input [(ngModel)]="value2">
+      <span #value2_ng>{{ value2 }}</span>
+    </div>
+  </div>
+</div>
+
+<div>
+  <form feForm ngNoForm *ngIf="show3_fe">
+    <div>
+      <input [(feControl)]="value3" feInput name="value3_fe">
+      <span>{{ value3 }}</span>
+    </div>
+  </form>
+  <div ngForm *ngIf="show3_ng">
+    <div>
+      <input [(ngModel)]="value3" name="value3_ng">
+      <span>{{ value3 }}</span>
+    </div>
+  </div>
+</div>
+
+<button (click)="bench1()">BENCH_1</button>
+<button (click)="bench2()">BENCH_2</button>
+<button (click)="bench3()">BENCH_3</button>
