@@ -30,7 +30,7 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * `OnPush` mode support.
 * SSR support.
 * Zero deps, only Angular and RxJS.
-* Reduced bundle size without @angular/forms.
+* Reduced bundle size without @angular/forms (~20KB parsed size in prod mode).
 * Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 
 

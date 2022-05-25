@@ -20,6 +20,11 @@ import { SubFormComponent } from './demos/sub-form-page/sub-form/sub-form.compon
 import { DemoRegistrationFormPageComponent } from './demos/demo-registration-form-page/demo-registration-form-page.component';
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FeModule,
+  ],
   declarations: [
     AppComponent,
     FieldComponent,
@@ -38,12 +43,6 @@ import { DemoRegistrationFormPageComponent } from './demos/demo-registration-for
     SubFormComponent,
     DemoRegistrationFormPageComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FeModule,
-  ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {

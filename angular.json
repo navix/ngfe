@@ -90,6 +90,7 @@
                 }
               ],
               "outputHashing": "all",
+              "vendorChunk": true,
               "statsJson": true
             },
             "development": {
@@ -194,7 +195,9 @@
                   "with": "projects/playground-adapter/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "vendorChunk": true,
+              "statsJson": true
             },
             "development": {
               "buildOptimizer": false,
@@ -202,7 +205,8 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "statsJson": true
             }
           },
           "defaultConfiguration": "production"
