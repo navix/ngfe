@@ -12,7 +12,7 @@ export class FeLengthValidatorDirective implements OnChanges {
     if (!this.hasValidLength(modelValue)) {
       return undefined;
     }
-    const actualLength = modelValue.length;
+    const actualLength = modelValue!.length;
     if (this.minlength !== undefined) {
       const requiredLength = +this.minlength;
       if (actualLength < requiredLength) {

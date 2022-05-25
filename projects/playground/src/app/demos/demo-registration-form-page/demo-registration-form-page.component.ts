@@ -24,11 +24,11 @@ export class DemoRegistrationFormPageComponent {
   submitted = false;
   submitting = false;
 
-  usernameAvailable: FeValidator<string> = ({modelValue, control}) => {
-    if (!modelValue) {
+  usernameAvailable: FeValidator<string> = (control) => {
+    if (!control.modelValue) {
       return undefined;
     }
-    return of(modelValue === 'my_name' ? undefined : {usernameAvailable: true}).pipe(
+    return of(control.modelValue === 'my_name' ? undefined : {usernameAvailable: true}).pipe(
       delay(500),
       tap(() => control.touch()),
     );

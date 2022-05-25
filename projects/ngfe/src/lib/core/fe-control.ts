@@ -292,8 +292,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
           let syncs: Observable<FeValidatorResult>[] = [];
           let asyncs: Observable<FeValidatorResult>[] = [];
           for (const validator of this.validators) {
-            const vc = this._vc$.value;
-            const res = validator({modelValue: vc.modelValue!, inputValue: vc.inputValue, control: this});
+            const res = validator(this);
             if (res instanceof Observable) {
               asyncs.push(res);
               continue;
