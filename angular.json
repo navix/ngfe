@@ -214,7 +214,8 @@
               "browserTarget": "playground-adapter:build:production"
             },
             "development": {
-              "browserTarget": "playground-adapter:build:development"
+              "browserTarget": "playground-adapter:build:development",
+              "port": 4201
             }
           },
           "defaultConfiguration": "development"

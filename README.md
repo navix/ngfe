@@ -170,8 +170,6 @@ Model and Controller can be declared of different elements, you do not always ne
 
 ## TODO
 
-* Performance tests ?? 
-* Complete ng adapter, release.
 * Labs:
   * `VisibleErrorsStrategy`
   * Scroll to first invalid field.

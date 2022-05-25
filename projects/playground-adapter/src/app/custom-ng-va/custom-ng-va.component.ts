@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-custom-ng-va',
   templateUrl: './custom-ng-va.component.html',
-  styleUrls: ['./custom-ng-va.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

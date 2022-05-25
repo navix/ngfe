@@ -1,6 +1,6 @@
 import { Directive, Inject, Optional, Self } from '@angular/core';
 import { ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
-import { FeControl } from '../core';
+import { FeControl } from 'ngfe';
 
 @Directive({
   selector: '[feControl]',
@@ -22,7 +22,7 @@ export class FeNgAdapterDirective {
       va.registerOnChange((value: any) => {
         this.control.input(value);
       });
-      this.control.inputValue$.subscribe(value => {
+      this.control.toInputValue$.subscribe(value => {
         va.writeValue(value);
       });
       if (va.setDisabledState) {
@@ -34,8 +34,9 @@ export class FeNgAdapterDirective {
     if (this.ngValidators) {
       this.control.updateValidators({
         add: this.ngValidators.map(ngValidator => {
-          return ({value}) => {
-            return ngValidator.validate({value} as any) || undefined;
+          console.log('NG_VAL', ngValidator);
+          return ({modelValue}) => {
+            return ngValidator.validate({value: modelValue} as any) || undefined;
           };
         }),
       });

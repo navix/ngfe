@@ -3,7 +3,15 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "ngfe": [
+        "projects/ngfe/src/public-api"
+      ],
+      "ngfe-ng-adapter": [
+        "projects/ngfe-ng-adapter/src/public-api"
+      ]
+    }
   },
   "files": [
     "src/main.ts",
