@@ -14,7 +14,7 @@
     ],
     "paths": {
       "ngfe": [
-        "projects/ngfe/src/public-api"
+        "dist/ngfe"
       ]
     }
   },

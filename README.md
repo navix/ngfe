@@ -421,7 +421,7 @@ imports: [
 
 After that you can use `ValueAccessors` and `Validator` with `[(feControl)]`.
 
-TODO: STACKBLITZ DEMO
+> [StackBlitz Demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src%2Fapp%2Fapp.component.html)
 
 
 
