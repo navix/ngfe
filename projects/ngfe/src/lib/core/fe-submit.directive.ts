@@ -13,6 +13,7 @@ export class FeButtonSubmitDirective {
     @Optional() @Inject(FeFormDirective) private group: FeFormDirective,
   ) {
     if (!this.group) {
+      // @todo allow formSubmit to work outside form
       err('FeButtonSubmitDirective', 'Should be used inside element with [feForm].');
     }
   }

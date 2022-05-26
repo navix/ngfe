@@ -17,6 +17,7 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   @Input() touched = false;
   @Input() dirty = false;
   @Input() extraValidators?: FeValidator<MODEL>[];
+  // @todo `[extraErrors]` input with custom errors that will be merged to the state.
   @Input() debounce?: number;
   @Input() adapter?: keyof typeof feAdapters | FeAdapter<MODEL, INPUT>;
 

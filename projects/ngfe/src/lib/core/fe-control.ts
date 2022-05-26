@@ -70,6 +70,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     @Optional() @Inject(FeFormDirective) private group: FeFormDirective | undefined,
     @Optional() @Inject(FeControl) @SkipSelf() private parentControl: FeControl | undefined,
     private cdr: ChangeDetectorRef,
+    // @todo public elementRef ??
   ) {
     if (this.group) {
       this.standalone$.subscribe(() => {
@@ -185,6 +186,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this._validators$.value;
   }
 
+  // @todo `VisibleErrorsStrategy`
   get visibleErrors() {
     return this.touched && this.errors;
   }
