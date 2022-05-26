@@ -2,6 +2,8 @@
   "name": "ngfe-ng-adapter",
   "version": "12.0.0-beta.1",
   "peerDependencies": {
-    "@angular/core": ">= 6.0.0"
+    "@angular/core": ">= 12.0.0",
+    "@angular/forms": ">= 12.0.0",
+    "ngfe": ">= 12.0.0"
   }
 }

@@ -34,7 +34,6 @@ export class FeNgAdapterDirective {
     if (this.ngValidators) {
       this.control.updateValidators({
         add: this.ngValidators.map(ngValidator => {
-          console.log('NG_VAL', ngValidator);
           return ({modelValue}) => {
             return ngValidator.validate({value: modelValue} as any) || undefined;
           };

@@ -12,7 +12,6 @@ export class FeEnsureDirective<T> implements OnChanges, OnDestroy {
   @Output() destroy = new EventEmitter<T | undefined>();
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('feEnsure', this.feEnsure, this.default);
     if (this.feEnsure == null) {
       this.init.emit(this.default);
       if (this.default != null) {

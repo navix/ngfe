@@ -13,6 +13,9 @@
     "ngfe:build": "ng run ngfe:build:production && cpx ./README.md ./dist/ngfe",
     "ngfe:publish": "npm publish ./dist/ngfe --access=public",
     "ngfe:publish:beta": "npm publish ./dist/ngfe --access=public --tag=beta",
+    "ngfe-ng-adapter:build": "ng run ngfe-ng-adapter:build:production && cpx ./README.md ./dist/ngfe-ng-adapter",
+    "ngfe-ng-adapter:publish": "npm publish ./dist/ngfe-ng-adapter --access=public",
+    "ngfe-ng-adapter:publish:beta": "npm publish ./dist/ngfe-ng-adapter --access=public --tag=beta",
     "e2e": "start-server-and-test playground:serve http://localhost:4200 e2e-test",
     "e2e-test": "playwright test -c e2e/playwright.config.ts",
     "e2e-test:chromium": "npm run e2e-test -- --project=chromium"

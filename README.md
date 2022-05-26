@@ -73,8 +73,8 @@ $ npm i ngfe
 
 ### Requirements
 
-* Angular 6.0+
-* RxJs 6.0+
+* Angular 12.0+
+* RxJs 6.6+
 
 
 
