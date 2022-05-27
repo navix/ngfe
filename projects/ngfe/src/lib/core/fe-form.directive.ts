@@ -5,7 +5,7 @@ import { FeControl } from './fe-control';
 import { FeValidity } from './validation';
 
 @Directive({
-  selector: '[feForm]',
+  selector: '[feForm],form',
   exportAs: 'feForm',
 })
 export class FeFormDirective implements OnChanges, OnDestroy {

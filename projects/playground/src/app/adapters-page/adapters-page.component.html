@@ -7,7 +7,6 @@
       #c1="feControl"
       [(feControl)]="value1"
       [adapter]="value1dc ? 'deepCopy' : undefined"
-      feInput
       id="control-1"
     >
     <div id="control-1-value">
@@ -17,7 +16,7 @@
       EQ: {{ c1.modelValue === c1.inputValue }}
     </div>
     <div>
-      <input [(feControl)]="value1dc" type="checkbox" feInput id="control-value1dc">
+      <input [(feControl)]="value1dc" type="checkbox" id="control-value1dc">
     </div>
   </div>
 </div>
@@ -28,7 +27,6 @@
     <input
         #c2="feControl"
         [(feControl)]="value2"
-        feInput
         adapter="numberToString"
         id="control-2"
     >
@@ -44,7 +42,6 @@
     <input
         #c3="feControl"
         [(feControl)]="value3"
-        feInput
         adapter="dateToDateString"
         id="control-3"
     >
@@ -60,7 +57,6 @@
     <input
         #c4="feControl"
         [(feControl)]="value4"
-        feInput
         adapter="dateToDateLocalString"
         id="control-4"
     >

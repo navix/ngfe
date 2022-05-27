@@ -10,10 +10,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FeControl } from '../core';
-import { coerceToBoolean, err } from '../util';
+import { coerceToBoolean } from '../util';
 
 @Directive({
-  selector: 'select[feSelect]',
+  selector: 'select[feControl]',
   exportAs: 'feSelect',
 })
 export class FeSelectDirective {
@@ -85,7 +85,7 @@ export class FeSelectDirective {
 }
 
 @Directive({
-  selector: 'option[feOption]',
+  selector: 'option',
 })
 export class FeSelectOptionDirective implements OnInit, OnChanges, OnDestroy {
   @Input() value?: any;
@@ -96,21 +96,30 @@ export class FeSelectOptionDirective implements OnInit, OnChanges, OnDestroy {
     private elementRef: ElementRef,
   ) {
     if (!this.select) {
-      err('FeSelectOptionDirective', 'Should be used only on select with [feSelect].');
+      return;
     }
     this.select.options.add(this);
   }
 
   ngOnInit() {
+    if (!this.select) {
+      return;
+    }
     // Browser could auto-set value to select after rendering options, need to update state.
     this.select.bindValue();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.select) {
+      return;
+    }
     this.select.bindValue();
   }
 
   ngOnDestroy() {
+    if (!this.select) {
+      return;
+    }
     this.select.options.delete(this);
     this.select.bindValue();
   }

@@ -14,7 +14,7 @@ export class FeButtonSubmitDirective {
   ) {
     if (!this.group) {
       // @todo allow formSubmit to work outside form
-      err('FeButtonSubmitDirective', 'Should be used inside element with [feForm].');
+      err('FeButtonSubmitDirective', 'Should be used inside form or element with [feForm].');
     }
   }
 
@@ -28,7 +28,7 @@ export class FeButtonSubmitDirective {
 }
 
 @Directive({
-  selector: 'form[feForm][feSubmit]',
+  selector: 'form[feSubmit]',
 })
 export class FeFormSubmitDirective {
   @Output() feSubmit = new EventEmitter();

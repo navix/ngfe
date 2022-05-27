@@ -3,7 +3,7 @@
 <div class="case">
   <h4>1 - Control disabled handling</h4>
   <div>
-    <input #c1="feControl" [(feControl)]="value1" feInput id="control-1" disabled>
+    <input #c1="feControl" [(feControl)]="value1" id="control-1" disabled>
   </div>
   <div id="control-1-disabled">
     DISABLED: {{ c1.disabled | json }}
@@ -13,8 +13,8 @@
 <div class="case">
   <h4>2 - Disabled toggle</h4>
   <div>
-    <input #c2="feControl" [(feControl)]="value2" feInput id="control-2" [disabled]="disabled2">
-    <input [(feControl)]="disabled2" feInput type="checkbox" id="control-2-disabled-toggle">
+    <input #c2="feControl" [(feControl)]="value2" id="control-2" [disabled]="disabled2">
+    <input [(feControl)]="disabled2" type="checkbox" id="control-2-disabled-toggle">
   </div>
   <div id="control-2-disabled">
     DISABLED: {{ c2.disabled | json }}
@@ -24,9 +24,9 @@
 <div class="case">
   <h4>3 - Disabled in group</h4>
   <div>
-    <form feForm #f3="feForm">
-      <input [(feControl)]="value3" feInput [disabled]="disabled3" #c3="feControl" required id="control-3">
-      <input [(feControl)]="disabled3" feInput type="checkbox" id="control-3-disabled-toggle">
+    <form #f3="feForm">
+      <input [(feControl)]="value3" [disabled]="disabled3" #c3="feControl" required id="control-3">
+      <input [(feControl)]="disabled3" type="checkbox" id="control-3-disabled-toggle">
     </form>
   </div>
   <div id="control-3-disabled">

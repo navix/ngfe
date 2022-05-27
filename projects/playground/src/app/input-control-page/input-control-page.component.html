@@ -5,7 +5,6 @@
   <div>
     <input
       [(feControl)]="value1"
-      feInput
       id="input-1"
     >
     <div id="input-1-value">
@@ -19,7 +18,6 @@
   <div>
     <input
       [(feControl)]="value2"
-      feInput
       id="input-2"
     >
     <div id="input-2-value">
@@ -33,7 +31,6 @@
   <div>
     <input
       [(feControl)]="value3"
-      feInput
       id="input-3"
     >
     <div id="input-3-value">
@@ -47,7 +44,6 @@
   <div>
     <input
       [(feControl)]="value4"
-      feInput
       id="input-4"
       type="number"
     >
@@ -63,7 +59,6 @@
     <input
       [(feControl)]="value5"
       adapter="numberToString"
-      feInput
       id="input-5"
       type="number"
     >
@@ -79,7 +74,6 @@
     <input
       [(feControl)]="value6"
       adapter="numberToString"
-      feInput
       id="input-6"
       type="text"
     >
@@ -94,7 +88,6 @@
   <div>
     <input
       [(feControl)]="value7"
-      feInput
       id="input-7"
       type="checkbox"
     >
@@ -109,7 +102,6 @@
   <div>
     <input
       [(feControl)]="value8"
-      feInput
       id="input-8"
       type="checkbox"
     >
@@ -124,7 +116,6 @@
   <div>
     <input
       [(feControl)]="value9"
-      feInput
       id="input-9"
       type="checkbox"
     >
@@ -139,7 +130,6 @@
   <div>
     1<input
     [(feControl)]="value10"
-    feInput
     id="input-10-1"
     name="radio-1"
     type="radio"
@@ -147,7 +137,6 @@
   >
     2<input
     [(feControl)]="value10"
-    feInput
     id="input-10-2"
     name="radio-1"
     type="radio"
@@ -155,7 +144,6 @@
   >
     3<input
     [(feControl)]="value10"
-    feInput
     id="input-10-3"
     name="radio-1"
     type="radio"
@@ -172,21 +160,18 @@
   <div>
     1<input
     [(feControl)]="value11"
-    feInput
     id="input-11-1"
     type="radio"
     value="1"
   >
     2<input
     [(feControl)]="value11"
-    feInput
     id="input-11-2"
     type="radio"
     value="2"
   >
     3<input
     [(feControl)]="value11"
-    feInput
     id="input-11-3"
     type="radio"
     value="3"
@@ -202,14 +187,12 @@
   <div>
     1<input
     [(feControl)]="value12"
-    feInput
     id="input-12-1"
     type="radio"
     value="1"
   >
     2<input
     [(feControl)]="value12"
-    feInput
     id="input-12-2"
     type="radio"
     value="2"
@@ -226,14 +209,12 @@
     1<input
     [(feControl)]="value13"
     [value]="1"
-    feInput
     id="input-13-1"
     type="radio"
   >
     2<input
     [(feControl)]="value13"
     [value]="2"
-    feInput
     id="input-13-2"
     type="radio"
   >
@@ -248,7 +229,6 @@
   <div>
     <input
       [(feControl)]="value14"
-      feInput
       id="input-14"
       type="date"
     >
@@ -264,7 +244,6 @@
     <input
       [(feControl)]="value15"
       adapter="dateToDateString"
-      feInput
       id="input-15"
       type="date"
     >
@@ -279,7 +258,6 @@
   <div>
     <input
       [(feControl)]="value16"
-      feInput
       id="input-16"
       type="datetime-local"
     >
@@ -295,7 +273,6 @@
     <input
       [(feControl)]="value17"
       adapter="dateToDateLocalString"
-      feInput
       id="input-17"
       type="datetime-local"
     >
@@ -308,7 +285,7 @@
 <div class="case">
   <h4>18 - Base file</h4>
   <div>
-    <input [(feControl)]="files1" feInput id="input-18" type="file">
+    <input [(feControl)]="files1" id="input-18" type="file">
   </div>
   <div id="input-18-value">
     VAL: {{ files1 }}, LEN: {{ files1?.length | json }}
@@ -318,7 +295,7 @@
 <div class="case">
   <h4>19 - File + readFiles</h4>
   <div>
-    <input (feControlChange)="loadFiles2($event)" [feControl]="files2" feInput id="input-19" multiple type="file">
+    <input (feControlChange)="loadFiles2($event)" [feControl]="files2" id="input-19" multiple type="file">
   </div>
   <div id="input-19-value">
     VAL: {{ files2 | json }}, LEN: {{ files2?.length | json }}
@@ -331,7 +308,7 @@
 <div class="case">
   <h4>20 - File from control</h4>
   <div>
-    <input [(feControl)]="files3" feInput type="file">
+    <input [(feControl)]="files3" type="file">
   </div>
   <div>
     VAL: {{ files3 | json }}, LEN: {{ files3?.length | json }}
@@ -343,7 +320,6 @@
   <div>
     <input
       [(feControl)]="value21"
-      feInput
       id="input-21"
       updateOn="blur"
     >
@@ -358,7 +334,6 @@
   <div>
     <textarea
       [(feControl)]="value22"
-      feInput
       id="input-22"
     ></textarea>
     <div id="input-22-value">
@@ -372,7 +347,6 @@
   <div>
     <input
       [(feControl)]="value23"
-      feInput
       id="input-23"
       type="range"
     >
@@ -388,7 +362,6 @@
     <input
       [(feControl)]="value24"
       adapter="numberToString"
-      feInput
       id="input-24"
       type="range"
     >
@@ -403,7 +376,6 @@
   <div>
     <input
       [(feControl)]="value25"
-      feInput
       id="input-25"
       readonly
     >

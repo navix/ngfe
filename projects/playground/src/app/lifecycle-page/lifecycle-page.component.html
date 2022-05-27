@@ -7,7 +7,6 @@
       *ngIf="show1"
       [(feControl)]="value1"
       (destroy)="value1 = undefined"
-      feInput
       id="control-1"
     >
     <button type="button" (click)="show1 = !show1" id="control-1-toggle">Toggle</button>
@@ -23,7 +22,6 @@
     <input
       #c2="feControl"
       [(feControl)]="value2"
-      feInput
       id="control-2"
     >
   </div>
@@ -38,7 +36,6 @@
     <input
         #c3="feControl"
         [(feControl)]="value3"
-        feInput
         id="control-3"
     >
   </div>

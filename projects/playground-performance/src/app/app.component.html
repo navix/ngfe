@@ -1,7 +1,7 @@
 <div>
   <div *ngIf="show1_fe">
     <div>
-      <input [(feControl)]="value1" feInput>
+      <input [(feControl)]="value1">
       {{ value1 }}
     </div>
   </div>
@@ -16,7 +16,7 @@
 <div>
   <div *ngIf="show2_fe">
     <div>
-      <input [(feControl)]="value2" feInput>
+      <input [(feControl)]="value2">
       <span #value2_fe>{{ value2 }}</span>
     </div>
   </div>
@@ -29,9 +29,9 @@
 </div>
 
 <div>
-  <form feForm ngNoForm *ngIf="show3_fe">
+  <form ngNoForm *ngIf="show3_fe">
     <div>
-      <input [(feControl)]="value3" feInput name="value3_fe">
+      <input [(feControl)]="value3" name="value3_fe">
       <span>{{ value3 }}</span>
     </div>
   </form>

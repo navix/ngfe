@@ -5,6 +5,9 @@ export interface FeLoadedFile {
   data: any;
 }
 
+/**
+ * Read file data from File[] or FileList (usually received from file inputs).
+ */
 export function readFiles(
   files: File[] | FileList,
   readAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL',
@@ -44,6 +47,9 @@ function loadFile(
   });
 }
 
+/**
+ * FileList factory.
+ */
 export function compileFileList(files: FeLoadedFile[]) {
   const dataTransfer = new DataTransfer();
   if (dataTransfer.items) {

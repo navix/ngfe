@@ -11,3 +11,9 @@ export type FeValidity = 'initial' | 'pending' | 'valid' | 'invalid';
 export type FeErrors = {
   [key: string]: any;
 }
+
+const c = {
+  onAdd: () => {},
+  onRemove: () => {},
+  validate: () => {},
+}

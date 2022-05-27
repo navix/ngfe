@@ -7,34 +7,32 @@ Boosted template-driven Angular forms.
 It is an alternative for the original `FormsModule`.
 If your project have complex and dynamic forms this lib will save you a lot of time and lines of code.
 
-
-
 ## Features
 
 * **Focused on template-driven approach.**
-* **Single source of truth for your forms - templates.**
 * **Less abstractions, ultimate control.**
 * **More freedom for developers.**
 * Nothing exceptionally new for Angular developers.
-* Simple custom value accessors creation.
-* Simple custom validators creation.
-* Single interface for sync and async validators.
-* Direct way to control model in value accessors and validators.
-* Stricter data type checks in controls.
-* Explicit native controls binding (input, select).
+* Less boilerplate to write:
+  * Simple custom value accessors creation.
+  * Simple custom validators creation.
+  * Single interface for sync and async validators.
+  * No `ControlContainer` providing for sub-forms.
+  * No required `name` binding.
+  * Directive for easy value init/cleanup.
+  * Handy way to display validation errors only on touched fields.
+* State binding in templates (e.g `[(dirty)]`).
+* Function validators binding.
 * Built-in debounce.
-* Nice submit directive which touches all fields and checks validity.
-* Handy ways to display validation errors.
-* Allows to create wrapper components without additional value accessors.
-* Does not conflict with the native `FormsModule`.
-* Adapters mechanism to convert value on the fly.
-* Native date input value transform to/from Date.
-* Directive for easy value init/cleanup.
+* Adapters for two-way value conversion on the fly.
+* Almost all states have reactive alternative (e.g `.errors`+`.errors$`).
+* Submit directive which touches all fields and checks validity.
+* Stricter types in controls.
 * `OnPush` mode support.
-* Almost all props have reactive alternative (e.g `.errors`+`.errors$`).
 * SSR support.
 * Zero deps, only Angular and RxJS.
 * Reduced bundle size without @angular/forms (~20KB parsed size in prod mode).
+* Does not conflict with the native `FormsModule`.
 * Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 
 ### Caveats
@@ -43,6 +41,12 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * Not battle-tested enough yet.
 * Sometimes too much freedom for developers.
 
+### Why template forms
+
+* **Single source of truth for your forms - templates.**
+* Almost all logic written in declarative manner.
+* Less code to write.
+* https://www.youtube.com/watch?v=L7rGogdfe2Q
 
 
 ## Terms
@@ -96,34 +100,29 @@ imports: [
 On the surface `[(feControl)]` works exactly like `[(ngModel)]`.
 
 ```
-<input [(feControl)]="field" feInput>
+<input [(feControl)]="field">
 ```
 
 ## Built-in controls
 
-All value accessors for native elements have explicit binding. 
-It is one additional keyword, but this solution has long-term compatibility benefits.
-
-### feInput
-
-Use `feInput` to enable model binding to any `input` or `textarea` element.
+### Input
 
 ```
-<input [(feControl)]="field" feInput>
-<input [(feControl)]="field" feInput type="checkbox">
-<input [(feControl)]="field" feInput type="radio" value="1">
-<input [(feControl)]="field" feInput type="date" value="1">
-<textarea [(feControl)]="field" feInput>
+<input [(feControl)]="field">
+<input [(feControl)]="field2" type="checkbox">
+<input [(feControl)]="field3" type="radio" value="1">
+<input [(feControl)]="field4" type="date" value="1">
+...
 ```
 
 TODO: STACKBLITZ DEMO
 
-#### file
+#### File helpers
 
-There is built-in function `readFiles` to read file data from file inputs:
+There is a built-in function `readFiles` to read file data from file inputs:
 
 ```
-<input (feControlChange)="loadFiles($event)" feInput multiple type="file">
+<input (feControlChange)="loadFiles($event)" type="file">
 ```
 
 ```
@@ -137,18 +136,22 @@ loadFiles(files?: FileList) {
 }
 ```
 
-### feSelect
-
-You have to use `feSelect` and `feOption` for proper work of `select` element.
-
-_Any type of value available to bind to `option[value]`._
+### Textarea
 
 ```
-<select [(feControl)]="field" feSelect>
-  <option feOption value="1">ONE</option>
-  <option feOption value="2">TWO</option>
+<textarea [(feControl)]="field"></textarea>
+```
+
+### Select
+
+```
+<select [(feControl)]="field">
+  <option value="1">ONE</option>
+  <option value="2">TWO</option>
 </select>
 ```
+
+_Any type of value available to bind to `option[value]`._
 
 TODO: STACKBLITZ DEMO
 
@@ -167,7 +170,7 @@ field: number = 100;
 ```
 
 ```
-<input [(feControl)]="field" feInput adapter="numberToString">
+<input [(feControl)]="field" adapter="numberToString">
 ```
 
 Or native Date:
@@ -177,7 +180,7 @@ field = new Date();
 ```
 
 ```
-<input [(feControl)]="field" feInput type="date" adapter="dateToDateString">
+<input [(feControl)]="field" type="date" adapter="dateToDateString">
 ```
 
 TODO: STACKBLITZ DEMO
@@ -204,7 +207,7 @@ const booleanToString: FeAdapter<boolean, string> = {
 Pass it to `[adapter]` input:
 
 ```
-<input [(feControl)]="field" feInput [adapter]="booleanToString">
+<input [(feControl)]="field" [adapter]="booleanToString">
 ```
 
 TODO: STACKBLITZ DEMO
@@ -216,7 +219,7 @@ TODO: STACKBLITZ DEMO
 Work very similar to the default Angular validation.
 
 ```
-<input #control [(feControl)]="field" feInput required>
+<input #control [(feControl)]="field" required>
 <span *ngIf="control.errors as errors>
   <span *ngIf="errors.required">Required</span>
 </span>
@@ -259,10 +262,10 @@ isBoom: FeValidator<string> = ({modelValue}) => {
 };
 ```
 
-Pass to `[extraValidators]` input:
+Pass it to `[extraValidators]` input:
 
 ```
-<input [(feControl)]="field" feInput [extraValidators]="[isBoom]">
+<input [(feControl)]="field" [extraValidators]="[isBoom]">
 ```
 
 TODO: STACKBLITZ DEMO
@@ -295,16 +298,23 @@ export class IsBoomValidatorDirective implements OnChanges {
   }
   
   get isEnabled() {
-    return this._isEnabled$.value;;
+    return coerceToBoolean(this.email);
   }
 }
 ```
 
 ```
-<input [(feControl)]="field" feInput isBoom>
+<input [(feControl)]="field" isBoom>
 ```
 
+When you add some attribute without value (instead `boolean` binding) it will pass empty string to `@Input`, `coerceToBoolean` converts it to true.
+
 TODO: STACKBLITZ DEMO
+
+### Async validators
+
+TODO
+
 
 
 ## Debounce 
@@ -312,7 +322,7 @@ TODO: STACKBLITZ DEMO
 Pass value from input to model with debounce time:
 
 ```
-<input [(feControl)]="field" [debounce]="400" feInput>
+<input [(feControl)]="field" [debounce]="400">
 ```
 
 TODO: STACKBLITZ DEMO
@@ -330,7 +340,7 @@ Also emits event only if form has `valid` state.
 ```
 <form>
   ...
-  <button type="submit" (feSubmit)="doStuff()">Submit</button>
+  <button (feSubmit)="doStuff()">Submit</button>
 </form>
 ```
 
@@ -341,7 +351,6 @@ TODO: STACKBLITZ DEMO
 ```
 <form (feSubmit)="doStuff()">
   ...
-  <button type="submit">Submit</button>
 </form>
 ```
 
@@ -355,7 +364,7 @@ Directive `feEnsure` will set `undefined` to binded model on destroy.
 
 ```
 <div *ngIf="showField" [(feEnsure)]="field">
-  <input [(feControl)]="field" feInput>
+  <input [(feControl)]="field">
 </div>
 ```
 
@@ -363,7 +372,7 @@ Also, you could define `[default]` value that will be set to the model when it i
 
 ```
 <div *ngIf="showField" [(feEnsure)]="field" default="BOOM">
-  <input [(feControl)]="field" feInput>
+  <input [(feControl)]="field">
 </div>
 ```
 
@@ -373,7 +382,9 @@ TODO: STACKBLITZ DEMO
 
 Unlike default Angular approach, you do not need to implement `ValueAccessor` interface.
 
-Just inject `FeControl` and use it methods.
+Just inject `FeControl` and use it props and methods.
+
+`.toInputValue$` - emits all changes except last passed from input itself.
 
 ```
 @Component({
@@ -400,6 +411,15 @@ export class AppCustomControlComponent {
 TODO: STACKBLITZ DEMO
 
 You can subscribe to any stream of the control and define any state.
+
+
+
+## Utils
+
+* `coerceToBoolean` - coerce an input value (typically a string) to a boolean.
+* `deepCopy` - deep copy objects and arrays.
+* `diff` - compare objects and arrays.
+* `readFile` - read file data from File.
 
 
 
@@ -437,6 +457,7 @@ After that you can use `ValueAccessors` and `Validator` with `[(feControl)]`.
 
 ## TODO
 
+* Implicit VAs binding to write less code?
 * Docs, stackblitz demos
 * Playwright helpers
 * CI test

@@ -2,7 +2,7 @@ import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Rende
 import { FeControl } from '../core';
 
 @Directive({
-  selector: 'input[feInput],textarea[feInput]',
+  selector: 'input[feControl],textarea[feControl]',
   exportAs: 'feInput',
 })
 export class FeInputDirective {

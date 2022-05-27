@@ -1,9 +1,9 @@
 <h2>Demo:RegistrationForm</h2>
 
-<form feForm #feForm="feForm" [disabled]="submitted">
+<form #feForm="feForm" [disabled]="submitted">
   <div class="case">
     Email:
-    <input [(feControl)]="form.email" feInput required email id="email" #emailControl="feControl">
+    <input [(feControl)]="form.email" required email id="email" #emailControl="feControl">
     <div *ngIf="emailControl.visibleErrors as errors" id="email-errors">
       ERRORS: {{ errors | json }}
     </div>
@@ -13,7 +13,6 @@
     Username:
     <input
       [(feControl)]="form.username"
-      feInput
       required
       [extraValidators]="[usernameAvailable]"
       id="username"
@@ -28,13 +27,12 @@
   <div class="case">
     <div>
       Password:
-      <input [(feControl)]="form.password" feInput required id="password" type="password">
+      <input [(feControl)]="form.password" required id="password" type="password">
     </div>
     <div>
       Password confirm:
       <input
         [(feControl)]="form.passwordConfirm"
-        feInput
         required
         id="passwordConfirm"
         type="password"

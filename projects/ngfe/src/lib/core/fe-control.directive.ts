@@ -5,6 +5,10 @@ import { FeAdapter, feAdapters } from './adapters';
 import { FeControl } from './fe-control';
 import { FeErrors, FeValidator, FeValidity } from './validation';
 
+/**
+ * Allow to bind model to control.
+ * Provides `FeControl` service to handle control state and communications.
+ */
 @Directive({
   selector: '[feControl]',
   exportAs: 'feControl',

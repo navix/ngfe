@@ -1,10 +1,10 @@
 <h2>Demo:DynamicForm</h2>
 
-<form #f="feForm" feForm>
+<form #f="feForm">
   <div class="case">
     <label>
       Field1
-      <input [(feControl)]="form.field1" feInput id="field1" required>
+      <input [(feControl)]="form.field1" id="field1" required>
     </label>
   </div>
 
@@ -12,7 +12,7 @@
     <h4>Optional field</h4>
     <div>
       <label>
-        <input [(feControl)]="form.showField2" feInput id="showField2" type="checkbox">
+        <input [(feControl)]="form.showField2" id="showField2" type="checkbox">
         Show Field2
       </label>
     </div>
@@ -25,7 +25,6 @@
         <input
           [(feControl)]="form.field2"
           adapter="numberToString"
-          feInput
           id="field2"
           required
           type="number"
@@ -38,7 +37,7 @@
     <h4>Array</h4>
     <div>
       <label>
-        <input [(feControl)]="form.showField3" feInput id="showField3" type="checkbox">
+        <input [(feControl)]="form.showField3" id="showField3" type="checkbox">
         Show Field3 (Also field1 should be 'abc')
       </label>
     </div>
@@ -52,7 +51,6 @@
           Field3.{{ index }}
           <input
             [(feControl)]="row.subField"
-            feInput
             id="subField-{{ index }}"
             required
           >

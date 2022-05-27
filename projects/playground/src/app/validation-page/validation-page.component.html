@@ -3,7 +3,7 @@
 <div class="case">
   <h4>1 - Required validator</h4>
   <div>
-    <input #c1="feControl" [(feControl)]="value1" feInput required id="control-1">
+    <input #c1="feControl" [(feControl)]="value1" required id="control-1">
   </div>
   <div id="control-1-validity">
     VALIDITY: {{ c1.validity | json }}<br>
@@ -16,7 +16,7 @@
 <div class="case">
   <h4>2 - Function validator</h4>
   <div>
-    <input #c2="feControl" [(feControl)]="value2" feInput id="control-2" [extraValidators]="[syncVal]">
+    <input #c2="feControl" [(feControl)]="value2" id="control-2" [extraValidators]="[syncVal]">
   </div>
   <div id="control-2-validity">
     VALIDITY: {{ c2.validity | json }}<br>
@@ -29,7 +29,7 @@
 <div class="case">
   <h4>3 - Function async Observable validator</h4>
   <div>
-    <input #c3="feControl" [(feControl)]="value3" feInput id="control-3" [extraValidators]="[asyncValObs]">
+    <input #c3="feControl" [(feControl)]="value3" id="control-3" [extraValidators]="[asyncValObs]">
   </div>
   <div id="control-3-validity">
     VALIDITY: {{ c3.validity | json }}<br>
@@ -42,7 +42,7 @@
 <div class="case">
   <h4>4 - Function async Promise validator</h4>
   <div>
-    <input #c4="feControl" [(feControl)]="value4" feInput id="control-4" [extraValidators]="[asyncValProm]">
+    <input #c4="feControl" [(feControl)]="value4" id="control-4" [extraValidators]="[asyncValProm]">
   </div>
   <div id="control-4-validity">
     VALIDITY: {{ c4.validity | json }}<br>
@@ -55,7 +55,7 @@
 <div class="case">
   <h4>5 - Debounce before async</h4>
   <div>
-    <input #c5="feControl" [(feControl)]="value5" feInput id="control-5" [extraValidators]="[asyncValObs]" [debounce]="300">
+    <input #c5="feControl" [(feControl)]="value5" id="control-5" [extraValidators]="[asyncValObs]" [debounce]="300">
   </div>
   <div id="control-5-validity">
     VALIDITY: {{ c5.validity | json }}<br>
@@ -68,7 +68,7 @@
 <div class="case">
   <h4>6 - Email validator</h4>
   <div>
-    <input #c6="feControl" [(feControl)]="value6" feInput email id="control-6">
+    <input #c6="feControl" [(feControl)]="value6" email id="control-6">
   </div>
   <div id="control-6-validity">
     VALIDITY: {{ c6.validity | json }}<br>
@@ -81,7 +81,7 @@
 <div class="case">
   <h4>7 - Length validator</h4>
   <div>
-    <input #c7="feControl" [(feControl)]="value7" feInput minlength="5" [maxlength]="10" id="control-7">
+    <input #c7="feControl" [(feControl)]="value7" minlength="5" [maxlength]="10" id="control-7">
   </div>
   <div id="control-7-validity">
     VALIDITY: {{ c7.validity | json }}<br>
@@ -94,7 +94,7 @@
 <div class="case">
   <h4>8 - Pattern validator</h4>
   <div>
-    <input #c8="feControl" [(feControl)]="value8" feInput pattern="[a-zA-Z ]*" id="control-8">
+    <input #c8="feControl" [(feControl)]="value8" pattern="[a-zA-Z ]*" id="control-8">
   </div>
   <div id="control-8-validity">
     VALIDITY: {{ c8.validity | json }}<br>
@@ -107,7 +107,7 @@
 <div class="case">
   <h4>9 - Required validator with initial value</h4>
   <div>
-    <input #c9="feControl" [(feControl)]="value9" feInput required id="control-9">
+    <input #c9="feControl" [(feControl)]="value9" required id="control-9">
   </div>
   <div id="control-9-validity">
     VALIDITY: {{ c9.validity | json }}<br>
@@ -120,7 +120,7 @@
 <div class="case">
   <h4>10 - Number validator</h4>
   <div>
-    <input #c10="feControl" [(feControl)]="value10" feInput adapter="numberToString" min="10" max="20" id="control-10">
+    <input #c10="feControl" [(feControl)]="value10" adapter="numberToString" min="10" max="20" id="control-10">
   </div>
   <div id="control-10-validity">
     VALIDITY: {{ c10.validity | json }}<br>
@@ -133,8 +133,8 @@
 <div class="case">
   <h4>11 - isNumber validator</h4>
   <div>
-    <input #c11="feControl" [(feControl)]="value11" feInput isNumber adapter="numberToString" id="control-11">
-    <input [(feControl)]="value11" feInput id="control-11-sub">
+    <input #c11="feControl" [(feControl)]="value11" isNumber adapter="numberToString" id="control-11">
+    <input [(feControl)]="value11" id="control-11-sub">
   </div>
   <div id="control-11-value">
     VAL: {{ value11 | json }}<br>
@@ -150,7 +150,7 @@
 <div class="case">
   <h4>12 - Equal validator</h4>
   <div>
-    <input #c12="feControl" [(feControl)]="value12" feInput equal="321" id="control-12">
+    <input #c12="feControl" [(feControl)]="value12" equal="321" id="control-12">
   </div>
   <div id="control-12-validity">
     VALIDITY: {{ c12.validity | json }}<br>
@@ -163,7 +163,7 @@
 <div class="case">
   <h4>13 - Not equal validator</h4>
   <div>
-    <input #c13="feControl" [(feControl)]="value13" feInput notEqual="654" id="control-13">
+    <input #c13="feControl" [(feControl)]="value13" notEqual="654" id="control-13">
   </div>
   <div id="control-13-validity">
     VALIDITY: {{ c13.validity | json }}<br>
@@ -176,8 +176,8 @@
 <div class="case">
   <h4>14 - Equal models validator</h4>
   <div>
-    <input #c14_1="feControl" [(feControl)]="value14_1" feInput [equal]="value14_2" id="control-14-1">
-    <input #c14_2="feControl" [(feControl)]="value14_2" feInput [equal]="value14_1" id="control-14-2">
+    <input #c14_1="feControl" [(feControl)]="value14_1" [equal]="value14_2" id="control-14-1">
+    <input #c14_2="feControl" [(feControl)]="value14_2" [equal]="value14_1" id="control-14-2">
   </div>
   <div id="control-14-1-validity">
     VALIDITY: {{ c14_1.validity | json }}<br>
