@@ -10,17 +10,17 @@ export class FeButtonSubmitDirective {
   @Output() feSubmit = new EventEmitter();
 
   constructor(
-    @Optional() @Inject(FeFormDirective) private group: FeFormDirective,
+    @Optional() @Inject(FeFormDirective) private form: FeFormDirective,
   ) {
-    if (!this.group) {
+    if (!this.form) {
       // @todo allow formSubmit to work outside form
       err('FeButtonSubmitDirective', 'Should be used inside form or element with [feForm].');
     }
   }
 
   @HostListener('click') clickHandler() {
-    this.group.touchAll();
-    if (this.group.valid) {
+    this.form.touchAll();
+    if (this.form.valid) {
       this.feSubmit.emit();
     }
     return false;

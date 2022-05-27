@@ -81,6 +81,10 @@ export class FeInputDirective {
       case 'file':
         this.control.input(event.target.files);
         break;
+      case 'number':
+        const value = event?.target?.value;
+        this.control.input(value !== '' ? parseFloat(value) : undefined);
+        break;
       default:
         this.control.input(event?.target?.value);
     }

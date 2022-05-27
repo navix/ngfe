@@ -47,7 +47,7 @@ export class FeFormDirective implements OnChanges, OnDestroy {
   }
 
   get enabledControls() {
-    return [...this.controlsMap.keys()].filter(control => !control.disabled);
+    return this.controls.filter(control => !control.disabled);
   }
 
   get validity(): FeValidity {
@@ -79,7 +79,7 @@ export class FeFormDirective implements OnChanges, OnDestroy {
   }
 
   touchAll() {
-    this.controls.forEach(m => m.touched = true);
+    this.enabledControls.forEach(m => m.touch());
   }
 
   reset() {

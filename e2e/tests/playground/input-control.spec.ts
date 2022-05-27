@@ -36,7 +36,7 @@ test.describe.serial('FeInputDirective', () => {
   test('input 4 - type number', async () => {
     await expect(kit.$('#input-4-value')).toHaveText('VAL: 111');
     await kit.$('#input-4').fill('222');
-    await expect(kit.$('#input-4-value')).toHaveText('VAL: "222"');
+    await expect(kit.$('#input-4-value')).toHaveText('VAL: 222');
   });
 
   test('input 5 - type number with force type', async () => {

@@ -10,7 +10,7 @@ import { FeErrors, FeValidator, FeValidity } from './validation';
  * Provides `FeControl` service to handle control state and communications.
  */
 @Directive({
-  selector: '[feControl]',
+  selector: '[feControl],[feControlChange]',
   exportAs: 'feControl',
   providers: [FeControl],
 })
@@ -123,6 +123,18 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
 
   get inputValue() {
     return this.control.inputValue;
+  }
+
+  get touched$() {
+    return this.control.touched$;
+  }
+
+  get dirty$() {
+    return this.control.dirty$;
+  }
+
+  get disabled$() {
+    return this.control.disabled$;
   }
 
   get validity() {
