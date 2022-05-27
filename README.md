@@ -4,7 +4,7 @@
 
 Boosted template-driven Angular forms.
 
-It is an alternative for the original `FormsModule`.
+It is an alternative for the Angular `FormsModule`.
 If your project have complex and dynamic forms this lib will save you a lot of time and lines of code.
 
 ## Features
@@ -21,10 +21,10 @@ If your project have complex and dynamic forms this lib will save you a lot of t
   * No required `name` binding.
   * Directive for easy value init/cleanup.
   * Handy way to display validation errors only on touched fields.
-* State binding in templates (e.g `[(dirty)]`).
 * Function validators binding.
 * Built-in debounce.
-* Adapters for two-way value conversion on the fly.
+* Adapters for two-way value conversion.
+* Optional state binding in templates (e.g `[(touched)]`).
 * Almost all states have reactive alternative (e.g `.errors`+`.errors$`).
 * Submit directive which touches all fields and checks validity.
 * Stricter types in controls.
@@ -32,7 +32,7 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * SSR support.
 * Zero deps, only Angular and RxJS.
 * Reduced bundle size without @angular/forms (~20KB parsed size in prod mode).
-* Does not conflict with the native `FormsModule`.
+* Does not conflict with the Angular `FormsModule`.
 * Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
 
 ### Caveats
@@ -57,15 +57,14 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * **Control** - a bridge between **Model** and **Input**.
 * **Value accessor** - directive or component that connects **Input** to the **Control**.
 * **Adapter** - functions that convert state when it flows between **Model** and **Input**. 
-* **Validator** - function to check **Model** or **Input** state to meet some conditions.
-* **Error** - returner by **Validator** if state is invalid. 
-* **Validity** - represents current state of control: 
+* **Validator** - function to check **Model** or **Input** values to meet some conditions.
+* **Error** - returner by **Validator** if value is invalid. 
+* **Validity** - represents current validation state: 
   * `pending` - one or more async **Validators** are running,
-  * `invalid` - one or more **Validators** return errors,
-  * `valid` - all **Validators** return no errors.
-* **Touched** - **Input** had interaction with user (was focused in default **Value accessors**).
+  * `invalid` - one or more **Validators** returned errors,
+  * `valid` - all **Validators** returned no errors.
+* **Touched** - **Input** had interaction with user (was focused for built-in **Value accessors**).
 * **Dirty** - **Input** was changed by user.
-* **Group** - set of **Controls**, **Form** is also a **Group**.
 
 
 
@@ -84,9 +83,11 @@ $ npm i ngfe
 
 ## Usage
 
-Import main module:
+Import the module:
 
 ```
+import { FeModule } from 'ngfe';
+...
 imports: [
   FeModule,
   ...
@@ -159,7 +160,7 @@ TODO: STACKBLITZ DEMO
 
 ## Adapters
 
-Controls store 2 values at the same moment: `modelValue` and `inputValue`.  When `modelValue` changes this value also transferred to `inputValue` and vice-versa.  You could define two functions that will change the values during this transition. 
+Controls store 2 values at the same moment: `modelValue` and `inputValue`. When `modelValue` changes its' value also transferred to `inputValue` and vice-versa.  You could define functions that will change the values during this transition. 
 
 At the first place this feature is needed to keep proper types for values in models.
 
@@ -199,8 +200,8 @@ Use `FeAdapter` interface to declare modifying functions:
 ```
 const booleanToString: FeAdapter<boolean, string> = {
   name: 'booleanToString',
-  fromModel: modelValue => modelValue ? '1' : '0',
-  fromInput: inputValue => inputValue === '1' ? true : false,
+  fromModel: modelValue => modelValue ? 'true' : 'false',
+  fromInput: inputValue => inputValue === 'true' ? true : false,
 };
 ```
 
@@ -230,7 +231,7 @@ Work very similar to the default Angular validation.
 Also, there is `.visibleErrors` that passed errors object when control is touched. 
 
 ```
-<input #control="feModel" [(feControl)]="field" required>
+<input #control="feControl" [(feControl)]="field" required>
 <span *ngIf="control.visibleErrors as errors>
   <span *ngIf="errors.required">Required</span>
 </span>
@@ -250,64 +251,52 @@ TODO: STACKBLITZ DEMO
 
 ### Custom validator
 
-#### As function
+#### As a function
 
-Use `FeValidator` interface to implement a validator.
+Use `FeValidator` interface to implement a validator. Return errors object or `undefined` if value is valid.
 
 ```
-isBoom: FeValidator<string> = ({modelValue}) => {
-  return !modelValue || modelValue === 'BOOM'
+// Invalid if value is not empty and have value "BOOM".
+notBoom: FeValidator<string> = ({modelValue}) => {
+  return !modelValue || modelValue !== 'BOOM'
     ? undefined
-    : {boom: true};
+    : {notBoom: true};
 };
 ```
 
 Pass it to `[extraValidators]` input:
 
 ```
-<input [(feControl)]="field" [extraValidators]="[isBoom]">
+<input #control="feControl" [(feControl)]="field" [extraValidators]="[notBoom]">
+<span *ngIf="control.errors?.notBoom">Value should not be "BOOM"</span>
 ```
 
 TODO: STACKBLITZ DEMO
 
-#### As directive
+#### As a directive
 
 Or, create a validator directive:
 
 ```
 @Directive({
-  selector: 'isBoom'
+  selector: 'notBoom'
 })
-export class IsBoomValidatorDirective implements OnChanges {
-  @Input isBoom!: string | boolean;
-
-  validator: FeValidator<string> = ({modelValue}) => {
-    return !this.isEnabled || !modelValue || modelValue === 'BOOM'
-      ? undefined
-      : {boom: true};
-  };
-  
+export class notBoomValidatorDirective implements OnChanges {
   constructor(
-    @Self() private control: FeControl,
+    @Self() private control: FeControl<string>,
   ) {
-    this.control.updateValidators({add: [this.validator]});
-  }
-
-  ngOnChanges() {
-    this.control.updateValidity();
-  }
-  
-  get isEnabled() {
-    return coerceToBoolean(this.email);
+    this.control.addValidator(({modelValue}) => {
+      return !modelValue || modelValue !== 'BOOM'
+        ? undefined
+        : {notBoom: true};
+    });
   }
 }
 ```
 
 ```
-<input [(feControl)]="field" isBoom>
+<input [(feControl)]="field" notBoom>
 ```
-
-When you add some attribute without value (instead `boolean` binding) it will pass empty string to `@Input`, `coerceToBoolean` converts it to true.
 
 TODO: STACKBLITZ DEMO
 
@@ -378,11 +367,11 @@ Also, you could define `[default]` value that will be set to the model when it i
 
 TODO: STACKBLITZ DEMO
 
-## Custom controls
+## Custom Value Accessor
 
 Unlike default Angular approach, you do not need to implement `ValueAccessor` interface.
 
-Just inject `FeControl` and use it props and methods.
+Just inject `FeControl` and use it's props and methods.
 
 `.toInputValue$` - emits all changes except last passed from input itself.
 

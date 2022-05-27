@@ -7,22 +7,20 @@ import { FeControl, FeValidator } from '../core';
 export class FePatternValidatorDirective implements OnChanges {
   @Input() pattern?: string | RegExp | false;
 
-  validator: FeValidator<string> = ({modelValue}) => {
-    if (!this.regex || !this.regexStr || !modelValue) {
-      return undefined;
-    }
-    return this.regex.test(modelValue)
-      ? undefined
-      : {pattern: {pattern: this.regexStr, modelValue}};
-  };
-
   private regex?: RegExp;
   private regexStr?: string;
 
   constructor(
-    @Self() private control: FeControl,
+    @Self() private control: FeControl<string>,
   ) {
-    this.control.updateValidators({add: [this.validator]});
+    this.control.addValidator(({modelValue}) => {
+      if (!this.regex || !this.regexStr || !modelValue) {
+        return undefined;
+      }
+      return this.regex.test(modelValue)
+        ? undefined
+        : {pattern: {pattern: this.regexStr, modelValue}};
+    });
   }
 
   ngOnChanges() {

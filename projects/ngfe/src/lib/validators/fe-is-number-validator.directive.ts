@@ -1,5 +1,5 @@
 import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { FeControl, FeValidator } from '../core';
+import { FeControl } from '../core';
 import { coerceToBoolean } from '../util';
 
 @Directive({
@@ -8,31 +8,29 @@ import { coerceToBoolean } from '../util';
 export class FeIsNumberValidatorDirective implements OnChanges {
   @Input() isNumber!: string | boolean;
 
-  validator: FeValidator<number, string> = ({modelValue, inputValue}) => {
-    if (!this.isEnabled) {
-      return undefined;
-    }
-    if (modelValue != null && typeof modelValue !== 'number') {
-      return {
-        isNumber: {
-          modelValue,
-        },
-      };
-    }
-    if (inputValue != null && inputValue !== '' && isNaN(+inputValue)) {
-      return {
-        isNumber: {
-          inputValue,
-        },
-      };
-    }
-    return undefined;
-  };
-
   constructor(
-    @Self() private control: FeControl,
+    @Self() private control: FeControl<number, string>,
   ) {
-    this.control.updateValidators({add: [this.validator]});
+    this.control.addValidator(({modelValue, inputValue}) => {
+      if (!this.isEnabled) {
+        return undefined;
+      }
+      if (modelValue != null && typeof modelValue !== 'number') {
+        return {
+          isNumber: {
+            modelValue,
+          },
+        };
+      }
+      if (inputValue != null && inputValue !== '' && isNaN(+inputValue)) {
+        return {
+          isNumber: {
+            inputValue,
+          },
+        };
+      }
+      return undefined;
+    });
   }
 
   ngOnChanges() {

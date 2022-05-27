@@ -9,19 +9,17 @@ import { coerceToBoolean } from '../util';
 export class FeRequiredValidatorDirective implements OnChanges {
   @Input() required!: boolean | string;
 
-  validator: FeValidator<any> = ({modelValue}) => {
-    if (!this.isEnabled || modelValue) {
-      return;
-    }
-    return {required: true};
-  };
-
   private readonly _isEnabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     @Self() private control: FeControl,
   ) {
-    this.control.updateValidators({add: [this.validator]});
+    this.control.addValidator(({modelValue}) => {
+      if (!this.isEnabled || modelValue) {
+        return;
+      }
+      return {required: true};
+    });
   }
 
   ngOnChanges() {

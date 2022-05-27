@@ -228,10 +228,14 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   }
 
   updateValidators({add = [], remove = []}: {
-    add?: FeValidator<MODEL>[];
-    remove?: FeValidator<MODEL>[];
+    add?: FeValidator<MODEL, INPUT>[];
+    remove?: FeValidator<MODEL, INPUT>[];
   }) {
     this._validators$.next([...new Set([...this.validators, ...add])].filter(v => remove.indexOf(v) === -1));
+  }
+
+  addValidator(validator: FeValidator<MODEL, INPUT>) {
+    this.updateValidators({add: [validator]});
   }
 
   updateValidity() {

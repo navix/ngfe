@@ -7,22 +7,20 @@ import { FeControl, FeValidator } from '../core';
 export class FeNotEqualValidatorDirective implements OnChanges {
   @Input() notEqual: any;
 
-  validator: FeValidator<string> = ({modelValue}) => {
-    if (this.notEqual === modelValue) {
-      return {
-        'notEqual': {
-          notEqual: this.notEqual,
-          modelValue,
-        },
-      };
-    }
-    return undefined;
-  };
-
   constructor(
     @Self() private control: FeControl,
   ) {
-    this.control.updateValidators({add: [this.validator]});
+    this.control.addValidator(({modelValue}) => {
+      if (this.notEqual === modelValue) {
+        return {
+          'notEqual': {
+            notEqual: this.notEqual,
+            modelValue,
+          },
+        };
+      }
+      return undefined;
+    });
   }
 
   ngOnChanges() {

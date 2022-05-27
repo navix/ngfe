@@ -8,30 +8,28 @@ export class FeLengthValidatorDirective implements OnChanges {
   @Input() minlength?: string | number | false;
   @Input() maxlength?: string | number | false;
 
-  validator: FeValidator<string | Array<any>> = ({modelValue}) => {
-    if (!this.hasValidLength(modelValue)) {
-      return undefined;
-    }
-    const actualLength = modelValue!.length;
-    if (this.minlength !== undefined) {
-      const requiredLength = +this.minlength;
-      if (actualLength < requiredLength) {
-        return {minlength: {requiredLength, actualLength}};
-      }
-    }
-    if (this.maxlength !== undefined) {
-      const requiredLength = +this.maxlength;
-      if (actualLength > requiredLength) {
-        return {maxlength: {requiredLength, actualLength}};
-      }
-    }
-    return undefined;
-  };
-
   constructor(
-    @Self() private control: FeControl,
+    @Self() private control: FeControl<string | Array<any>>,
   ) {
-    this.control.updateValidators({add: [this.validator]});
+    this.control.addValidator(({modelValue}) => {
+      if (!this.hasValidLength(modelValue)) {
+        return undefined;
+      }
+      const actualLength = modelValue!.length;
+      if (this.minlength !== undefined) {
+        const requiredLength = +this.minlength;
+        if (actualLength < requiredLength) {
+          return {minlength: {requiredLength, actualLength}};
+        }
+      }
+      if (this.maxlength !== undefined) {
+        const requiredLength = +this.maxlength;
+        if (actualLength > requiredLength) {
+          return {maxlength: {requiredLength, actualLength}};
+        }
+      }
+      return undefined;
+    });
   }
 
   ngOnChanges() {
