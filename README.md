@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/ngfe.svg)](https://www.npmjs.com/package/ngfe)
+![CI](https://github.com/navix/ngfe/actions/workflows/ci.yml/badge.svg)
+
 # 🧰 ngfe | Angular Forms Extra
 
 ## WIP
@@ -279,7 +282,7 @@ Or, create a validator directive:
 
 ```
 @Directive({
-  selector: 'notBoom'
+  selector: '[feControl][notBoom]'
 })
 export class notBoomValidatorDirective implements OnChanges {
   constructor(
@@ -397,13 +400,19 @@ export class AppCustomControlComponent {
 }
 ```
 
-TODO: STACKBLITZ DEMO
+```
+<app-custom-control [(feControl)]="field"></app-custom-control>
+```
 
 You can subscribe to any stream of the control and define any state.
+
+TODO: STACKBLITZ DEMO
 
 
 
 ## Utils
+
+Set of functions that is very useful in work with forms.
 
 * `coerceToBoolean` - coerce an input value (typically a string) to a boolean.
 * `deepCopy` - deep copy objects and arrays.
@@ -428,7 +437,7 @@ imports: [
 ]
 ```
 
-After that you can use `ValueAccessors` and `Validator` with `[(feControl)]`.
+After that you can use Angular `ValueAccessors` and `Validator` with `[(feControl)]`.
 
 > [StackBlitz Demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src%2Fapp%2Fapp.component.html)
 
@@ -437,16 +446,15 @@ After that you can use `ValueAccessors` and `Validator` with `[(feControl)]`.
 ## Additional Examples
 
 * TODO: How to create form with dynamic fields.
-* TODO: How to reduce errors boilerplate using pipe.
-* TODO: How to reduce errors boilerplate using component.
-* TODO: How to create a field component.
+* TODO: How to create form for array of objects.
+* TODO: How to reduce errors boilerplate using pipe or component.
+* TODO: How to create a field component to handle label, state and errors.
 * TODO: How to scroll to first invalid field.
 
 
 
 ## TODO
 
-* Implicit VAs binding to write less code?
-* Docs, stackblitz demos
-* Playwright helpers
 * CI test
+* Playwright helpers ??
+* Docs, stackblitz demos
