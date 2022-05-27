@@ -167,7 +167,7 @@ Controls store 2 values at the same moment: `modelValue` and `inputValue`. When 
 
 At the first place this feature is needed to keep proper types for values in models.
 
-For example numbers:
+For example:
 
 ```
 field: number = 100;
@@ -176,6 +176,8 @@ field: number = 100;
 ```
 <input [(feControl)]="field" adapter="numberToString">
 ```
+
+_Note: value accessor for `input[type="number"]` parses input and returns number without the adapter._
 
 Or native Date:
 
@@ -423,6 +425,8 @@ Set of functions that is very useful in work with forms.
 
 ## @angular/forms adapter
 
+Enables an easy transition from Angular forms to **ngfe**.
+
 Install package:
 
 ```
@@ -439,7 +443,9 @@ imports: [
 
 After that you can use Angular `ValueAccessors` and `Validator` with `[(feControl)]`.
 
-> [StackBlitz Demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src%2Fapp%2Fapp.component.html)
+Also, with this package, `feControl` provides `NgControl` and allows you to use **ngfe** with Material components or other UI libs.
+
+> [[StackBlitz] ngfe-ng-adapter demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src%2Fapp%2Fapp.component.html)
 
 
 
@@ -455,6 +461,7 @@ After that you can use Angular `ValueAccessors` and `Validator` with `[(feContro
 
 ## TODO
 
+* adapter playground: material, datepicker
 * CI test
 * Playwright helpers ??
 * Docs, stackblitz demos
