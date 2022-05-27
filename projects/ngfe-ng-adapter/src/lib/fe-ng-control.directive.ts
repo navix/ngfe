@@ -13,6 +13,8 @@ class LocalControl {
     this.valueChanges = this.feControl.modelValue$;
   }
 
+  hasValidator() {}
+
   patchValue(value: any, options?: Object): void {
     this.feControl.update(value);
   }
@@ -68,6 +70,56 @@ class LocalControl {
   get pending() {
     return this.feControl.pending;
   }
+
+  markAsTouched() {
+    this.feControl.touch();
+  }
+
+  markAllAsTouched() {
+    this.feControl.touch();
+  }
+
+  markAsUntouched() {
+    this.feControl.touched = false;
+  }
+
+  markAsDirty() {
+    this.feControl.dirty = true;
+  }
+
+  markAsPristine() {
+    this.feControl.dirty = false;
+  }
+
+  markAsPending() {}
+
+  disable() {
+    this.feControl.disabled = true;
+  }
+
+  enable() {
+    this.feControl.disabled = false;
+  }
+
+  setParent() {}
+
+  updateValueAndValidity() {
+    this.feControl.updateValidity();
+  }
+
+  setErrors() {}
+
+  get() {}
+
+  getError(errorCode: string) {
+    return this.feControl.errors?.[errorCode];
+  }
+
+  hasError(errorCode: string) {
+    return !!this.feControl.errors?.[errorCode];
+  }
+
+  root() {}
 }
 
 @Directive({
