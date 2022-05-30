@@ -22,6 +22,9 @@ export class FeSelectDirective {
   @Input() updateOn: 'change' | 'blur' = 'change';
 
   options = new Set<FeSelectOptionDirective>();
+
+  connected = true;
+
   private _value: any[] = [undefined];
 
   constructor(
@@ -30,6 +33,9 @@ export class FeSelectDirective {
     private elementRef: ElementRef,
   ) {
     this.control.toInputValue$.subscribe(value => {
+      if (!this.connected) {
+        return;
+      }
       this._value = Array.isArray(value) ? value : [value];
       this.bindValue();
     });
@@ -43,12 +49,18 @@ export class FeSelectDirective {
   }
 
   @HostListener('change') inputHandler() {
+    if (!this.connected) {
+      return;
+    }
     if (this.updateOn === 'change') {
       this.input();
     }
   }
 
   bindValue() {
+    if (!this.connected) {
+      return;
+    }
     if (this.isMultiple) {
       this.options.forEach(option => {
         if (this._value.find(v => v === option.value)) {
@@ -68,6 +80,9 @@ export class FeSelectDirective {
   }
 
   @HostListener('focusout') focusoutHandler() {
+    if (!this.connected) {
+      return;
+    }
     this.control.touch();
     if (this.updateOn === 'blur') {
       this.input();

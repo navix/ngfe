@@ -25,12 +25,17 @@ export class FeInputDirective {
 
   @Output() fileError = new EventEmitter<string>();
 
+  connected = true;
+
   constructor(
     private control: FeControl,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
     this.control.toInputValue$.subscribe(value => {
+      if (!this.connected) {
+        return;
+      }
       let inputValue = value;
       switch (this.type) {
         case 'checkbox':
@@ -47,23 +52,35 @@ export class FeInputDirective {
       }
     });
     this.control.disabled$.subscribe(disabled => {
+      if (!this.connected) {
+        return;
+      }
       this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', disabled);
     });
   }
 
   @HostListener('input', ['$event']) inputHandler(event: any) {
+    if (!this.connected) {
+      return;
+    }
     if (this.type !== 'checkbox' && this.type !== 'radio' && this.updateOn === 'change') {
       this.input(event);
     }
   }
 
   @HostListener('change', ['$event']) changeHandler(event: any) {
+    if (!this.connected) {
+      return;
+    }
     if ((this.type === 'checkbox' || this.type === 'radio') && this.updateOn === 'change') {
       this.input(event);
     }
   }
 
   @HostListener('focusout', ['$event']) focusoutHandler(event: any) {
+    if (!this.connected) {
+      return;
+    }
     this.control.touch();
     if (this.updateOn === 'blur') {
       this.input(event);

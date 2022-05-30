@@ -1,5 +1,5 @@
-import { Directive, Self } from '@angular/core';
-import { AbstractControl, NgControl } from '@angular/forms';
+import { Directive, Input, Self } from '@angular/core';
+import { AbstractControl, ControlContainer, NgControl } from '@angular/forms';
 import { FeControl } from 'ngfe';
 import { merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -129,9 +129,15 @@ class LocalControl {
       provide: NgControl,
       useExisting: FeNgControlDirective,
     },
+    {
+      provide: ControlContainer,
+      useExisting: FeNgControlDirective,
+    },
   ],
 })
 export class FeNgControlDirective extends NgControl {
+  @Input() name!: string | null;
+
   private _control?: LocalControl;
 
   constructor(@Self() private feControl: FeControl) {
@@ -144,4 +150,10 @@ export class FeNgControlDirective extends NgControl {
   }
 
   viewToModelUpdate(newValue: any) {}
+
+  formDirective() {}
+
+  get path() {
+    return null;
+  }
 }

@@ -47,7 +47,7 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 ### Why template forms
 
 * **Single source of truth for your forms - templates.**
-* Almost all logic written in declarative manner.
+* Almost all logic written in a declarative manner.
 * Less code to write.
 * https://www.youtube.com/watch?v=L7rGogdfe2Q
 
@@ -231,7 +231,7 @@ Work very similar to the default Angular validation.
 </span>
 ```
 
-### Display Errors
+### Visible Errors
 
 Also, there is `.visibleErrors` that passed errors object when control is touched. 
 
@@ -252,7 +252,7 @@ TODO: STACKBLITZ DEMO
 * `minlength`, `maxlength` - works only for strings and arrays in `modelValue`.
 * `min`, `max` - works only for numbers in `modelValue`.
 * `pattern`
-* `isNumber` - check that `inputValue` represents a number.
+* `isNumber` - check that `inputValue` represents a number or a string that can be parsed to number.
 
 ### Custom validator
 
