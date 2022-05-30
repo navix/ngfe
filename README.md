@@ -461,7 +461,6 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 
 ## TODO
 
-* adapter playground: material, datepicker
 * CI test
 * Playwright helpers ??
 * Docs, stackblitz demos
