@@ -203,7 +203,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   /**
    * Set new MODEL value.
    */
-  update(modelValue: MODEL) {
+  update(modelValue: MODEL | undefined) {
     if (modelValue === this.modelValue) {
       return;
     }
@@ -213,7 +213,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   /**
    * Set new INPUT value.
    */
-  input(inputValue: INPUT) {
+  input(inputValue: INPUT | undefined) {
     if (inputValue === this.inputValue) {
       return;
     }

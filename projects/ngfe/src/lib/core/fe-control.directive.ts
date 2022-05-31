@@ -15,15 +15,42 @@ import { FeErrors, FeValidator, FeValidity } from './validation';
   providers: [FeControl],
 })
 export class FeControlDirective<MODEL, INPUT> implements OnChanges {
-  @Input() feControl!: MODEL;
-  @Input() disabled: boolean | string = false;
-  @Input() standalone: boolean | string = false;
-  @Input() touched = false;
-  @Input() dirty = false;
+  @Input() feControl!: MODEL | undefined;
+
+  @Input() set disabled(disabled: boolean | string) {
+    this.control.disabled = coerceToBoolean(disabled);
+  }
+
+  @Input() set standalone(standalone: boolean | string) {
+    this.control.standalone = coerceToBoolean(standalone);
+  }
+
+  @Input() set touched(touched: boolean) {
+    this.control.touched = touched;
+  }
+
+  @Input() set dirty(dirty: boolean) {
+    this.control.dirty = dirty;
+  }
+
+  @Input() set debounce(debounce: number | undefined) {
+    this.control.debounce = debounce;
+  }
+
+  @Input() set adapter(adapter: keyof typeof feAdapters | FeAdapter<MODEL, INPUT> | undefined) {
+    if (typeof adapter === 'string') {
+      if (adapter in feAdapters) {
+        this.control.adapter = feAdapters[adapter];
+      } else {
+        err('FeControlDirective', `Adapter with name "${this.adapter}" not found.`);
+      }
+    } else {
+      this.control.adapter = adapter;
+    }
+  }
+
   @Input() extraValidators?: FeValidator<MODEL>[];
   // @todo `[extraErrors]` input with custom errors that will be merged to the state.
-  @Input() debounce?: number;
-  @Input() adapter?: keyof typeof feAdapters | FeAdapter<MODEL, INPUT>;
 
   @Output() feControlChange = new EventEmitter<MODEL>();
   @Output() disabledChange = new EventEmitter<boolean>();
@@ -35,7 +62,7 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   @Output() destroy = new EventEmitter<undefined>();
 
   constructor(
-    private control: FeControl,
+    public control: FeControl,
   ) {
     this.control.modelValue$
       .pipe(filter(value => this.feControl !== value))
@@ -44,27 +71,19 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
         this.feControlChange.emit(value);
       });
     this.control.disabled$
-      .pipe(filter(disabled => this.disabled !== disabled))
       .subscribe(disabled => {
-        this.disabled = disabled;
         this.disabledChange.emit(disabled);
       });
     this.control.standalone$
-      .pipe(filter(standalone => this.standalone !== standalone))
       .subscribe(standalone => {
-        this.standalone = standalone;
         this.standaloneChange.emit(standalone);
       });
     this.control.touched$
-      .pipe(filter(touched => this.touched !== touched))
       .subscribe(touched => {
-        this.touched = touched;
         this.touchedChange.emit(touched);
       });
     this.control.dirty$
-      .pipe(filter(dirty => this.dirty !== dirty))
       .subscribe(dirty => {
-        this.dirty = dirty;
         this.dirtyChange.emit(dirty);
       });
     this.control.validity$
@@ -79,28 +98,8 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('adapter' in changes) {
-      if (typeof this.adapter === 'string') {
-        if (this.adapter in feAdapters) {
-          this.control.adapter = feAdapters[this.adapter];
-        } else {
-          err('FeControlDirective', `Adapter with name "${this.adapter}" not found.`);
-        }
-      } else {
-        this.control.adapter = this.adapter;
-      }
-    }
-    if ('disabled' in changes) {
-      this.control.disabled = coerceToBoolean(this.disabled);
-    }
-    if ('standalone' in changes) {
-      this.control.standalone = coerceToBoolean(this.standalone);
-    }
-    if ('touched' in changes) {
-      this.control.touched = this.touched;
-    }
-    if ('dirty' in changes) {
-      this.control.dirty = this.dirty;
+    if ('feControl' in changes) {
+      this.control.update(this.feControl);
     }
     if ('extraValidators' in changes) {
       const prev: FeValidator<MODEL>[] | undefined = changes.extraValidators.previousValue;
@@ -108,12 +107,6 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
         add: this.extraValidators,
         remove: prev?.filter(f => this.extraValidators?.indexOf(f) === -1) || [],
       });
-    }
-    if ('debounce' in changes) {
-      this.control.debounce = this.debounce;
-    }
-    if ('feControl' in changes) {
-      this.control.update(this.feControl);
     }
   }
 
@@ -125,12 +118,24 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
     return this.control.inputValue;
   }
 
+  get touched() {
+    return this.control.touched;
+  }
+
   get touched$() {
     return this.control.touched$;
   }
 
+  get dirty() {
+    return this.control.dirty;
+  }
+
   get dirty$() {
     return this.control.dirty$;
+  }
+
+  get disabled() {
+    return this.control.disabled;
   }
 
   get disabled$() {

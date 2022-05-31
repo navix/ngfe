@@ -3,8 +3,6 @@
 
 # 🧰 ngfe | Angular Forms Extra
 
-## WIP
-
 Boosted template-driven Angular forms.
 
 It is an alternative for the Angular `FormsModule`.
@@ -119,11 +117,11 @@ On the surface `[(feControl)]` works exactly like `[(ngModel)]`.
 ...
 ```
 
-TODO: STACKBLITZ DEMO
+> [[StackBlitz] ngfe inputs demo](https://stackblitz.com/edit/ngfe-inputs-demo?file=src/app/app.component.html)
 
 #### File helpers
 
-There is a built-in function `readFiles` to read file data from file inputs:
+There is a built-in function [`readFiles`](./projects/ngfe/src/lib/util/read-files.ts) to read file data from file inputs:
 
 ```
 <input (feControlChange)="loadFiles($event)" type="file">
@@ -157,8 +155,6 @@ loadFiles(files?: FileList) {
 
 _Any type of value available to bind to `option[value]`._
 
-TODO: STACKBLITZ DEMO
-
 
 
 ## Adapters
@@ -189,9 +185,7 @@ field = new Date();
 <input [(feControl)]="field" type="date" adapter="dateToDateString">
 ```
 
-TODO: STACKBLITZ DEMO
-
-### Built-in adapters
+### [Built-in adapters](./projects/ngfe/src/lib/core/adapters.ts)
 
 * `numberToString` - keeps number in model and string in input.
 * `dateToDateString`
@@ -200,13 +194,13 @@ TODO: STACKBLITZ DEMO
 
 ### Custom adapter
 
-Use `FeAdapter` interface to declare modifying functions:
+Use [`FeAdapter`](./projects/ngfe/src/lib/core/adapters.ts#L3) interface to declare modifying functions:
 
 ```
-const booleanToString: FeAdapter<boolean, string> = {
+booleanToString: FeAdapter<boolean, string> = {
   name: 'booleanToString',
-  fromModel: modelValue => modelValue ? 'true' : 'false',
-  fromInput: inputValue => inputValue === 'true' ? true : false,
+  fromModel: modelValue => modelValue === true ? '1' : modelValue === false ? '0' : '',
+  fromInput: inputValue => inputValue === '1' ? true : inputValue === '0' ? false : undefined,
 };
 ```
 
@@ -216,7 +210,7 @@ Pass it to `[adapter]` input:
 <input [(feControl)]="field" [adapter]="booleanToString">
 ```
 
-TODO: STACKBLITZ DEMO
+> [[StackBlitz] ngfe custom adapter demo](https://stackblitz.com/edit/ngfe-custom-adapter-demo?file=src/app/app.component.ts)
 
 
 
@@ -225,11 +219,13 @@ TODO: STACKBLITZ DEMO
 Work very similar to the default Angular validation.
 
 ```
-<input #control [(feControl)]="field" required>
-<span *ngIf="control.errors as errors>
+<input #control="feControl" [(feControl)]="field" required>
+<div *ngIf="control.errors as errors">
   <span *ngIf="errors.required">Required</span>
-</span>
+</div>
 ```
+
+> [[StackBlitz] ngfe validation demo](https://stackblitz.com/edit/ngfe-validation-demo?file=src/app/app.component.html)
 
 ### Visible Errors
 
@@ -237,12 +233,10 @@ Also, there is `.visibleErrors` that passed errors object when control is touche
 
 ```
 <input #control="feControl" [(feControl)]="field" required>
-<span *ngIf="control.visibleErrors as errors>
-  <span *ngIf="errors.required">Required</span>
-</span>
+<div *ngIf="control.visibleErrors as errors">
+  <span *ngIf="errors.required">Field is required</span>
+</div>
 ```
-
-TODO: STACKBLITZ DEMO
 
 ### Built-in validators
 
@@ -258,7 +252,7 @@ TODO: STACKBLITZ DEMO
 
 #### As a function
 
-Use `FeValidator` interface to implement a validator. Return errors object or `undefined` if value is valid.
+Use [`FeValidator`](./projects/ngfe/src/lib/core/validation.ts#L7) interface to implement a validator. Return errors object [`FeError`](./projects/ngfe/src/lib/core/validation.ts#L14) or `undefined` if value is valid.
 
 ```
 // Invalid if value is not empty and have value "BOOM".
@@ -275,8 +269,6 @@ Pass it to `[extraValidators]` input:
 <input #control="feControl" [(feControl)]="field" [extraValidators]="[notBoom]">
 <span *ngIf="control.errors?.notBoom">Value should not be "BOOM"</span>
 ```
-
-TODO: STACKBLITZ DEMO
 
 #### As a directive
 
@@ -303,11 +295,11 @@ export class notBoomValidatorDirective implements OnChanges {
 <input [(feControl)]="field" notBoom>
 ```
 
-TODO: STACKBLITZ DEMO
+> [[StackBlitz] ngfe validation demo](https://stackblitz.com/edit/ngfe-validation-demo?file=src/app/not-boom-validator.directive.ts)
 
 ### Async validators
 
-TODO
+Return from validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts#L10).
 
 
 
@@ -318,8 +310,6 @@ Pass value from input to model with debounce time:
 ```
 <input [(feControl)]="field" [debounce]="400">
 ```
-
-TODO: STACKBLITZ DEMO
 
 
 
@@ -337,8 +327,6 @@ Also emits event only if form has `valid` state.
   <button (feSubmit)="doStuff()">Submit</button>
 </form>
 ```
-
-TODO: STACKBLITZ DEMO
 
 ### On form
 
@@ -369,8 +357,6 @@ Also, you could define `[default]` value that will be set to the model when it i
   <input [(feControl)]="field">
 </div>
 ```
-
-TODO: STACKBLITZ DEMO
 
 ## Custom Value Accessor
 
@@ -408,7 +394,7 @@ export class AppCustomControlComponent {
 
 You can subscribe to any stream of the control and define any state.
 
-TODO: STACKBLITZ DEMO
+> [[StackBlitz] ngfe custom value accessor demo](https://stackblitz.com/edit/ngfe-custom-va-demo?file=src/app/custom-control.component.ts)
 
 
 
@@ -416,10 +402,10 @@ TODO: STACKBLITZ DEMO
 
 Set of functions that is very useful in work with forms.
 
-* `coerceToBoolean` - coerce an input value (typically a string) to a boolean.
-* `deepCopy` - deep copy objects and arrays.
-* `diff` - compare objects and arrays.
-* `readFile` - read file data from File.
+* [`coerceToBoolean`](./projects/ngfe/src/lib/util/coercion.ts) - coerce an input value (typically a string) to a boolean.
+* [`deepCopy`](./projects/ngfe/src/lib/util/deep-copy.ts) - deep copy objects and arrays.
+* [`diff`](./projects/ngfe/src/lib/util/diff.ts) - compare objects and arrays.
+* [`readFiles`](./projects/ngfe/src/lib/util/read-files.ts) - read file data from File.
 
 
 
@@ -445,7 +431,7 @@ After that you can use Angular `ValueAccessors` and `Validator` with `[(feContro
 
 Also, with this package, `feControl` provides `NgControl` and allows you to use **ngfe** with Material components or other UI libs.
 
-> [[StackBlitz] ngfe-ng-adapter demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src%2Fapp%2Fapp.component.html)
+> [[StackBlitz] ngfe-ng-adapter demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src/app/app.component.html)
 
 
 
@@ -456,11 +442,3 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 * TODO: How to reduce errors boilerplate using pipe or component.
 * TODO: How to create a field component to handle label, state and errors.
 * TODO: How to scroll to first invalid field.
-
-
-
-## TODO
-
-* CI test
-* Playwright helpers ??
-* Docs, stackblitz demos
