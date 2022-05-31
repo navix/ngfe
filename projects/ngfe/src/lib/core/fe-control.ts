@@ -31,8 +31,8 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     map(vc => vc.inputValue),
   );
 
-  private readonly _modelValueUpdate$ = new Subject<MODEL>();
-  private readonly _inputValueUpdate$ = new Subject<INPUT>();
+  private readonly _modelValueUpdate$ = new Subject<MODEL | undefined>();
+  private readonly _inputValueUpdate$ = new Subject<INPUT | undefined>();
 
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
   readonly disabled$ = this._disabled$.pipe(distinctUntilChanged());
@@ -100,7 +100,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     this._validity$.complete();
     this._errors$.complete();
     this._updateValidity$.complete();
-    this._destroy$.next();
+    this._destroy$.next(undefined);
     this._destroy$.complete();
   }
 
@@ -239,7 +239,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   }
 
   updateValidity() {
-    this._updateValidity$.next();
+    this._updateValidity$.next(undefined);
   }
 
   /**
@@ -275,7 +275,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
 
   private initInputValueHandler() {
     this._inputValueUpdate$.pipe(
-      debounce(() => timer(this._debounce)),
+      debounce(() => timer(this._debounce || 0)),
     ).subscribe(inputValue => {
       this._vc$.next({
         source: 'input',

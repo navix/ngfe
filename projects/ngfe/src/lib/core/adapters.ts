@@ -2,8 +2,8 @@ import { deepCopy } from '../util';
 
 export interface FeAdapter<MODEL, INPUT> {
   name?: string;
-  fromModel: (modelValue: MODEL) => INPUT;
-  fromInput: (inputValue: INPUT) => MODEL;
+  fromModel: (modelValue: MODEL | undefined) => INPUT | undefined;
+  fromInput: (inputValue: INPUT | undefined) => MODEL | undefined;
 }
 
 const noop: FeAdapter<any, any> = {
@@ -15,14 +15,14 @@ const noop: FeAdapter<any, any> = {
 const numberToString: FeAdapter<number | undefined, string> = {
   name: 'numberToString',
   fromModel: modelValue => modelValue == null ? '' : modelValue + '',
-  fromInput: inputValue => inputValue !== '' && !isNaN(+inputValue) ? +inputValue : undefined,
+  fromInput: inputValue => inputValue != null && inputValue !== '' && !isNaN(+inputValue) ? +inputValue : undefined,
 };
 
 const dateToDateString: FeAdapter<Date | undefined, string> = {
   name: 'dateToDateString',
   fromModel: modelValue => modelValue == null ? '' : modelValue.toISOString().substring(0, 10),
   fromInput: (inputValue) => {
-    if (inputValue === '') {
+    if (inputValue == null || inputValue === '') {
       return undefined;
     }
     const date = new Date(inputValue);
