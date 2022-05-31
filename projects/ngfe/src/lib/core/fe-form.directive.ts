@@ -90,7 +90,7 @@ export class FeFormDirective implements OnChanges, OnDestroy {
     if (!this.controlsMap.has(control)) {
       this.controlsMap.set(control, [
         control.modelValue$.subscribe(this._modelValueChange$),
-        control.validity$.subscribe(() => this._validityCheck$.next()),
+        control.validity$.subscribe(() => this._validityCheck$.next(undefined)),
       ]);
     }
   }
@@ -100,7 +100,7 @@ export class FeFormDirective implements OnChanges, OnDestroy {
     if (subs) {
       subs.forEach(s => s.unsubscribe());
       this.controlsMap.delete(control);
-      this._validityCheck$.next();
+      this._validityCheck$.next(undefined);
     }
   }
 }
