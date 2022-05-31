@@ -19,4 +19,5 @@ jobs:
         run: |
           npm i
           npx playwright install-deps
+          npx playwright install
           npm run e2e
