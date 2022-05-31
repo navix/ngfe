@@ -158,8 +158,8 @@ test.describe.serial('FeInputDirective', () => {
   });
 
   test('input 17 - datetime-local with Date type', async () => {
-    await expect(kit.$('#input-17')).toHaveValue('2022-08-24T15:00');
-    await expect(kit.$('#input-17-value')).toHaveText('VAL: "2022-08-24T15:00:00.000Z"');
+    await expect(kit.$('#input-17')).toHaveValue('2022-08-24T18:00');
+    await expect(kit.$('#input-17-value')).toHaveText('VAL: "2022-08-24T18:00:00.000Z"');
     await kit.$('#input-17').fill('2023-01-02T02:22');
     await expect(kit.$('#input-17')).toHaveValue('2023-01-02T02:22');
     await expect(kit.$('#input-17-value')).toHaveText('VAL: "2023-01-02T02:22:00.000Z"');

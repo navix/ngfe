@@ -23,7 +23,7 @@ export class InputControlPageComponent {
   value14 = '2022-02-24';
   value15 = new Date('2022-03-03');
   value16 = '2022-02-24T05:00';
-  value17 = new Date('2022-08-24T18:00');
+  value17 = new Date('2022-08-24T18:00:00.000Z');
   value18?: any;
   files1?: FileList;
   files2?: FileList;
