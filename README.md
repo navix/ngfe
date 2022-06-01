@@ -450,10 +450,6 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 
 
 
-## Additional Examples
+## LICENSE 
 
-* TODO: How to create form with dynamic fields.
-* TODO: How to create form for array of objects.
-* TODO: How to reduce errors boilerplate using pipe or component.
-* TODO: How to create a field component to handle label, state and errors.
-* TODO: How to scroll to first invalid field.
+MIT
