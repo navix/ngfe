@@ -138,6 +138,17 @@ loadFiles(files?: FileList) {
 }
 ```
 
+#### Touch on change
+
+You can control how touched state is set with `touchOnChange` and `touchOnBlur` parameters.
+
+By default `touchOnBlur` is `true` and `touchOnChange` is `false`. 
+
+```
+<input [(feControl)]="field1" touchOnChange>
+<input [(feControl)]="field2" [touchOnBlur]="false">
+```
+
 ### Textarea
 
 ```
@@ -340,22 +351,26 @@ Also emits event only if form has `valid` state.
 
 ## Init/cleanup values
 
-On dynamic forms we need to setup values when some fields became visible, and remove such values on field hiding.
+For dynamic forms we need to setup values when some fields became visible, and remove such values on field hiding.
 
-Directive `feEnsure` will set `undefined` to binded model on destroy.
+Structural directive [`feIf`](./projects/ngfe/src/lib/core/fe-if.directive.ts) works similar to `ngIf` (except `else` part) and could set a model to some default / `undefined`.
+
+When Angular change detection runs, `feIf` directive checks that the condition is true/false, wait until template updates, then update bound model and renders conditional template. This allows us to keep this logic in template and not collide with rendering process.
+
+_The main disadvantage - it works only with `<ng-template>`._
 
 ```
-<div *ngIf="showField" [(feEnsure)]="field">
+<ng-template [feIf]="showField" [(ensure)]="field">
   <input [(feControl)]="field">
-</div>
+</ng-template>
 ```
 
-Also, you could define `[default]` value that will be set to the model when it is `undefined`.
+Also, you could define `[default]` value that will be set to the model when it's empty.
 
 ```
-<div *ngIf="showField" [(feEnsure)]="field" default="BOOM">
+<ng-template [feIf]="showField" [(ensure)]="field" default="BOOOM">
   <input [(feControl)]="field">
-</div>
+</ng-template>
 ```
 
 ## Custom Value Accessor

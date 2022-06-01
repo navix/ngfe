@@ -139,3 +139,17 @@
     DISABLED: {{ c10.disabled | json }}
   </div>
 </div>
+
+<div class="case">
+  <h4>11 - Touch on change</h4>
+  <div>
+    <select [(feControl)]="value11" #control11="feControl" id="select-11" touchOnChange>
+      <option value="1">VAL1</option>
+      <option value="2">VAL2</option>
+      <option value="3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-11-touched">
+    TOUCHED: {{ control11.touched | json }}
+  </div>
+</div>

@@ -195,4 +195,10 @@ test.describe.serial('FeInputDirective', () => {
     await kit.$('#input-22').fill('xyz');
     await expect(kit.$('#input-22-value')).toHaveText('VAL: "xyz"');
   });
+
+  test('input 26 - touch on change', async () => {
+    await expect(kit.$('#input-26-touched')).toHaveText('TOUCHED: false');
+    await kit.$('#input-26').fill('123');
+    await expect(kit.$('#input-26-touched')).toHaveText('TOUCHED: true');
+  });
 });

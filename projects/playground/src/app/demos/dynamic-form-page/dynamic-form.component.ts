@@ -16,5 +16,5 @@ export class DynamicFormComponent {
     field1: '',
     showField2: false,
     showField3: false,
-  }
+  };
 }

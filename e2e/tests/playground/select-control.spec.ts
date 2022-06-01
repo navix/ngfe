@@ -112,4 +112,10 @@ test.describe.serial('FeSelectDirective', () => {
     await expect(await kit.$('#select-10').isDisabled()).toBeTruthy();
     await expect(kit.$('#select-10-disabled')).toHaveText('DISABLED: true ');
   });
+
+  test('11 - touch on change', async () => {
+    await expect(kit.$('#select-11-touched')).toHaveText('TOUCHED: false');
+    await kit.$('#select-11').selectOption({label: 'VAL2'});
+    await expect(kit.$('#select-11-touched')).toHaveText('TOUCHED: true');
+  });
 });

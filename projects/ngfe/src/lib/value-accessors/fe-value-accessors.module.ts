@@ -14,5 +14,5 @@ import { FeSelectDirective, FeSelectOptionDirective } from './fe-select.directiv
     FeSelectOptionDirective,
   ],
 })
-export class FeControlsModule {
+export class FeValueAccessorsModule {
 }

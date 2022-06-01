@@ -18,4 +18,5 @@ export class SelectControlPageComponent {
   value9 = '1';
   value10 = '1';
   disabled10 = false;
+  value11 = '';
 }

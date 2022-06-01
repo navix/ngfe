@@ -384,3 +384,18 @@
     </div>
   </div>
 </div>
+
+<div class="case">
+  <h4>26 - touch on change</h4>
+  <div>
+    <input
+      [(feControl)]="value26"
+      #control26="feControl"
+      id="input-26"
+      touchOnChange
+    >
+    <div id="input-26-touched">
+      TOUCHED: {{ control26.touched | json }}
+    </div>
+  </div>
+</div>

@@ -21,11 +21,21 @@ export class FeSelectDirective {
 
   @Input() updateOn: 'change' | 'blur' = 'change';
 
+  @Input() set touchOnBlur(touchOnBlur: boolean | string) {
+    this._touchOnBlur = coerceToBoolean(touchOnBlur);
+  }
+
+  @Input() set touchOnChange(touchOnChange: boolean | string) {
+    this._touchOnChange = coerceToBoolean(touchOnChange);
+  }
+
   options = new Set<FeSelectOptionDirective>();
 
   connected = true;
 
   private _value: any[] = [undefined];
+  private _touchOnBlur = true;
+  private _touchOnChange = false;
 
   constructor(
     private control: FeControl,
@@ -83,7 +93,9 @@ export class FeSelectDirective {
     if (!this.connected) {
       return;
     }
-    this.control.touch();
+    if (this._touchOnBlur) {
+      this.control.touch();
+    }
     if (this.updateOn === 'blur') {
       this.input();
     }
@@ -95,6 +107,9 @@ export class FeSelectDirective {
     } else {
       const selected = Array.from(this.options).find(o => o.selected);
       this.control.input(selected !== undefined ? selected.value : undefined);
+    }
+    if (this._touchOnChange) {
+      this.control.touch();
     }
   }
 }

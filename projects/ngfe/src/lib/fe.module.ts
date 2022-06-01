@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
-import { FeControlsModule } from './controls';
+import { FeValueAccessorsModule } from './value-accessors';
 import { FeCoreModule } from './core';
 import { FeValidatorsModule } from './validators';
 
 @NgModule({
   imports: [
     FeCoreModule,
-    FeControlsModule,
+    FeValueAccessorsModule,
     FeValidatorsModule,
   ],
   exports: [
     FeCoreModule,
-    FeControlsModule,
+    FeValueAccessorsModule,
     FeValidatorsModule,
   ],
 })

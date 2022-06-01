@@ -1,5 +1,7 @@
 <h2>Demo:DynamicForm</h2>
 
+{{ form | json }}
+
 <form #f="feForm">
   <div class="case">
     <label>
@@ -16,21 +18,20 @@
         Show Field2
       </label>
     </div>
-    <div
-      *ngIf="form.showField2"
-      [(feEnsure)]="form.field2"
-    >
-      <label>
-        Field2
-        <input
-          [(feControl)]="form.field2"
-          adapter="numberToString"
-          id="field2"
-          required
-          type="number"
-        >
-      </label>
-    </div>
+    <ng-template [feIf]="form.showField2" [(ensure)]="form.field2">
+      <div>
+        <label>
+          Field2
+          <input
+            [(feControl)]="form.field2"
+            adapter="numberToString"
+            id="field2"
+            required
+            type="number"
+          >
+        </label>
+      </div>
+    </ng-template>
   </div>
 
   <div class="case">
@@ -41,24 +42,26 @@
         Show Field3 (Also field1 should be 'abc')
       </label>
     </div>
-    <div
-      *ngIf="form.showField3 && form.field1 === 'abc'"
-      [(feEnsure)]="form.field3"
+    <ng-template
+      [feIf]="form.showField3 && form.field1 === 'abc'"
+      [(ensure)]="form.field3"
       [default]="[{subField: 'ph'}]"
     >
-      <div *ngFor="let row of form.field3; let index = index">
-        <label>
-          Field3.{{ index }}
-          <input
-            [(feControl)]="row.subField"
-            id="subField-{{ index }}"
-            required
-          >
-        </label>
-        <button type="button" (click)="form.field3!.splice(index, 1)">Remove row</button>
+      <div>
+        <div *ngFor="let row of form.field3; let index = index">
+          <label>
+            Field3.{{ index }}
+            <input
+              [(feControl)]="row.subField"
+              id="subField-{{ index }}"
+              required
+            >
+          </label>
+          <button type="button" (click)="form.field3!.splice(index, 1)">Remove row</button>
+        </div>
+        <button type="button" (click)="form.field3!.push({subField: ''})" id="add-row">Add row</button>
       </div>
-      <button type="button" (click)="form.field3!.push({subField: ''})" id="add-row">Add row</button>
-    </div>
+    </ng-template>
   </div>
 
   <div class="case">

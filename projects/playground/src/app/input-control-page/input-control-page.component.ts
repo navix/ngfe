@@ -42,6 +42,7 @@ export class InputControlPageComponent {
   value23?: string;
   value24 = 33;
   value25 = 'jkl';
+  value26 = '';
 
   constructor(
     private cdr: ChangeDetectorRef,

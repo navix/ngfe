@@ -1,5 +1,6 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
 import { FeControl } from '../core';
+import { coerceToBoolean } from '../util';
 
 @Directive({
   selector: 'input[feControl],textarea[feControl]',
@@ -21,11 +22,22 @@ export class FeInputDirective {
 
   @Input() updateOn: 'change' | 'blur' = 'change';
 
+  @Input() set touchOnBlur(touchOnBlur: boolean | string) {
+    this._touchOnBlur = coerceToBoolean(touchOnBlur);
+  }
+
+  @Input() set touchOnChange(touchOnChange: boolean | string) {
+    this._touchOnChange = coerceToBoolean(touchOnChange);
+  }
+
   @Input() readFileAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL';
 
   @Output() fileError = new EventEmitter<string>();
 
   connected = true;
+
+  private _touchOnBlur = true;
+  private _touchOnChange = false;
 
   constructor(
     private control: FeControl,
@@ -81,7 +93,9 @@ export class FeInputDirective {
     if (!this.connected) {
       return;
     }
-    this.control.touch();
+    if (this._touchOnBlur) {
+      this.control.touch();
+    }
     if (this.updateOn === 'blur') {
       this.input(event);
     }
@@ -104,6 +118,9 @@ export class FeInputDirective {
         break;
       default:
         this.control.input(event?.target?.value);
+    }
+    if (this._touchOnChange) {
+      this.control.touch();
     }
   }
 }
