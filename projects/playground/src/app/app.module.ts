@@ -8,7 +8,7 @@ import { CustomControlComponent } from './demos/custom-control-page/custom-contr
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldComponent } from './demos/field-page/custom-field/field.component';
 import { FieldPageComponent } from './demos/field-page/field-page.component';
-import { GroupPageComponent } from './group-page/group-page.component';
+import { FormPageComponent } from './form-page/form-page.component';
 import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
@@ -33,7 +33,7 @@ import { DemoRegistrationFormPageComponent } from './demos/demo-registration-for
     LifecyclePageComponent,
     SelectControlPageComponent,
     FieldPageComponent,
-    GroupPageComponent,
+    FormPageComponent,
     DisabledPageComponent,
     CustomControlPageComponent,
     CustomControlComponent,

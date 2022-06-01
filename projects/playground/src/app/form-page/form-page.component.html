@@ -1,0 +1,40 @@
+<h2>Form</h2>
+
+<div class="case">
+  <h4>1 - Submit</h4>
+  <div>
+    <form>
+      <input #c1="feControl" [(feControl)]="value1" id="control-1" required>
+      <button (feSubmit)="this.submitted1 = true" id="form-1-submit">Submit</button>
+    </form>
+  </div>
+  <div id="control-1-touched">
+    TOUCHED: {{ c1.touched | json }}
+  </div>
+  <div id="form-1-submitted">
+    FORM_SUBM: {{ submitted1 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - Update view on control remove</h4>
+  <div>
+    VALID: {{ feForm.valid | json }}
+  </div>
+  <div>
+    <form #feForm="feForm">
+      <ng-template [(ensure)]="value2" [feIf]="show2">
+        <input [(feControl)]="value2" [required]="required2">
+      </ng-template>
+      <div>
+        Show: <input [(feControl)]="show2" type="checkbox" id="show2">
+      </div>
+      <div>
+        Required: <input [(feControl)]="required2" type="checkbox" id="required2">
+      </div>
+    </form>
+  </div>
+  <div id="form-2-valid">
+    VALID: {{ feForm.valid | json }}
+  </div>
+</div>

@@ -1,7 +1,9 @@
 import {
-  Directive, EmbeddedViewRef,
+  Directive,
+  EmbeddedViewRef,
   EventEmitter,
-  Input, NgZone,
+  Input,
+  NgZone,
   Output,
   TemplateRef,
   ViewContainerRef,
@@ -9,14 +11,19 @@ import {
 import { take } from 'rxjs';
 import { deepCopy } from '../util';
 
+// @todo improve checking code
+
 @Directive({
   selector: '[feIf]',
 })
 export class FeIfDirective<T> {
   static ngTemplateGuard_feIf: 'binding';
 
-  static ngTemplateContextGuard<T>(dir: FeIfDirective<T>, ctx: any):
-    ctx is FeIfContext<Exclude<T, false|0|''|null|undefined>> {
+  static ngTemplateContextGuard<T>(
+    dir: FeIfDirective<T>,
+    ctx: any,
+  ):
+    ctx is FeIfContext<Exclude<T, false | 0 | '' | null | undefined>> {
     return true;
   }
 
@@ -40,7 +47,8 @@ export class FeIfDirective<T> {
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<FeIfContext<T>>,
     private ngZone: NgZone,
-  ) {}
+  ) {
+  }
 
   private updateView() {
     if (this._if) {
@@ -79,7 +87,7 @@ export class FeIfDirective<T> {
     this.ngZone.onStable.pipe(take(1)).subscribe(() => {
       this.ngZone.run(() => {
         fn();
-      })
+      });
     });
   }
 }

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { PageKit, PageKitFactory } from '../page-kit';
 
-test.describe.serial('Group', () => {
+test.describe.serial('Form', () => {
   let kit: PageKit;
 
   test.beforeAll(async ({browser}) => {
@@ -9,8 +9,8 @@ test.describe.serial('Group', () => {
   });
 
   test('open', async () => {
-    await kit.goto('/group');
-    await expect(kit.subTitle).toHaveText('Group');
+    await kit.goto('/form');
+    await expect(kit.subTitle).toHaveText('Form');
   });
 
   test('1 - Submit', async () => {
@@ -22,5 +22,13 @@ test.describe.serial('Group', () => {
     await kit.$('#control-1').fill('www');
     await kit.$('#form-1-submit').click();
     await expect(kit.$('#form-1-submitted')).toHaveText('FORM_SUBM: true ');
+  });
+
+  test('2 - Update view on control remove', async () => {
+    await expect(kit.$('#form-2-valid')).toHaveText('VALID: false');
+    await kit.$('#show2').uncheck();
+    await expect(kit.$('#form-2-valid')).toHaveText('VALID: true');
+    await kit.$('#show2').check();
+    await expect(kit.$('#form-2-valid')).toHaveText('VALID: false');
   });
 });

@@ -9,7 +9,7 @@ import { DynamicFormComponent } from './demos/dynamic-form-page/dynamic-form.com
 import { SubFormPageComponent } from './demos/sub-form-page/sub-form-page.component';
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
 import { FieldPageComponent } from './demos/field-page/field-page.component';
-import { GroupPageComponent } from './group-page/group-page.component';
+import { FormPageComponent } from './form-page/form-page.component';
 import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
@@ -37,8 +37,8 @@ const routes: Routes = [
     component: LifecyclePageComponent,
   },
   {
-    path: 'group',
-    component: GroupPageComponent,
+    path: 'form',
+    component: FormPageComponent,
   },
   {
     path: 'disabled',

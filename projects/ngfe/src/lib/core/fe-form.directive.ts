@@ -1,5 +1,14 @@
-import { Directive, HostBinding, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { ReplaySubject, Subject, Subscription } from 'rxjs';
+import {
+  ChangeDetectorRef,
+  Directive,
+  HostBinding,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
+import { ReplaySubject, Subject, Subscription, take } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { FeControl } from './fe-control';
 import { FeValidity } from './validation';
@@ -31,6 +40,15 @@ export class FeFormDirective implements OnChanges, OnDestroy {
     map(() => this.valid),
     distinctUntilChanged(),
   );
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+  ) {
+    this._validityCheck$.subscribe(() => {
+      this.cdr.markForCheck();
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if ('disabled' in changes) {
@@ -87,20 +105,28 @@ export class FeFormDirective implements OnChanges, OnDestroy {
   }
 
   addControl(control: FeControl) {
-    if (!this.controlsMap.has(control)) {
-      this.controlsMap.set(control, [
-        control.modelValue$.subscribe(this._modelValueChange$),
-        control.validity$.subscribe(() => this._validityCheck$.next(undefined)),
-      ]);
-    }
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+      if (!this.controlsMap.has(control)) {
+        this.ngZone.run(() => {
+          this.controlsMap.set(control, [
+            control.modelValue$.subscribe(this._modelValueChange$),
+            control.validity$.subscribe(() => this._validityCheck$.next(undefined)),
+          ]);
+        });
+      }
+    });
   }
 
   removeControl(control: FeControl) {
-    const subs = this.controlsMap.get(control);
-    if (subs) {
-      subs.forEach(s => s.unsubscribe());
-      this.controlsMap.delete(control);
-      this._validityCheck$.next(undefined);
-    }
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+      const subs = this.controlsMap.get(control);
+      if (subs) {
+        subs.forEach(s => s.unsubscribe());
+        this.controlsMap.delete(control);
+        this.ngZone.run(() => {
+          this._validityCheck$.next(undefined);
+        });
+      }
+    });
   }
 }

@@ -1,11 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-group-page',
-  templateUrl: './group-page.component.html',
+  selector: 'app-form-page',
+  templateUrl: './form-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupPageComponent {
+export class FormPageComponent {
   value1 = '';
   submitted1 = false;
+  value2 = '';
+  show2 = true;
+  required2 = true;
 }
