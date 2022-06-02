@@ -450,6 +450,28 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 
 
 
+## Reference
+
+`FeControl`
+
+`FeControlDirective`
+
+`FeFormDirective`
+
+`FeSubmitDirective`
+
+`FeIfDirective`
+
+`FeValidator`
+
+`FeAdapter`
+
+`FeInput`
+
+`FeSelect`
+
+
+
 ## LICENSE 
 
 MIT

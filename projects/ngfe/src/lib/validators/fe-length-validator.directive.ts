@@ -1,5 +1,5 @@
 import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { FeControl, FeValidator } from '../core';
+import { FeControl } from '../core';
 
 @Directive({
   selector: '[feControl][minlength],[feControl][maxlength]',

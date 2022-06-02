@@ -4,12 +4,12 @@
   <h4>1 - (destroy)</h4>
   <div>
     <input
+      (destroy)="value1 = undefined"
       *ngIf="show1"
       [(feControl)]="value1"
-      (destroy)="value1 = undefined"
       id="control-1"
     >
-    <button type="button" (click)="show1 = !show1" id="control-1-toggle">Toggle</button>
+    <button (click)="show1 = !show1" id="control-1-toggle" type="button">Toggle</button>
   </div>
   <div id="control-1-value">
     VAL: {{ value1 | json }}
@@ -20,9 +20,9 @@
   <h4>2 - Touch handle</h4>
   <div>
     <input
-      #c2="feControl"
-      [(feControl)]="value2"
-      id="control-2"
+        #c2="feControl"
+        [(feControl)]="value2"
+        id="control-2"
     >
   </div>
   <div id="control-2-touched">
@@ -41,6 +41,31 @@
   </div>
   <div id="control-3-dirty">
     DIRTY: {{ c3.dirty | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>4 - feIf & ensure</h4>
+  <div>
+    {{ value4 | json }}
+    <ng-template
+      (ensureChange)="ensureChange4($event)"
+      [(ensure)]="value4"
+      [default]="'123'"
+      [feIf]="show4"
+      [force]="force4"
+    >
+      <input [(feControl)]="value4" id="control-4">
+    </ng-template>
+    <button (click)="setValue4Undef()" id="rm-4">rm</button>
+    <label><input [(feControl)]="force4" type="checkbox" id="force-4">force</label>
+    <label><input [(feControl)]="show4" type="checkbox" id="show-4">show</label>
+  </div>
+  <div id="value-4">
+    VALUE: {{ value4 | json }}
+  </div>
+  <div id="ensure-count-4">
+    ENSURE_COUNT: {{ ensureCount4 | json }}
   </div>
 </div>
 

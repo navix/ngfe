@@ -7,31 +7,35 @@ import { FeFormDirective } from './fe-form.directive';
 import { FeErrors, FeValidator, FeValidatorResult, FeValidity } from './validation';
 
 interface Vc<MODEL, INPUT> {
-  source: 'initial' | 'model' | 'input';
+  source: VcSource;
   modelValue?: MODEL;
   inputValue?: INPUT;
 }
 
+export type VcSource = 'initial' | 'model' | 'input' | 'manual';
+
 @Injectable()
 export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private readonly _vc$ = new BehaviorSubject<Vc<MODEL, INPUT>>({source: 'initial'});
+
+  readonly vc$ = this._vc$.asObservable();
+
   /**
    * Stream with current MODEL value.
-   * Does not emit initial value.
    */
-  readonly modelValue$: Observable<MODEL> = this._vc$.pipe(
-    filter(value => value.source !== 'initial'),
-    map(value => value.modelValue!),
-  );
-  /**
-   * Get INPUT value stream which come from model.
-   */
-  readonly toInputValue$: Observable<INPUT | undefined> = this._vc$.pipe(
-    filter(vc => vc.source === 'model'),
-    map(vc => vc.inputValue),
+  readonly modelValue$: Observable<MODEL | undefined> = this._vc$.pipe(
+    map(({modelValue}) => modelValue),
   );
 
-  private readonly _modelValueUpdate$ = new Subject<MODEL | undefined>();
+  /**
+   * Get INPUT value stream which come not from input.
+   */
+  readonly toInputValue$: Observable<INPUT | undefined> = this._vc$.pipe(
+    filter(({source}) => source !== 'input'),
+    map(({inputValue}) => inputValue),
+  );
+
+  private readonly _modelValueUpdate$ = new Subject<{modelValue?: MODEL; source: VcSource}>();
   private readonly _inputValueUpdate$ = new Subject<INPUT | undefined>();
 
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
@@ -193,7 +197,10 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
 
   set adapter(adapter: FeAdapter<MODEL, INPUT> | undefined) {
     this._adapter = adapter || feAdapters.noop;
-    this._modelValueUpdate$.next(this.modelValue);
+    this._modelValueUpdate$.next({
+      modelValue: this.modelValue,
+      source: this._vc$.value.source,
+    });
   }
 
   set debounce(debounce: number | undefined) {
@@ -203,11 +210,8 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   /**
    * Set new MODEL value.
    */
-  update(modelValue: MODEL | undefined) {
-    if (modelValue === this.modelValue) {
-      return;
-    }
-    this._modelValueUpdate$.next(modelValue);
+  update(modelValue: MODEL | undefined, source: VcSource = 'manual') {
+    this._modelValueUpdate$.next({modelValue, source});
   }
 
   /**
@@ -262,11 +266,9 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   }
 
   private initModelValueHandler() {
-    this._modelValueUpdate$.pipe(
-      debounceTime(0),
-    ).subscribe((modelValue) => {
+    this._modelValueUpdate$.subscribe(({modelValue, source}) => {
       this._vc$.next({
-        source: 'model',
+        source,
         modelValue,
         inputValue: this._adapter.fromModel(modelValue),
       });

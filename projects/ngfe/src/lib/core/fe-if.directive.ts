@@ -4,19 +4,20 @@ import {
   EventEmitter,
   Input,
   NgZone,
+  OnChanges,
   Output,
+  SimpleChanges,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { take } from 'rxjs';
-import { deepCopy } from '../util';
-
-// @todo improve checking code
+import { Subject, switchMap, take } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { coerceToBoolean, deepCopy } from '../util';
 
 @Directive({
   selector: '[feIf]',
 })
-export class FeIfDirective<T> {
+export class FeIfDirective<T> implements OnChanges {
   static ngTemplateGuard_feIf: 'binding';
 
   static ngTemplateContextGuard<T>(
@@ -30,17 +31,23 @@ export class FeIfDirective<T> {
   @Input() set feIf(condition: any) {
     this._context.$implicit = this._context.feIf = condition;
     this._if = !!condition;
-    this.updateView();
+    this._updateCall$.next(undefined);
   }
 
   @Input() ensure?: T;
 
   @Input() default?: T;
 
+  @Input() set force(force: boolean | string) {
+    this._force = coerceToBoolean(force);
+  }
+
   @Output() ensureChange = new EventEmitter<T | undefined>();
 
   private _context: FeIfContext<T> = new FeIfContext<T>();
   private _if = false;
+  private _force = false;
+  private _updateCall$ = new Subject<undefined>();
   private thenViewRef?: EmbeddedViewRef<any>;
 
   constructor(
@@ -48,47 +55,37 @@ export class FeIfDirective<T> {
     private templateRef: TemplateRef<FeIfContext<T>>,
     private ngZone: NgZone,
   ) {
-  }
-
-  private updateView() {
-    if (this._if) {
-      if (!this.thenViewRef) {
-        if (this.templateRef) {
-          if (this.ensure == null && this.default) {
-            this.zoneStableRun(() => {
+    this._updateCall$.pipe(
+      switchMap(args => this.ngZone.onStable.pipe(take(1), map(() => args))),
+    ).subscribe(() => {
+      this.ngZone.run(() => {
+        if (!this._if) {
+          if (this.thenViewRef) {
+            this.viewContainerRef.clear();
+            this.thenViewRef = undefined;
+            this.ensureChange.emit(undefined);
+          }
+        } else {
+          if (!this.thenViewRef) {
+            if (!this.ensure && this.default) {
               this.ensureChange.emit(deepCopy(this.default));
-              this.thenViewRef = this.viewContainerRef.createEmbeddedView(
-                this.templateRef,
-                this._context,
-              );
-            });
-          } else {
+            }
             this.thenViewRef = this.viewContainerRef.createEmbeddedView(
               this.templateRef,
               this._context,
             );
+          } else if (this._force && this.default && !this.ensure) {
+            this.ensureChange.emit(deepCopy(this.default));
           }
         }
-      }
-    } else {
-      if (this.thenViewRef) {
-        this.viewContainerRef.clear();
-        this.thenViewRef = undefined;
-        this.zoneStableRun(() => {
-          if (this.ensure != null) {
-            this.ensureChange.emit(undefined);
-          }
-        });
-      }
-    }
-  }
-
-  private zoneStableRun(fn: () => void) {
-    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
-      this.ngZone.run(() => {
-        fn();
       });
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ('ensure' in changes || 'force' in changes) {
+      this._updateCall$.next(undefined);
+    }
   }
 }
 

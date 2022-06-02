@@ -10,4 +10,16 @@ export class LifecyclePageComponent {
   show1 = true;
   value2 = '';
   value3 = '';
+  value4?: string;
+  show4 = true;
+  force4 = true;
+  ensureCount4 = 0;
+
+  ensureChange4(v: any) {
+    this.ensureCount4++;
+  }
+
+  setValue4Undef() {
+    this.value4 = undefined;
+  }
 }

@@ -61,14 +61,18 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   @Output() errorsChange = new EventEmitter<FeErrors | undefined>();
   @Output() destroy = new EventEmitter<undefined>();
 
+  private modelValueOutput?: MODEL;
+  private modelValueOutputFlag = false;
+
   constructor(
     public control: FeControl,
   ) {
-    this.control.modelValue$
-      .pipe(filter(value => this.feControl !== value))
-      .subscribe(value => {
-        this.feControl = value;
-        this.feControlChange.emit(value);
+    this.control.vc$
+      .pipe(filter(({source}) => source !== 'initial' && source !== 'model'))
+      .subscribe(({modelValue}) => {
+        this.modelValueOutput = modelValue;
+        this.modelValueOutputFlag = true;
+        this.feControlChange.emit(modelValue);
       });
     this.control.disabled$
       .subscribe(disabled => {
@@ -98,8 +102,8 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('feControl' in changes) {
-      this.control.update(this.feControl);
+    if ('feControl' in changes && (!this.modelValueOutputFlag || this.feControl !== this.modelValueOutput)) {
+      this.control.update(this.feControl, 'model');
     }
     if ('extraValidators' in changes) {
       const prev: FeValidator<MODEL>[] | undefined = changes.extraValidators.previousValue;

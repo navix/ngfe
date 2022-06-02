@@ -1,6 +1,6 @@
 import { Directive, Input, OnChanges, Self } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FeControl, FeValidator } from '../core';
+import { FeControl } from '../core';
 import { coerceToBoolean } from '../util';
 
 @Directive({

@@ -46,4 +46,28 @@ test.describe.serial('Lifecycle', () => {
     await kit.$('#control-3').fill('123');
     await expect(kit.$('#control-3-dirty')).toHaveText('DIRTY: true');
   });
+
+  test('4 - feIf & ensure', async () => {
+    await expect(kit.$('#control-4')).toHaveValue('123');
+    await expect(kit.$('#value-4')).toHaveText('VALUE: "123"');
+    await expect(kit.$('#ensure-count-4')).toHaveText('ENSURE_COUNT: 1 ');
+    await kit.$('#rm-4').click();
+    await expect(kit.$('#value-4')).toHaveText('VALUE: "123"');
+    await expect(kit.$('#ensure-count-4')).toHaveText('ENSURE_COUNT: 2 ');
+    await kit.$('#force-4').uncheck();
+    await kit.$('#rm-4').click();
+    await expect(kit.$('#control-4')).toHaveValue('');
+    await expect(kit.$('#value-4')).toHaveText('VALUE:');
+    await expect(kit.$('#ensure-count-4')).toHaveText('ENSURE_COUNT: 2 ');
+    await kit.$('#force-4').check();
+    await expect(kit.$('#value-4')).toHaveText('VALUE: "123"');
+    await expect(kit.$('#ensure-count-4')).toHaveText('ENSURE_COUNT: 3 ');
+    await kit.$('#show-4').uncheck();
+    await expect(kit.$('#value-4')).toHaveText('VALUE:');
+    await expect(kit.$('#ensure-count-4')).toHaveText('ENSURE_COUNT: 4 ');
+    await kit.$('#show-4').check();
+    await expect(kit.$('#control-4')).toHaveValue('123');
+    await expect(kit.$('#value-4')).toHaveText('VALUE: "123"');
+    await expect(kit.$('#ensure-count-4')).toHaveText('ENSURE_COUNT: 5 ');
+  });
 });
