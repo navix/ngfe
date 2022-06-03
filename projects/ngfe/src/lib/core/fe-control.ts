@@ -17,14 +17,12 @@ export type VcSource = 'initial' | 'model' | 'input' | 'manual';
 @Injectable()
 export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private readonly _vc$ = new BehaviorSubject<Vc<MODEL, INPUT>>({source: 'initial'});
-
   readonly vc$ = this._vc$.asObservable();
-
-  /**
-   * Stream with current MODEL value.
-   */
   readonly modelValue$: Observable<MODEL | undefined> = this._vc$.pipe(
     map(({modelValue}) => modelValue),
+  );
+  readonly inputValue$: Observable<INPUT | undefined> = this._vc$.pipe(
+    map(({inputValue}) => inputValue),
   );
 
   /**
@@ -50,7 +48,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private readonly _dirty$ = new BehaviorSubject<boolean>(false);
   readonly dirty$ = this._dirty$.pipe(distinctUntilChanged());
 
-  private readonly _validators$ = new BehaviorSubject<FeValidator<MODEL>[]>([]);
+  private readonly _validators$ = new BehaviorSubject<FeValidator<MODEL, INPUT>[]>([]);
   readonly validators$ = this._validators$.asObservable();
 
   private readonly _updateValidity$ = new Subject<undefined>();
@@ -195,14 +193,6 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this.touched && this.errors;
   }
 
-  set adapter(adapter: FeAdapter<MODEL, INPUT> | undefined) {
-    this._adapter = adapter || feAdapters.noop;
-    this._modelValueUpdate$.next({
-      modelValue: this.modelValue,
-      source: this._vc$.value.source,
-    });
-  }
-
   set debounce(debounce: number | undefined) {
     this._debounce = debounce;
   }
@@ -244,6 +234,14 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
 
   updateValidity() {
     this._updateValidity$.next(undefined);
+  }
+
+  setAdapter(adapter: FeAdapter<MODEL, INPUT> | undefined) {
+    this._adapter = adapter || feAdapters.noop;
+    this._modelValueUpdate$.next({
+      modelValue: this.modelValue,
+      source: this._vc$.value.source,
+    });
   }
 
   /**

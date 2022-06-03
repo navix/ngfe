@@ -40,6 +40,16 @@ export class FeFormDirective implements OnChanges, OnDestroy {
     map(() => this.valid),
     distinctUntilChanged(),
   );
+  readonly invalid$ = this._validityCheck$.pipe(
+    debounceTime(0),
+    map(() => this.invalid),
+    distinctUntilChanged(),
+  );
+  readonly pending$ = this._validityCheck$.pipe(
+    debounceTime(0),
+    map(() => this.pending),
+    distinctUntilChanged(),
+  );
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -104,6 +114,9 @@ export class FeFormDirective implements OnChanges, OnDestroy {
     this.controls.forEach(m => m.reset());
   }
 
+  /**
+   * @internal
+   */
   addControl(control: FeControl) {
     this.ngZone.onStable.pipe(take(1)).subscribe(() => {
       if (!this.controlsMap.has(control)) {
@@ -117,6 +130,9 @@ export class FeFormDirective implements OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * @internal
+   */
   removeControl(control: FeControl) {
     this.ngZone.onStable.pipe(take(1)).subscribe(() => {
       const subs = this.controlsMap.get(control);

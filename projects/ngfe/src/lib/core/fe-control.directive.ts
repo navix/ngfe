@@ -3,7 +3,7 @@ import { filter } from 'rxjs/operators';
 import { coerceToBoolean, err } from '../util';
 import { FeAdapter, feAdapters } from './adapters';
 import { FeControl } from './fe-control';
-import { FeErrors, FeValidator, FeValidity } from './validation';
+import { FeValidator } from './validation';
 
 /**
  * Allow to bind model to control.
@@ -40,12 +40,12 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   @Input() set adapter(adapter: keyof typeof feAdapters | FeAdapter<MODEL, INPUT> | undefined) {
     if (typeof adapter === 'string') {
       if (adapter in feAdapters) {
-        this.control.adapter = feAdapters[adapter];
+        this.control.setAdapter(feAdapters[adapter]);
       } else {
         err('FeControlDirective', `Adapter with name "${this.adapter}" not found.`);
       }
     } else {
-      this.control.adapter = adapter;
+      this.control.setAdapter(adapter);
     }
   }
 
@@ -57,8 +57,6 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
   @Output() standaloneChange = new EventEmitter<boolean>();
   @Output() touchedChange = new EventEmitter<boolean>();
   @Output() dirtyChange = new EventEmitter<boolean>();
-  @Output() validityChange = new EventEmitter<FeValidity>();
-  @Output() errorsChange = new EventEmitter<FeErrors | undefined>();
   @Output() destroy = new EventEmitter<undefined>();
 
   private modelValueOutput?: MODEL;
@@ -89,14 +87,6 @@ export class FeControlDirective<MODEL, INPUT> implements OnChanges {
     this.control.dirty$
       .subscribe(dirty => {
         this.dirtyChange.emit(dirty);
-      });
-    this.control.validity$
-      .subscribe(validity => {
-        this.validityChange.emit(validity);
-      });
-    this.control.errors$
-      .subscribe(errors => {
-        this.errorsChange.emit(errors);
       });
     this.control.destroy$.subscribe(this.destroy);
   }

@@ -29,7 +29,7 @@ export class FeSelectDirective {
     this._touchOnChange = coerceToBoolean(touchOnChange);
   }
 
-  options = new Set<FeSelectOptionDirective>();
+  readonly options = new Set<FeSelectOptionDirective>();
 
   connected = true;
 

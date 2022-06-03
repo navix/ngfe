@@ -34,6 +34,9 @@ export class FeInputDirective {
 
   @Output() fileError = new EventEmitter<string>();
 
+  /**
+   * Set to `false` to disconnect from FeControl.
+   */
   connected = true;
 
   private _touchOnBlur = true;
