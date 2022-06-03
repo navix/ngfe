@@ -205,7 +205,7 @@ field = new Date();
 
 ### Custom adapter
 
-Use [`FeAdapter`](./projects/ngfe/src/lib/core/adapters.ts#L3) interface to declare modifying functions:
+Use [`FeAdapter`](./projects/ngfe/src/lib/core/adapters.ts) interface to declare modifying functions:
 
 ```
 booleanToString: FeAdapter<boolean, string> = {
@@ -263,7 +263,7 @@ Also, there is `.visibleErrors` that passed errors object when control is touche
 
 #### As a function
 
-Use [`FeValidator`](./projects/ngfe/src/lib/core/validation.ts#L7) interface to implement a validator. Return errors object [`FeError`](./projects/ngfe/src/lib/core/validation.ts#L14) or `undefined` if value is valid.
+Use [`FeValidator`](./projects/ngfe/src/lib/core/validation.ts) interface to implement a validator. Return errors object [`FeError`](./projects/ngfe/src/lib/core/validation.ts) or `undefined` if value is valid.
 
 ```
 // Invalid if value is not empty and have value "BOOM".
@@ -310,7 +310,7 @@ export class notBoomValidatorDirective implements OnChanges {
 
 ### Async validators
 
-Return from validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts#L10).
+Return from validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts).
 
 
 
@@ -452,24 +452,168 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 
 ## Reference
 
-`FeControl`
+### [`FeControl<MODEL, INPUT>`](./projects/ngfe/src/lib/core/fe-control.ts)
 
-`FeControlDirective`
+```
+readonly modelValue: MODEL | undefined;
+readonly modelValue$: Observable<MODEL | undefined>;
+readonly inputValue: INPUT | undefined;
+readonly inputValue$: Observable<INPUT | undefined>;
+readonly toInputValue$: Observable<INPUT | undefined>;
+disabled: boolean;
+readonly disabled$: Observable<boolean>;
+standalone: boolean;
+readonly standalone$: Observable<boolean>;
+touched: boolean;
+readonly touched$: Observable<boolean>;
+dirty: boolean;
+readonly dirty$: Observable<boolean>;
+readonly validators: FeValidator<MODEL, INPUT>[];
+readonly validators$: Observable<FeValidator<MODEL, INPUT>[]>;
+readonly validity: boolean;
+readonly validity$: Observable<FeValidity>[]>;
+readonly valid: boolean;
+readonly valid$: Observable<boolean>;
+readonly invalid: boolean;
+readonly invalid$: Observable<boolean>;
+readonly pending: boolean;
+readonly pending$: Observable<boolean>;
+readonly errors: FeErrors | undefined;
+readonly errors$: Observable<FeErrors | undefined>;
+readonly visibleErrors: FeErrors | undefined;
+readonly visibleErrors$: Observable<FeErrors | undefined>;
+readonly destroy$: Observable<undefined>;
+adapter: FeAdapter<MODEL, INPUT> | undefined;
+debounce: debounce: number | undefined;
+update(modelValue: MODEL | undefined, source: VcSource = 'manual');
+input(inputValue: INPUT | undefined);
+touch();
+updateValidators({add = [], remove = []}: {
+  add?: FeValidator<MODEL, INPUT>[];
+  remove?: FeValidator<MODEL, INPUT>[];
+});
+addValidator(validator: FeValidator<MODEL, INPUT>);
+updateValidity();
+setAdapter(adapter: FeAdapter<MODEL, INPUT> | undefined);
+reset();
+```
 
-`FeFormDirective`
+### [`FeControlDirective<MODEL, INPUT>`](./projects/ngfe/src/lib/core/fe-control.directive.ts)
 
-`FeSubmitDirective`
+`exportAs: "feControl"`
 
-`FeIfDirective`
+```
+[(feControl)]: MODEL | undefined;
+[(disabled)]: boolean;
+[(standalone)]: boolean;
+[(touched)]: boolean;
+[(dirty)]: boolean;
+[extraValidators]: FeValidator<MODEL>[] | undefined;
+[debounce]: number | undefined;
+[adapter]: 'noop' | 'numberToString' | 'dateToDateString' | 'dateToDateLocalString' | 'deepCopy' 
+  | FeAdapter<MODEL, INPUT> | undefined;
+(destroy): undefined;
+readonly modelValue: MODEL | undefined;
+readonly modelValue$: Observable<MODEL | undefined>;
+readonly inputValue: INPUT | undefined;
+readonly inputValue$: Observable<INPUT | undefined>;
+disabled: boolean;
+readonly disabled$: Observable<boolean>;
+standalone: boolean;
+readonly standalone$: Observable<boolean>;
+touched: boolean;
+readonly touched$: Observable<boolean>;
+dirty: boolean;
+readonly dirty$: Observable<boolean>;
+readonly validity: boolean;
+readonly validity$: Observable<FeValidity>[]>;
+readonly valid: boolean;
+readonly valid$: Observable<boolean>;
+readonly invalid: boolean;
+readonly invalid$: Observable<boolean>;
+readonly pending: boolean;
+readonly pending$: Observable<boolean>;
+readonly errors: FeErrors | undefined;
+readonly errors$: Observable<FeErrors | undefined>;
+readonly visibleErrors: FeErrors | undefined;
+readonly visibleErrors$: Observable<FeErrors | undefined>;
+```
 
-`FeValidator`
+### [`FeFormDirective`](./projects/ngfe/src/lib/core/fe-form.directive.ts)
 
-`FeAdapter`
+`exportAs: "feForm"`
 
-`FeInput`
+```
+[disabled]: boolean;
+readonly change$: Observable<undefined>;
+readonly validity: FeValidity;
+readonly validity$: Observable<FeValidity>;
+readonly valid: boolean;
+readonly valid$: Observable<boolean>;
+readonly invalid: boolean;
+readonly invalid$: Observable<boolean>;
+readonly pending: boolean;
+readonly pending$: Observable<boolean>;
+readonly controls: FeControl[];
+readonly enabledControls: FeControl[];
+readonly touched: boolean;
+readonly dirty: boolean;
+touchAll();
+reset();
+```
 
-`FeSelect`
+### [`FeSubmitDirective`](./projects/ngfe/src/lib/core/fe-submit.directive.ts)
 
+`exportAs: "feSubmit"`
+
+```
+(feSubmit): void;
+```
+
+### [`FeIfDirective<T>`](./projects/ngfe/src/lib/core/fe-if.directive.ts)
+
+```
+[feIf]: any;
+[(ensure)]: T | undefined;
+[default]: T | undefined;
+[force]: boolean; 
+```
+
+### [`FeInputDirective`](./projects/ngfe/src/lib/value-accessors/fe-input.directive.ts)
+
+```
+[type]: 'text' | 'color' | 'email' | 'password' | 'range' | 'search' | 'tel' | 'url' |
+    'number' |
+    'checkbox' |'radio' |
+    'date' | 'datetime-local' | 'time' | 'month' | 'week' |
+    'file' |
+    'hidden' | 'button' | 'image' | 'reset' = 'text';
+[name]: string;
+[value]: any;
+[updateOn]: 'change' | 'blur' = 'change'
+[touchOnBlur]: boolean | string = true;
+[touchOnChange]: boolean | string = false;
+[readFileAs]: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL'
+(fileError): string;
+connected: boolean = true;
+```
+
+### [`FeSelectDirective`](./projects/ngfe/src/lib/value-accessors/fe-select.directive.ts)
+
+```
+[multiple]: boolean = false;
+[updateOn]: 'change' | 'blur' = 'change';
+[touchOnBlur]: boolean | string = true;
+[touchOnChange]: boolean | string = false;
+readonly options: Set<FeSelectOptionDirective>;
+connected: boolean = true;
+```
+
+### [`FeSelectOptionDirective`](./projects/ngfe/src/lib/value-accessors/fe-select.directive.ts)
+
+```
+[value]: any;
+```
 
 
 ## LICENSE 
