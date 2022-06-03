@@ -8,6 +8,8 @@ Boosted template-driven Angular forms.
 It is an alternative for the Angular `FormsModule`.
 If your project have complex and dynamic forms this lib will save you a lot of time and lines of code.
 
+> [StackBlitz showcase](https://stackblitz.com/edit/ngfe-showcase?file=src/app/app.component.html)
+
 ## Features
 
 * **Focused on template-driven approach.**
