@@ -1,6 +1,6 @@
 {
   "name": "ngfe",
-  "version": "13.0.0-beta.5",
+  "version": "13.0.0",
   "peerDependencies": {
     "@angular/core": ">= 12.0.0",
     "rxjs": ">= 6.6.0"
