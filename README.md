@@ -77,10 +77,8 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 $ npm i ngfe
 ```
 
-### Requirements
-
-* Angular 12.0+
-* RxJs 6.6+
+* `ngfe@13` for Angular 12 and 13, RxJS 7,
+* `ngfe@14` for Angular 14.
 
 
 
