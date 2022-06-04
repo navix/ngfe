@@ -1,0 +1,24 @@
+<div class="case">
+  <h4>1 - Standalone control</h4>
+  <label>
+    Field1
+    <input [(feControl)]="model1" id="control-1">
+  </label>
+  <div id="value-1">
+    VALUE: {{ model1 | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - Standalone validator</h4>
+  <label>
+    Field1
+    <input [(feControl)]="model2" #control2="feControl" id="control-2" required>
+  </label>
+  <div id="value-2">
+    VALUE: {{ model2 | json }}
+  </div>
+  <div id="errors-2">
+    ERRORS: {{ control2.errors | json }}
+  </div>
+</div>

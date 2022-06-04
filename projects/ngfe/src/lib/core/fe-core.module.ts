@@ -5,19 +5,19 @@ import { FeIf } from './fe-if';
 import { FeFormSubmit, FeSubmit } from './fe-submit';
 
 @NgModule({
-  declarations: [
+  imports: [
     FeControl,
-    FeForm,
-    FeSubmit,
     FeIf,
+    FeForm,
     FeFormSubmit,
+    FeSubmit,
   ],
   exports: [
     FeControl,
-    FeForm,
-    FeSubmit,
     FeIf,
+    FeForm,
     FeFormSubmit,
+    FeSubmit,
   ],
 })
 export class FeCoreModule {

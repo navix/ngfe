@@ -15,6 +15,7 @@ import { coerceToBoolean } from '../util';
 @Directive({
   selector: 'select[feControl]',
   exportAs: 'feSelect',
+  standalone: true,
 })
 export class FeSelect {
   @Input() multiple?: boolean | string;
@@ -117,6 +118,7 @@ export class FeSelect {
 @Directive({
   selector: 'option',
   exportAs: 'feSelectOption',
+  standalone: true,
 })
 export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
   @Input() value?: any;

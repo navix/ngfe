@@ -3,7 +3,7 @@ import { FeInput } from './fe-input';
 import { FeSelect, FeSelectOption } from './fe-select';
 
 @NgModule({
-  declarations: [
+  imports: [
     FeInput,
     FeSelect,
     FeSelectOption,

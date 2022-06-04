@@ -5,6 +5,7 @@ import { coerceToBoolean } from '../util';
 @Directive({
   selector: 'input[feControl],textarea[feControl]',
   exportAs: 'feInput',
+  standalone: true,
 })
 export class FeInput {
   @Input() type:

@@ -3,16 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdaptersPageComponent } from './adapters-page/adapters-page.component';
 import { CustomControlPageComponent } from './demos/custom-control-page/custom-control-page.component';
 import {
-  DemoRegistrationFormPageComponent
+  DemoRegistrationFormPageComponent,
 } from './demos/demo-registration-form-page/demo-registration-form-page.component';
 import { DynamicFormComponent } from './demos/dynamic-form-page/dynamic-form.component';
+import { FieldPageComponent } from './demos/field-page/field-page.component';
 import { SubFormPageComponent } from './demos/sub-form-page/sub-form-page.component';
 import { DisabledPageComponent } from './disabled-page/disabled-page.component';
-import { FieldPageComponent } from './demos/field-page/field-page.component';
 import { FormPageComponent } from './form-page/form-page.component';
 import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
+import { StandalonePageComponent } from './standalone-page/standalone-page.component';
 import { ValidationPageComponent } from './validation-page/validation-page.component';
 
 const routes: Routes = [
@@ -43,6 +44,10 @@ const routes: Routes = [
   {
     path: 'disabled',
     component: DisabledPageComponent,
+  },
+  {
+    path: 'standalone',
+    component: StandalonePageComponent,
   },
   {
     path: 'demo-field',

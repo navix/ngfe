@@ -41,13 +41,34 @@ test.describe.serial('Disabled', () => {
     await expect(kit.$('#control-3-disabled')).toHaveText('DISABLED: true ');
     await expect(kit.$('#control-3-valid')).toHaveText('VAL: false ');
     await expect(kit.$('#form-3-valid')).toHaveText('FORM_VAL: true ');
+    await expect(kit.$('#form-3-valid-async')).toHaveText('FORM_VAL$: true ');
     await kit.$('#control-3-disabled-toggle').uncheck();
     await delay(10);
     await expect(kit.$('#control-3-disabled')).toHaveText('DISABLED: false ');
     await expect(kit.$('#control-3-valid')).toHaveText('VAL: false ');
     await expect(kit.$('#form-3-valid')).toHaveText('FORM_VAL: false ');
+    await expect(kit.$('#form-3-valid-async')).toHaveText('FORM_VAL$: false ');
     await kit.$('#control-3').fill('qqq');
     await expect(kit.$('#control-3-valid')).toHaveText('VAL: true ');
     await expect(kit.$('#form-3-valid')).toHaveText('FORM_VAL: true ');
+    await expect(kit.$('#form-3-valid-async')).toHaveText('FORM_VAL$: true ');
+  });
+
+  test('4 - Direct disabled bind in group', async () => {
+    await expect(kit.$('#control-4-disabled')).toHaveText('DISABLED: false ');
+    await expect(kit.$('#form-4-valid')).toHaveText('FORM_VAL: false ');
+    await kit.$('#control-4-disabled-toggle').check();
+    await delay(10);
+    await expect(kit.$('#control-4-disabled')).toHaveText('DISABLED: true ');
+    await expect(kit.$('#form-4-valid')).toHaveText('FORM_VAL: true ');
+    await expect(kit.$('#form-4-valid-async')).toHaveText('FORM_VAL$: true ');
+    await kit.$('#control-4-disabled-toggle').uncheck();
+    await delay(10);
+    await expect(kit.$('#control-4-disabled')).toHaveText('DISABLED: false ');
+    await expect(kit.$('#form-4-valid')).toHaveText('FORM_VAL: false ');
+    await expect(kit.$('#form-4-valid-async')).toHaveText('FORM_VAL$: false ');
+    await kit.$('#control-4').fill('qqq');
+    await expect(kit.$('#form-4-valid')).toHaveText('FORM_VAL: true ');
+    await expect(kit.$('#form-4-valid-async')).toHaveText('FORM_VAL$: true ');
   });
 });

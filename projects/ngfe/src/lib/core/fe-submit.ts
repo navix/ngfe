@@ -5,6 +5,7 @@ import { FeForm } from './fe-form';
 @Directive({
   selector: 'button[feSubmit]',
   exportAs: 'feSubmit',
+  standalone: true,
 })
 export class FeSubmit {
   @Output() feSubmit = new EventEmitter();
@@ -30,6 +31,7 @@ export class FeSubmit {
 @Directive({
   selector: 'form[feSubmit]',
   exportAs: 'feSubmit',
+  standalone: true,
 })
 export class FeFormSubmit {
   @Output() feSubmit = new EventEmitter();

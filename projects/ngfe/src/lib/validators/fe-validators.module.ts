@@ -9,7 +9,7 @@ import { FePatternValidator } from './fe-pattern-validator';
 import { FeRequiredValidator } from './fe-required-validator';
 
 @NgModule({
-  declarations: [
+  imports: [
     FeEmailValidator,
     FeEqualValidator,
     FeIsNumberValidator,

@@ -19,7 +19,9 @@ import { FormPageComponent } from './form-page/form-page.component';
 import { InputControlPageComponent } from './input-control-page/input-control-page.component';
 import { LifecyclePageComponent } from './lifecycle-page/lifecycle-page.component';
 import { SelectControlPageComponent } from './select-control-page/select-control-page.component';
+import { SubForm2Component } from './standalone-page/sub-form/sub-form2.component';
 import { ValidationPageComponent } from './validation-page/validation-page.component';
+import { StandalonePageComponent } from './standalone-page/standalone-page.component';
 
 @NgModule({
   imports: [
@@ -27,6 +29,7 @@ import { ValidationPageComponent } from './validation-page/validation-page.compo
     AppRoutingModule,
     FeModule,
     SubFormComponent,
+    SubForm2Component,
   ],
   declarations: [
     AppComponent,
@@ -44,6 +47,7 @@ import { ValidationPageComponent } from './validation-page/validation-page.compo
     DynamicFormComponent,
     SubFormPageComponent,
     DemoRegistrationFormPageComponent,
+    StandalonePageComponent,
   ],
   bootstrap: [AppComponent],
 })

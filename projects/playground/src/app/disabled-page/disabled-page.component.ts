@@ -11,4 +11,5 @@ export class DisabledPageComponent {
   disabled2 = false;
   value3 = '';
   disabled3 = false;
+  value4 = '';
 }

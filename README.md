@@ -15,19 +15,19 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * **Focused on template-driven approach.**
 * **Less abstractions, ultimate control.**
 * **More freedom for developers.**
-* Nothing exceptionally new for Angular developers.
+* Nothing exceptionally new for Angular people.
 * Less boilerplate to write:
   * Simple custom value accessors creation.
   * Simple custom validators creation.
   * Single interface for sync and async validators.
   * No `ControlContainer` providing for sub-forms.
   * No required `name` binding.
-  * Directive for easy value init/cleanup.
+  * Directive for easy value init/cleanup on dynamic forms.
   * Handy way to display validation errors only on touched fields.
 * Function validators binding.
 * Built-in debounce.
 * Adapters for two-way value conversion.
-* Optional state binding in templates (e.g `[(touched)]`).
+* Two-way state binding in templates (e.g `[(touched)]`).
 * Almost all states have reactive alternative (e.g `.errors`+`.errors$`).
 * Submit directive which touches all fields and checks validity.
 * Stricter types in controls.
@@ -37,6 +37,7 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * Reduced bundle size without @angular/forms (~20KB parsed size in prod mode).
 * Does not conflict with the Angular `FormsModule`.
 * Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
+* Works with Angular Material.
 
 ### Caveats
 
@@ -77,8 +78,7 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 $ npm i ngfe
 ```
 
-* `ngfe@13` for Angular 12 and 13, RxJS 7,
-* `ngfe@14` for Angular 14.
+* `ngfe@13` for Angular 12 and 13. RxJS 7 needed.
 
 
 
@@ -95,19 +95,25 @@ imports: [
 ]
 ```
 
+Also, all directives are standalone and can be imported separately:
+
+```
+imports: [FeControl, FeInput, FeRequiredValidator]
+```
+
 
 
 ## Binding
 
-On the surface `[(feControl)]` works exactly like `[(ngModel)]`.
+On the surface [`[(feControl)]`](./projects/ngfe/src/lib/core/fe-control.ts) works exactly like `[(ngModel)]`.
 
 ```
 <input [(feControl)]="field">
 ```
 
-## Built-in controls
+## Built-in value accessors
 
-### Input
+### [Input](./projects/ngfe/src/lib/value-accessors/fe-input.ts)
 
 ```
 <input [(feControl)]="field">
@@ -149,13 +155,13 @@ By default `touchOnBlur` is `true` and `touchOnChange` is `false`.
 <input [(feControl)]="field2" [touchOnBlur]="false">
 ```
 
-### Textarea
+### [Textarea](./projects/ngfe/src/lib/value-accessors/fe-input.ts)
 
 ```
 <textarea [(feControl)]="field"></textarea>
 ```
 
-### Select
+### [Select](./projects/ngfe/src/lib/value-accessors/fe-select.ts)
 
 ```
 <select [(feControl)]="field">
@@ -164,13 +170,24 @@ By default `touchOnBlur` is `true` and `touchOnChange` is `false`.
 </select>
 ```
 
-_Any type of value available to bind to `option[value]`._
+Any type of value available to bind to `option[value]`.
+
+```
+field: number;
+```
+
+```
+<select [(feControl)]="field">
+  <option [value]="1">ONE</option>
+  <option [value]="2">TWO</option>
+</select>
+```
 
 
 
-## Adapters
+## [Adapters](./projects/ngfe/src/lib/core/adapters.ts)
 
-Controls store 2 values at the same moment: `modelValue` and `inputValue`. When `modelValue` changes its' value also transferred to `inputValue` and vice-versa.  You could define functions that will change the values during this transition. 
+Controls store 2 values at the same moment: `modelValue` and `inputValue`. When `modelValue` changes its' value also transferred to `inputValue` and vice-versa.  You could define functions that change the values during this transition. 
 
 At the first place this feature is needed to keep proper types for values in models.
 
@@ -195,6 +212,8 @@ field = new Date();
 ```
 <input [(feControl)]="field" type="date" adapter="dateToDateString">
 ```
+
+_By default in browsers date input uses `string`._
 
 ### [Built-in adapters](./projects/ngfe/src/lib/core/adapters.ts)
 
@@ -224,7 +243,7 @@ Pass it to `[adapter]` input:
 
 
 
-## Validation
+## [Validation](./projects/ngfe/src/lib/core/validation.ts)
 
 Work very similar to the default Angular validation.
 
@@ -248,7 +267,7 @@ Also, there is `.visibleErrors` that passes errors object when control becomes t
 </div>
 ```
 
-### Built-in validators
+### [Built-in validators](./projects/ngfe/src/lib/validators)
 
 * `required`
 * `email`
@@ -323,7 +342,7 @@ Define debounce time for values from a value accessor:b
 
 
 
-## Submit
+## [Submit](./projects/ngfe/src/lib/core/fe-submit.ts)
 
 Directive that marks all form controls as touched, when user submits the form.
 
@@ -348,7 +367,7 @@ Also emits event only if form has `valid` state.
 
 
 
-## Init/cleanup values
+## [Init/cleanup values](./projects/ngfe/src/lib/core/fe-if.ts)
 
 For dynamic forms we need to setup values when some fields became visible, and remove such values on field hiding.
 
@@ -371,6 +390,8 @@ Also, you could define `[default]` value that will be set to the model when it's
   <input [(feControl)]="field">
 </ng-template>
 ```
+
+
 
 ## Custom Value Accessor
 
@@ -412,7 +433,7 @@ You can subscribe to any stream of the control and define any state.
 
 
 
-## Utils
+## [Util](./projects/ngfe/src/lib/util)
 
 Set of functions that is very useful in work with forms.
 
@@ -437,6 +458,8 @@ Import module:
 
 ```
 imports: [
+  ...
+  FeModule,
   FeNgAdapterModule,
 ]
 ```
@@ -452,6 +475,3 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 ## LICENSE 
 
 MIT
-
-* usage in standalone cmps demos
-* standalone export ??

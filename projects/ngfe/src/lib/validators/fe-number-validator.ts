@@ -4,6 +4,7 @@ import { FeControl } from '../core';
 @Directive({
   selector: '[feControl][min],[feControl][max]',
   exportAs: 'feNumberValidator',
+  standalone: true,
 })
 export class FeNumberValidator implements OnChanges {
   @Input() min?: string | number | false;

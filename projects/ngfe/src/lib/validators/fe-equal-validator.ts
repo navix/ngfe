@@ -4,6 +4,7 @@ import { FeControl } from '../core';
 @Directive({
   selector: '[feControl][equal]',
   exportAs: 'feEqualValidator',
+  standalone: true,
 })
 export class FeEqualValidator implements OnChanges {
   @Input() equal: any;

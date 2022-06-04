@@ -6,6 +6,7 @@ import { coerceToBoolean } from '../util';
 @Directive({
   selector: '[feControl][required]',
   exportAs: 'feRequiredValidator',
+  standalone: true,
 })
 export class FeRequiredValidator implements OnChanges {
   @Input() required!: boolean | string;

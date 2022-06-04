@@ -22,7 +22,7 @@
 </div>
 
 <div class="case">
-  <h4>3 - Disabled in group</h4>
+  <h4>3 - Disabled in form</h4>
   <div>
     <form #f3="feForm">
       <input [(feControl)]="value3" [disabled]="disabled3" #c3="feControl" required id="control-3">
@@ -37,5 +37,27 @@
   </div>
   <div id="form-3-valid">
     FORM_VAL: {{ f3.valid | json }}
+  </div>
+  <div id="form-3-valid-async">
+    FORM_VAL$: {{ f3.valid$ | async | json }}
+  </div>
+</div>
+
+<div class="case">
+  <h4>3 - Direct disabled binding in form</h4>
+  <div>
+    <form #f4="feForm">
+      <input [(feControl)]="value4" #c4="feControl" required id="control-4">
+      <input [(feControl)]="c4.disabled" type="checkbox" id="control-4-disabled-toggle">
+    </form>
+  </div>
+  <div id="control-4-disabled">
+    DISABLED: {{ c4.disabled | json }}
+  </div>
+  <div id="form-4-valid">
+    FORM_VAL: {{ f4.valid | json }}
+  </div>
+  <div id="form-4-valid-async">
+    FORM_VAL$: {{ f4.valid$ | async | json }}
   </div>
 </div>

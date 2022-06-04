@@ -4,6 +4,7 @@ import { FeControl } from '../core';
 @Directive({
   selector: '[feControl][pattern]',
   exportAs: 'fePatternValidator',
+  standalone: true,
 })
 export class FePatternValidator implements OnChanges {
   @Input() pattern?: string | RegExp | false;

@@ -5,6 +5,7 @@ import { coerceToBoolean } from '../util';
 @Directive({
   selector: '[feControl][isNumber]',
   exportAs: 'feIsNumberValidator',
+  standalone: true,
 })
 export class FeIsNumberValidator implements OnChanges {
   @Input() isNumber!: string | boolean;

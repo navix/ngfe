@@ -16,6 +16,7 @@ import { FeValidity } from './validation';
 @Directive({
   selector: '[feForm],form',
   exportAs: 'feForm',
+  standalone: true,
 })
 export class FeForm implements OnChanges, OnDestroy {
   @Input() disabled = false;
@@ -124,6 +125,7 @@ export class FeForm implements OnChanges, OnDestroy {
           this.controlsMap.set(control, [
             control.modelValue$.subscribe(this._modelValueChange$),
             control.validity$.subscribe(() => this._validityCheck$.next(undefined)),
+            control.disabled$.subscribe(() => this._validityCheck$.next(undefined)),
           ]);
         });
       }

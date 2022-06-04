@@ -33,6 +33,7 @@ export type VcSource = 'initial' | 'model' | 'input' | 'manual';
 @Directive({
   selector: '[feControl],[feControlChange]',
   exportAs: 'feControl',
+  standalone: true,
 })
 export class FeControl<MODEL = any, INPUT = any> implements OnChanges, OnDestroy {
   @Input() feControl!: MODEL | undefined;

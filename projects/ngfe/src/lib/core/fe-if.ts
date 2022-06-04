@@ -16,6 +16,7 @@ import { coerceToBoolean, deepCopy } from '../util';
 
 @Directive({
   selector: '[feIf]',
+  standalone: true,
 })
 export class FeIf<T> implements OnChanges {
   static ngTemplateGuard_feIf: 'binding';
