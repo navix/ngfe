@@ -1,23 +1,23 @@
 import { NgModule } from '@angular/core';
-import { FeControlDirective } from './fe-control.directive';
-import { FeFormDirective } from './fe-form.directive';
-import { FeIfDirective } from './fe-if.directive';
-import { FeButtonSubmitDirective, FeFormSubmitDirective } from './fe-submit.directive';
+import { FeControl } from './fe-control';
+import { FeForm } from './fe-form';
+import { FeIf } from './fe-if';
+import { FeFormSubmit, FeSubmit } from './fe-submit';
 
 @NgModule({
   declarations: [
-    FeControlDirective,
-    FeFormDirective,
-    FeButtonSubmitDirective,
-    FeIfDirective,
-    FeFormSubmitDirective,
+    FeControl,
+    FeForm,
+    FeSubmit,
+    FeIf,
+    FeFormSubmit,
   ],
   exports: [
-    FeControlDirective,
-    FeFormDirective,
-    FeButtonSubmitDirective,
-    FeIfDirective,
-    FeFormSubmitDirective,
+    FeControl,
+    FeForm,
+    FeSubmit,
+    FeIf,
+    FeFormSubmit,
   ],
 })
 export class FeCoreModule {

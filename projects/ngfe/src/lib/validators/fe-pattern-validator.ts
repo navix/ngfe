@@ -3,8 +3,9 @@ import { FeControl } from '../core';
 
 @Directive({
   selector: '[feControl][pattern]',
+  exportAs: 'fePatternValidator',
 })
-export class FePatternValidatorDirective implements OnChanges {
+export class FePatternValidator implements OnChanges {
   @Input() pattern?: string | RegExp | false;
 
   private regex?: RegExp;

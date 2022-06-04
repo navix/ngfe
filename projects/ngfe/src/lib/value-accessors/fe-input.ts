@@ -6,7 +6,7 @@ import { coerceToBoolean } from '../util';
   selector: 'input[feControl],textarea[feControl]',
   exportAs: 'feInput',
 })
-export class FeInputDirective {
+export class FeInput {
   @Input() type:
     'text' | 'color' | 'email' | 'password' | 'range' | 'search' | 'tel' | 'url' | 'time' | 'month' | 'week' |
     'number' |

@@ -11,7 +11,7 @@ test.describe.serial('FeSelectDirective', () => {
 
   test('open', async ({page}) => {
     await kit.goto('/select-control');
-    await expect(kit.subTitle).toHaveText('FeSelectDirective');
+    await expect(kit.subTitle).toHaveText('FeSelect');
   });
 
   test('select 1 - base select', async () => {

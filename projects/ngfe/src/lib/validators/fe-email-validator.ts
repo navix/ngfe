@@ -4,8 +4,9 @@ import { coerceToBoolean } from '../util';
 
 @Directive({
   selector: '[feControl][email]',
+  exportAs: 'feEmailValidator',
 })
-export class FeEmailValidatorDirective implements OnChanges {
+export class FeEmailValidator implements OnChanges {
   @Input() email!: boolean | string;
 
   /**

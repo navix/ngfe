@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { FeNgAdapterDirective } from './fe-ng-adapter.directive';
-import { FeNgControlDirective } from './fe-ng-control.directive';
+import { FeNgAdapter } from './fe-ng-adapter';
+import { FeNgControl } from './fe-ng-control';
 
 @NgModule({
   declarations: [
-    FeNgAdapterDirective,
-    FeNgControlDirective,
+    FeNgAdapter,
+    FeNgControl,
   ],
   exports: [
-    FeNgAdapterDirective,
-    FeNgControlDirective,
+    FeNgAdapter,
+    FeNgControl,
   ],
 })
 export class FeNgAdapterModule {

@@ -5,8 +5,9 @@ import { coerceToBoolean } from '../util';
 
 @Directive({
   selector: '[feControl][required]',
+  exportAs: 'feRequiredValidator',
 })
-export class FeRequiredValidatorDirective implements OnChanges {
+export class FeRequiredValidator implements OnChanges {
   @Input() required!: boolean | string;
 
   private readonly _isEnabled$ = new BehaviorSubject<boolean>(false);
@@ -28,7 +29,7 @@ export class FeRequiredValidatorDirective implements OnChanges {
   }
 
   get isEnabled() {
-    return this._isEnabled$.value;;
+    return this._isEnabled$.value;
   }
 
   get isEnabled$() {

@@ -3,8 +3,9 @@ import { FeControl } from '../core';
 
 @Directive({
   selector: '[feControl][minlength],[feControl][maxlength]',
+  exportAs: 'feLengthValidator',
 })
-export class FeLengthValidatorDirective implements OnChanges {
+export class FeLengthValidator implements OnChanges {
   @Input() minlength?: string | number | false;
   @Input() maxlength?: string | number | false;
 

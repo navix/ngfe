@@ -127,15 +127,15 @@ class LocalControl {
   providers: [
     {
       provide: NgControl,
-      useExisting: FeNgControlDirective,
+      useExisting: FeNgControl,
     },
     {
       provide: ControlContainer,
-      useExisting: FeNgControlDirective,
+      useExisting: FeNgControl,
     },
   ],
 })
-export class FeNgControlDirective extends NgControl {
+export class FeNgControl extends NgControl {
   @Input() name!: string | null;
 
   private _control?: LocalControl;

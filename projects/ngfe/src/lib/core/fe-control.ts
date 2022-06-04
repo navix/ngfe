@@ -1,9 +1,21 @@
-import { ChangeDetectorRef, Inject, Injectable, OnDestroy, Optional, SkipSelf } from '@angular/core';
-import { BehaviorSubject, forkJoin, from, merge, Observable, of, Subject, timer } from 'rxjs';
-import { debounce, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
-import { diff } from '../util';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  Inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Optional,
+  Output,
+  SimpleChanges,
+  SkipSelf,
+} from '@angular/core';
+import { BehaviorSubject, debounce, forkJoin, from, merge, Observable, of, Subject, timer } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { coerceToBoolean, diff, err } from '../util';
 import { FeAdapter, feAdapters } from './adapters';
-import { FeFormDirective } from './fe-form.directive';
+import { FeForm } from './fe-form';
 import { FeErrors, FeValidator, FeValidatorResult, FeValidity } from './validation';
 
 interface Vc<MODEL, INPUT> {
@@ -14,8 +26,72 @@ interface Vc<MODEL, INPUT> {
 
 export type VcSource = 'initial' | 'model' | 'input' | 'manual';
 
-@Injectable()
-export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
+/**
+ * Allow to bind model to control.
+ * Provides `FeControl` service to handle control state and communications.
+ */
+@Directive({
+  selector: '[feControl],[feControlChange]',
+  exportAs: 'feControl',
+})
+export class FeControl<MODEL = any, INPUT = any> implements OnChanges, OnDestroy {
+  @Input() feControl!: MODEL | undefined;
+
+  @Input() set disabled(disabled: boolean | string) {
+    const normalized = coerceToBoolean(disabled);
+    if (this.disabled !== normalized) {
+      this._disabled$.next(normalized);
+    }
+  }
+
+  @Input() set standalone(standalone: boolean | string) {
+    const normalized = coerceToBoolean(standalone);
+    if (this.standalone !== normalized) {
+      this._standalone$.next(normalized);
+    }
+  }
+
+  @Input() set touched(touched: boolean) {
+    if (this.touched !== touched) {
+      this._touched$.next(touched);
+    }
+  }
+
+  @Input() set dirty(dirty: boolean) {
+    if (dirty !== this.dirty) {
+      this._dirty$.next(dirty);
+    }
+  }
+
+  @Input() set debounce(debounce: number | string | undefined) {
+    this._debounce = debounce ? +debounce : undefined;
+  }
+
+  @Input() set adapter(adapter: keyof typeof feAdapters | FeAdapter<MODEL, INPUT> | undefined) {
+    if (typeof adapter === 'string') {
+      if (adapter in feAdapters) {
+        this.setAdapter(feAdapters[adapter]);
+      } else {
+        err('FeControl', `Adapter with name "${this.adapter}" not found.`);
+      }
+    } else {
+      this.setAdapter(adapter);
+    }
+  }
+
+  @Input() extraValidators?: FeValidator<MODEL>[];
+  // @todo `[extraErrors]` input with custom errors that will be merged to the state.
+
+  @Output() feControlChange = new EventEmitter<MODEL>();
+  @Output() disabledChange = new EventEmitter<boolean>();
+  @Output() standaloneChange = new EventEmitter<boolean>();
+  @Output() touchedChange = new EventEmitter<boolean>();
+  @Output() dirtyChange = new EventEmitter<boolean>();
+  @Output() destroy = new EventEmitter<undefined>();
+
+  private modelValueOutput?: MODEL;
+  private modelValueOutputFlag = false;
+
   private readonly _vc$ = new BehaviorSubject<Vc<MODEL, INPUT>>({source: 'initial'});
   readonly vc$ = this._vc$.asObservable();
   readonly modelValue$: Observable<MODEL | undefined> = this._vc$.pipe(
@@ -69,7 +145,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
   private _debounce?: number;
 
   constructor(
-    @Optional() @Inject(FeFormDirective) private group: FeFormDirective | undefined,
+    @Optional() @Inject(FeForm) private group: FeForm | undefined,
     @Optional() @Inject(FeControl) @SkipSelf() private parentControl: FeControl | undefined,
     private cdr: ChangeDetectorRef,
     // @todo public elementRef ??
@@ -85,6 +161,43 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     merge(this.modelValue$, this.validators$).subscribe(() => {
       this.updateValidity();
     });
+    this.vc$
+      .pipe(filter(({source}) => source !== 'initial' && source !== 'model'))
+      .subscribe(({modelValue}) => {
+        this.modelValueOutput = modelValue;
+        this.modelValueOutputFlag = true;
+        this.feControlChange.emit(modelValue);
+      });
+    this.disabled$
+      .subscribe(disabled => {
+        this.disabledChange.emit(disabled);
+      });
+    this.standalone$
+      .subscribe(standalone => {
+        this.standaloneChange.emit(standalone);
+      });
+    this.touched$
+      .subscribe(touched => {
+        this.touchedChange.emit(touched);
+      });
+    this.dirty$
+      .subscribe(dirty => {
+        this.dirtyChange.emit(dirty);
+      });
+    this.destroy$.subscribe(this.destroy);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ('feControl' in changes && (!this.modelValueOutputFlag || this.feControl !== this.modelValueOutput)) {
+      this.update(this.feControl, 'model');
+    }
+    if ('extraValidators' in changes) {
+      const prev: FeValidator<MODEL>[] | undefined = changes.extraValidators.previousValue;
+      this.updateValidators({
+        add: this.extraValidators,
+        remove: prev?.filter(f => this.extraValidators?.indexOf(f) === -1) || [],
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -118,30 +231,12 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this._disabled$.value;
   }
 
-  set disabled(disabled: boolean) {
-    if (this.disabled !== disabled) {
-      this._disabled$.next(disabled);
-    }
-  }
-
   get standalone() {
     return this._standalone$.value;
   }
 
-  set standalone(standalone: boolean) {
-    if (this.standalone !== standalone) {
-      this._standalone$.next(standalone);
-    }
-  }
-
   get dirty() {
     return this._dirty$.value;
-  }
-
-  set dirty(dirty: boolean) {
-    if (dirty !== this.dirty) {
-      this._dirty$.next(dirty);
-    }
   }
 
   get errors() {
@@ -178,12 +273,6 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this._touched$.value;
   }
 
-  set touched(touched: boolean) {
-    if (this.touched !== touched) {
-      this._touched$.next(touched);
-    }
-  }
-
   get validators() {
     return this._validators$.value;
   }
@@ -193,14 +282,13 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     return this.touched && this.errors;
   }
 
-  set debounce(debounce: number | undefined) {
-    this._debounce = debounce;
-  }
-
   /**
    * Set new MODEL value.
    */
-  update(modelValue: MODEL | undefined, source: VcSource = 'manual') {
+  update(
+    modelValue: MODEL | undefined,
+    source: VcSource = 'manual',
+  ) {
     this._modelValueUpdate$.next({modelValue, source});
   }
 
@@ -236,7 +324,7 @@ export class FeControl<MODEL = any, INPUT = any> implements OnDestroy {
     this._updateValidity$.next(undefined);
   }
 
-  setAdapter(adapter: FeAdapter<MODEL, INPUT> | undefined) {
+  setAdapter(adapter: FeAdapter<any, any> | undefined) {
     this._adapter = adapter || feAdapters.noop;
     this._modelValueUpdate$.next({
       modelValue: this.modelValue,
