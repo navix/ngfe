@@ -17,7 +17,7 @@ import { FeValidity } from './validation';
   selector: '[feForm],form',
   exportAs: 'feForm',
 })
-export class FeFormDirective implements OnChanges, OnDestroy {
+export class FeForm implements OnChanges, OnDestroy {
   @Input() disabled = false;
 
   @HostBinding('attr.novalidate') novalidate = '';

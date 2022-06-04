@@ -1,16 +1,16 @@
 import { Directive, EventEmitter, HostListener, Inject, Optional, Output } from '@angular/core';
 import { err } from '../util';
-import { FeFormDirective } from './fe-form.directive';
+import { FeForm } from './fe-form';
 
 @Directive({
   selector: 'button[feSubmit]',
   exportAs: 'feSubmit',
 })
-export class FeButtonSubmitDirective {
+export class FeSubmit {
   @Output() feSubmit = new EventEmitter();
 
   constructor(
-    @Optional() @Inject(FeFormDirective) private form: FeFormDirective,
+    @Optional() @Inject(FeForm) private form: FeForm,
   ) {
     if (!this.form) {
       // @todo allow formSubmit to work outside form
@@ -29,12 +29,13 @@ export class FeButtonSubmitDirective {
 
 @Directive({
   selector: 'form[feSubmit]',
+  exportAs: 'feSubmit',
 })
-export class FeFormSubmitDirective {
+export class FeFormSubmit {
   @Output() feSubmit = new EventEmitter();
 
   constructor(
-    @Inject(FeFormDirective) private group: FeFormDirective,
+    @Inject(FeForm) private group: FeForm,
   ) {
   }
 

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
-import { FeInputDirective } from './fe-input.directive';
-import { FeSelectDirective, FeSelectOptionDirective } from './fe-select.directive';
+import { FeInput } from './fe-input';
+import { FeSelect, FeSelectOption } from './fe-select';
 
 @NgModule({
   declarations: [
-    FeInputDirective,
-    FeSelectDirective,
-    FeSelectOptionDirective,
+    FeInput,
+    FeSelect,
+    FeSelectOption,
   ],
   exports: [
-    FeInputDirective,
-    FeSelectDirective,
-    FeSelectOptionDirective,
+    FeInput,
+    FeSelect,
+    FeSelectOption,
   ],
 })
 export class FeValueAccessorsModule {

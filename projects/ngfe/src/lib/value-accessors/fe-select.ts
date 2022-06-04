@@ -16,7 +16,7 @@ import { coerceToBoolean } from '../util';
   selector: 'select[feControl]',
   exportAs: 'feSelect',
 })
-export class FeSelectDirective {
+export class FeSelect {
   @Input() multiple?: boolean | string;
 
   @Input() updateOn: 'change' | 'blur' = 'change';
@@ -29,7 +29,7 @@ export class FeSelectDirective {
     this._touchOnChange = coerceToBoolean(touchOnChange);
   }
 
-  readonly options = new Set<FeSelectOptionDirective>();
+  readonly options = new Set<FeSelectOption>();
 
   connected = true;
 
@@ -116,12 +116,13 @@ export class FeSelectDirective {
 
 @Directive({
   selector: 'option',
+  exportAs: 'feSelectOption',
 })
-export class FeSelectOptionDirective implements OnInit, OnChanges, OnDestroy {
+export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
   @Input() value?: any;
 
   constructor(
-    private select: FeSelectDirective,
+    private select: FeSelect,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {

@@ -1,33 +1,33 @@
 import { NgModule } from '@angular/core';
-import { FeEmailValidatorDirective } from './fe-email-validator.directive';
-import { FeEqualValidatorDirective } from './fe-equal-validator.directive';
-import { FeIsNumberValidatorDirective } from './fe-is-number-validator.directive';
-import { FeLengthValidatorDirective } from './fe-length-validator.directive';
-import { FeNotEqualValidatorDirective } from './fe-not-equal-validator.directive';
-import { FeNumberValidatorDirective } from './fe-number-validator.directive';
-import { FePatternValidatorDirective } from './fe-pattern-validator.directive';
-import { FeRequiredValidatorDirective } from './fe-required-validator.directive';
+import { FeEmailValidator } from './fe-email-validator';
+import { FeEqualValidator } from './fe-equal-validator';
+import { FeIsNumberValidator } from './fe-is-number-validator';
+import { FeLengthValidator } from './fe-length-validator';
+import { FeNotEqualValidator } from './fe-not-equal-validator';
+import { FeNumberValidator } from './fe-number-validator';
+import { FePatternValidator } from './fe-pattern-validator';
+import { FeRequiredValidator } from './fe-required-validator';
 
 @NgModule({
   declarations: [
-    FeEmailValidatorDirective,
-    FeEqualValidatorDirective,
-    FeIsNumberValidatorDirective,
-    FeLengthValidatorDirective,
-    FeNotEqualValidatorDirective,
-    FeNumberValidatorDirective,
-    FePatternValidatorDirective,
-    FeRequiredValidatorDirective,
+    FeEmailValidator,
+    FeEqualValidator,
+    FeIsNumberValidator,
+    FeLengthValidator,
+    FeNotEqualValidator,
+    FeNumberValidator,
+    FePatternValidator,
+    FeRequiredValidator,
   ],
   exports: [
-    FeEmailValidatorDirective,
-    FeEqualValidatorDirective,
-    FeIsNumberValidatorDirective,
-    FeLengthValidatorDirective,
-    FeNotEqualValidatorDirective,
-    FeNumberValidatorDirective,
-    FePatternValidatorDirective,
-    FeRequiredValidatorDirective,
+    FeEmailValidator,
+    FeEqualValidator,
+    FeIsNumberValidator,
+    FeLengthValidator,
+    FeNotEqualValidator,
+    FeNumberValidator,
+    FePatternValidator,
+    FeRequiredValidator,
   ],
 })
 export class FeValidatorsModule {

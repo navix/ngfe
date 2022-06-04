@@ -79,8 +79,8 @@ $ npm i ngfe
 
 ### Requirements
 
-* Angular 12.0+
-* RxJs 6.6+
+* Angular 12+
+* RxJs 7+
 
 
 
@@ -355,7 +355,7 @@ Also emits event only if form has `valid` state.
 
 For dynamic forms we need to setup values when some fields became visible, and remove such values on field hiding.
 
-Structural directive [`feIf`](./projects/ngfe/src/lib/core/fe-if.directive.ts) works similar to `ngIf` (except `else` part) and could set a model to some default / `undefined`.
+Structural directive [`feIf`](./projects/ngfe/src/lib/core/fe-if.ts) works similar to `ngIf` (except `else` part) and could set a model to some default / `undefined`.
 
 When Angular change detection runs, `feIf` directive checks that the condition is true/false, wait until template updates, then update bound model and renders conditional template. This allows us to keep this logic in template and not collide with rendering process.
 
@@ -450,172 +450,6 @@ Also, with this package, `feControl` provides `NgControl` and allows you to use 
 
 > [[StackBlitz] ngfe-ng-adapter demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src/app/app.component.html)
 
-
-
-## Reference
-
-### [`FeControl<MODEL, INPUT>`](./projects/ngfe/src/lib/core/fe-control.ts)
-
-```
-readonly modelValue: MODEL | undefined;
-readonly modelValue$: Observable<MODEL | undefined>;
-readonly inputValue: INPUT | undefined;
-readonly inputValue$: Observable<INPUT | undefined>;
-readonly toInputValue$: Observable<INPUT | undefined>;
-disabled: boolean;
-readonly disabled$: Observable<boolean>;
-standalone: boolean;
-readonly standalone$: Observable<boolean>;
-touched: boolean;
-readonly touched$: Observable<boolean>;
-dirty: boolean;
-readonly dirty$: Observable<boolean>;
-readonly validators: FeValidator<MODEL, INPUT>[];
-readonly validators$: Observable<FeValidator<MODEL, INPUT>[]>;
-readonly validity: boolean;
-readonly validity$: Observable<FeValidity>[]>;
-readonly valid: boolean;
-readonly valid$: Observable<boolean>;
-readonly invalid: boolean;
-readonly invalid$: Observable<boolean>;
-readonly pending: boolean;
-readonly pending$: Observable<boolean>;
-readonly errors: FeErrors | undefined;
-readonly errors$: Observable<FeErrors | undefined>;
-readonly visibleErrors: FeErrors | undefined;
-readonly visibleErrors$: Observable<FeErrors | undefined>;
-readonly destroy$: Observable<undefined>;
-adapter: FeAdapter<MODEL, INPUT> | undefined;
-debounce: debounce: number | undefined;
-update(modelValue: MODEL | undefined, source: VcSource = 'manual');
-input(inputValue: INPUT | undefined);
-touch();
-updateValidators({add = [], remove = []}: {
-  add?: FeValidator<MODEL, INPUT>[];
-  remove?: FeValidator<MODEL, INPUT>[];
-});
-addValidator(validator: FeValidator<MODEL, INPUT>);
-updateValidity();
-setAdapter(adapter: FeAdapter<MODEL, INPUT> | undefined);
-reset();
-```
-
-### [`FeControlDirective<MODEL, INPUT>`](./projects/ngfe/src/lib/core/fe-control.directive.ts)
-
-`exportAs: "feControl"`
-
-```
-[(feControl)]: MODEL | undefined;
-[(disabled)]: boolean;
-[(standalone)]: boolean;
-[(touched)]: boolean;
-[(dirty)]: boolean;
-[extraValidators]: FeValidator<MODEL>[] | undefined;
-[debounce]: number | undefined;
-[adapter]: 'noop' | 'numberToString' | 'dateToDateString' | 'dateToDateLocalString' | 'deepCopy' 
-  | FeAdapter<MODEL, INPUT> | undefined;
-(destroy): undefined;
-readonly modelValue: MODEL | undefined;
-readonly modelValue$: Observable<MODEL | undefined>;
-readonly inputValue: INPUT | undefined;
-readonly inputValue$: Observable<INPUT | undefined>;
-disabled: boolean;
-readonly disabled$: Observable<boolean>;
-standalone: boolean;
-readonly standalone$: Observable<boolean>;
-touched: boolean;
-readonly touched$: Observable<boolean>;
-dirty: boolean;
-readonly dirty$: Observable<boolean>;
-readonly validity: boolean;
-readonly validity$: Observable<FeValidity>[]>;
-readonly valid: boolean;
-readonly valid$: Observable<boolean>;
-readonly invalid: boolean;
-readonly invalid$: Observable<boolean>;
-readonly pending: boolean;
-readonly pending$: Observable<boolean>;
-readonly errors: FeErrors | undefined;
-readonly errors$: Observable<FeErrors | undefined>;
-readonly visibleErrors: FeErrors | undefined;
-readonly visibleErrors$: Observable<FeErrors | undefined>;
-```
-
-### [`FeFormDirective`](./projects/ngfe/src/lib/core/fe-form.directive.ts)
-
-`exportAs: "feForm"`
-
-```
-[disabled]: boolean;
-readonly change$: Observable<undefined>;
-readonly validity: FeValidity;
-readonly validity$: Observable<FeValidity>;
-readonly valid: boolean;
-readonly valid$: Observable<boolean>;
-readonly invalid: boolean;
-readonly invalid$: Observable<boolean>;
-readonly pending: boolean;
-readonly pending$: Observable<boolean>;
-readonly controls: FeControl[];
-readonly enabledControls: FeControl[];
-readonly touched: boolean;
-readonly dirty: boolean;
-touchAll();
-reset();
-```
-
-### [`FeSubmitDirective`](./projects/ngfe/src/lib/core/fe-submit.directive.ts)
-
-`exportAs: "feSubmit"`
-
-```
-(feSubmit): void;
-```
-
-### [`FeIfDirective<T>`](./projects/ngfe/src/lib/core/fe-if.directive.ts)
-
-```
-[feIf]: any;
-[(ensure)]: T | undefined;
-[default]: T | undefined;
-[force]: boolean; 
-```
-
-### [`FeInputDirective`](./projects/ngfe/src/lib/value-accessors/fe-input.directive.ts)
-
-```
-[type]: 'text' | 'color' | 'email' | 'password' | 'range' | 'search' | 'tel' | 'url' |
-    'number' |
-    'checkbox' |'radio' |
-    'date' | 'datetime-local' | 'time' | 'month' | 'week' |
-    'file' |
-    'hidden' | 'button' | 'image' | 'reset' = 'text';
-[name]: string;
-[value]: any;
-[updateOn]: 'change' | 'blur' = 'change'
-[touchOnBlur]: boolean | string = true;
-[touchOnChange]: boolean | string = false;
-[readFileAs]: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL'
-(fileError): string;
-connected: boolean = true;
-```
-
-### [`FeSelectDirective`](./projects/ngfe/src/lib/value-accessors/fe-select.directive.ts)
-
-```
-[multiple]: boolean = false;
-[updateOn]: 'change' | 'blur' = 'change';
-[touchOnBlur]: boolean | string = true;
-[touchOnChange]: boolean | string = false;
-readonly options: Set<FeSelectOptionDirective>;
-connected: boolean = true;
-```
-
-### [`FeSelectOptionDirective`](./projects/ngfe/src/lib/value-accessors/fe-select.directive.ts)
-
-```
-[value]: any;
-```
 
 
 ## LICENSE 

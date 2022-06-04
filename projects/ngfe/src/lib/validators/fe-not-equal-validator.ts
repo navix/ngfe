@@ -2,19 +2,20 @@ import { Directive, Input, OnChanges, Self } from '@angular/core';
 import { FeControl } from '../core';
 
 @Directive({
-  selector: '[feControl][equal]',
+  selector: '[feControl][notEqual]',
+  exportAs: 'feNotEqualValidator',
 })
-export class FeEqualValidatorDirective implements OnChanges {
-  @Input() equal: any;
+export class FeNotEqualValidator implements OnChanges {
+  @Input() notEqual: any;
 
   constructor(
     @Self() private control: FeControl,
   ) {
     this.control.addValidator(({modelValue}) => {
-      if (this.equal !== modelValue) {
+      if (this.notEqual === modelValue) {
         return {
-          'equal': {
-            equal: this.equal,
+          'notEqual': {
+            notEqual: this.notEqual,
             modelValue,
           },
         };

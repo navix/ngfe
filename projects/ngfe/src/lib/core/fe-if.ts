@@ -17,11 +17,11 @@ import { coerceToBoolean, deepCopy } from '../util';
 @Directive({
   selector: '[feIf]',
 })
-export class FeIfDirective<T> implements OnChanges {
+export class FeIf<T> implements OnChanges {
   static ngTemplateGuard_feIf: 'binding';
 
   static ngTemplateContextGuard<T>(
-    dir: FeIfDirective<T>,
+    dir: FeIf<T>,
     ctx: any,
   ):
     ctx is FeIfContext<Exclude<T, false | 0 | '' | null | undefined>> {

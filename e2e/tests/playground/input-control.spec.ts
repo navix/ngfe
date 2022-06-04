@@ -10,7 +10,7 @@ test.describe.serial('FeInputDirective', () => {
 
   test('open', async ({page}) => {
     await kit.goto('/input-control');
-    await expect(kit.subTitle).toHaveText('FeInputDirective');
+    await expect(kit.subTitle).toHaveText('FeInput');
   });
 
   test('input 1 - base input', async () => {
