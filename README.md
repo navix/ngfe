@@ -199,8 +199,8 @@ field = new Date();
 ### [Built-in adapters](./projects/ngfe/src/lib/core/adapters.ts)
 
 * `numberToString` - keeps number in model and string in input.
-* `dateToDateString`
-* `dateToDateLocalString`
+* `dateToDateString` - useful for inputs with type `date`.
+* `dateToDateLocalString` - useful for inputs with type `date-local`.
 * `deepCopy` - useful for objects and arrays.
 
 ### Custom adapter
@@ -209,7 +209,6 @@ Use [`FeAdapter`](./projects/ngfe/src/lib/core/adapters.ts) interface to declare
 
 ```
 booleanToString: FeAdapter<boolean, string> = {
-  name: 'booleanToString',
   fromModel: modelValue => modelValue === true ? '1' : modelValue === false ? '0' : '',
   fromInput: inputValue => inputValue === '1' ? true : inputValue === '0' ? false : undefined,
 };
@@ -240,7 +239,7 @@ Work very similar to the default Angular validation.
 
 ### Visible Errors
 
-Also, there is `.visibleErrors` that passed errors object when control is touched. 
+Also, there is `.visibleErrors` that passes errors object when control becomes touched.
 
 ```
 <input #control="feControl" [(feControl)]="field" required>
@@ -257,7 +256,7 @@ Also, there is `.visibleErrors` that passed errors object when control is touche
 * `minlength`, `maxlength` - works only for strings and arrays in `modelValue`.
 * `min`, `max` - works only for numbers in `modelValue`.
 * `pattern`
-* `isNumber` - check that `inputValue` represents a number or a string that can be parsed to number.
+* `isNumber` - checks that `inputValue` represents a number or a string that can be parsed to number.
 
 ### Custom validator
 
@@ -310,13 +309,13 @@ export class notBoomValidatorDirective implements OnChanges {
 
 ### Async validators
 
-Return from validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts).
+Just return from validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts).
 
 
 
 ## Debounce 
 
-Pass value from input to model with debounce time:
+Define debounce time for values from a value accessor:b
 
 ```
 <input [(feControl)]="field" [debounce]="400">
@@ -619,3 +618,6 @@ connected: boolean = true;
 ## LICENSE 
 
 MIT
+
+* usage in standalone cmps demos
+* standalone export ??
