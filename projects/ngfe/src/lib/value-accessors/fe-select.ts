@@ -5,7 +5,7 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
+  OnInit, Optional,
   Renderer2,
   SimpleChanges,
 } from '@angular/core';
@@ -124,7 +124,7 @@ export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
   @Input() value?: any;
 
   constructor(
-    private select: FeSelect,
+    @Optional() private select: FeSelect,
     private renderer: Renderer2,
     private elementRef: ElementRef,
   ) {
