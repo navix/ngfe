@@ -9,6 +9,7 @@ import { FeForm } from './fe-form';
 })
 export class FeSubmit {
   @Output() feSubmit = new EventEmitter();
+  @Output() invalid = new EventEmitter();
 
   constructor(
     @Optional() @Inject(FeForm) private form: FeForm,
@@ -23,6 +24,8 @@ export class FeSubmit {
     this.form.touchAll();
     if (this.form.valid) {
       this.feSubmit.emit();
+    } else {
+      this.invalid.emit();
     }
     return false;
   }
@@ -35,6 +38,7 @@ export class FeSubmit {
 })
 export class FeFormSubmit {
   @Output() feSubmit = new EventEmitter();
+  @Output() invalid = new EventEmitter();
 
   constructor(
     @Inject(FeForm) private group: FeForm,
@@ -45,6 +49,8 @@ export class FeFormSubmit {
     this.group.touchAll();
     if (this.group.valid) {
       this.feSubmit.emit();
+    } else {
+      this.invalid.emit();
     }
   }
 }
