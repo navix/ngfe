@@ -37,6 +37,7 @@ export type VcSource = 'initial' | 'model' | 'input' | 'manual';
 })
 export class FeControl<MODEL = any, INPUT = any> implements OnChanges, OnDestroy {
   @Input() feControl!: MODEL | undefined;
+  @Input() name?: string;
 
   @Input() set disabled(disabled: boolean | string) {
     const normalized = coerceToBoolean(disabled);
