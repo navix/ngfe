@@ -1,6 +1,6 @@
 import {
   ChangeDetectorRef,
-  Directive,
+  Directive, ElementRef,
   EventEmitter,
   Inject,
   Input,
@@ -147,10 +147,10 @@ export class FeControl<MODEL = any, INPUT = any> implements OnChanges, OnDestroy
   private _debounce?: number;
 
   constructor(
+    public elementRef: ElementRef,
     @Optional() @Inject(FeForm) private group: FeForm | undefined,
     @Optional() @Inject(FeControl) @SkipSelf() private parentControl: FeControl | undefined,
     private cdr: ChangeDetectorRef,
-    // @todo public elementRef ??
   ) {
     if (this.group) {
       this.standalone$.subscribe(() => {
