@@ -1,6 +1,6 @@
 {
   "name": "ngfe",
-  "version": "14.0.1",
+  "version": "15.0.0",
   "keywords": ["angular", "forms"],
   "author": {
     "name": "Oleksa Novyk",
@@ -13,7 +13,7 @@
     "type": "git"
   },
   "peerDependencies": {
-    "@angular/core": ">= 14.0.0",
+    "@angular/core": ">= 15.0.0",
     "rxjs": ">= 7.0.0"
   }
 }
