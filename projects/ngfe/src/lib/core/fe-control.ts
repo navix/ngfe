@@ -92,6 +92,10 @@ export class FeControl<MODEL = any, INPUT = any> implements OnChanges, OnDestroy
   @Output() destroy = new EventEmitter<undefined>();
 
   private modelValueOutput?: MODEL;
+  /**
+   * When we emit value from @output with "change" postfix - it will immediately return from @input.
+   * This flag is `true` when we emit value, and should be reset after next input.
+   */
   private modelValueOutputFlag = false;
 
   private readonly _vc$ = new BehaviorSubject<Vc<MODEL, INPUT>>({source: 'initial'});
@@ -190,8 +194,14 @@ export class FeControl<MODEL = any, INPUT = any> implements OnChanges, OnDestroy
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('feControl' in changes && (!this.modelValueOutputFlag || this.feControl !== this.modelValueOutput)) {
-      this.update(this.feControl, 'model');
+    if ('feControl' in changes) {
+      if (!this.modelValueOutputFlag || this.feControl !== this.modelValueOutput) {
+        this.update(this.feControl, 'model');
+      }
+      // Reset flag after input
+      if (this.modelValueOutputFlag) {
+        this.modelValueOutputFlag = false;
+      }
     }
     if ('extraValidators' in changes) {
       const prev: FeValidator<MODEL>[] | undefined = changes.extraValidators.previousValue;

@@ -118,4 +118,27 @@ test.describe.serial('FeSelectDirective', () => {
     await kit.$('#select-11').selectOption({label: 'VAL2'});
     await expect(kit.$('#select-11-touched')).toHaveText('TOUCHED: true');
   });
+
+  test('12 - cross-change, should properly re-set value received from input', async () => {
+    await kit.$('#select-12_1').selectOption({label: 'VAL1'});
+    await expect(kit.$('#select-12_1-input-value')).toHaveText('INPUT_VALUE: "1"');
+    expect(await kit.isSelected('#select-12_1-opt-1')).toBeTruthy();
+    expect(await kit.isSelected('#select-12_2-opt-1')).toBeTruthy();
+    await kit.$('#select-12_2').selectOption({label: 'VAL2'});
+    await expect(kit.$('#select-12_1-model-value')).toHaveText('MODEL_VALUE: "2"');
+    await expect(kit.$('#select-12_1-input-value')).toHaveText('INPUT_VALUE: "2"');
+    expect(await kit.isSelected('#select-12_1-opt-2')).toBeTruthy();
+    await kit.$('#select-12_2').selectOption({label: 'VAL1'});
+    await expect(kit.$('#select-12_1-model-value')).toHaveText('MODEL_VALUE: "1"');
+    await expect(kit.$('#select-12_1-input-value')).toHaveText('INPUT_VALUE: "1"');
+    expect(await kit.isSelected('#select-12_1-opt-1')).toBeTruthy();
+    await kit.$('#select-12_2').selectOption({label: 'VAL2'});
+    await expect(kit.$('#select-12_1-model-value')).toHaveText('MODEL_VALUE: "2"');
+    await expect(kit.$('#select-12_1-input-value')).toHaveText('INPUT_VALUE: "2"');
+    expect(await kit.isSelected('#select-12_1-opt-2')).toBeTruthy();
+    await kit.$('#select-12_1').selectOption({label: 'VAL3'});
+    expect(await kit.isSelected('#select-12_2-opt-3')).toBeTruthy();
+    await kit.$('#select-12_1').selectOption({label: 'VAL2'});
+    expect(await kit.isSelected('#select-12_2-opt-2')).toBeTruthy();
+  });
 });

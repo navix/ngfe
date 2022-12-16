@@ -153,3 +153,25 @@
     TOUCHED: {{ control11.touched | json }}
   </div>
 </div>
+
+<div class="case">
+  <h4>12 - Cross-change</h4>
+  <div>
+    <select [(feControl)]="value12" #control12_1="feControl" id="select-12_1" touchOnChange>
+      <option value="1" id="select-12_1-opt-1">VAL1</option>
+      <option value="2" id="select-12_1-opt-2">VAL2</option>
+      <option value="3">VAL3</option>
+    </select>
+    <select [(feControl)]="value12" #control12_2="feControl" id="select-12_2" touchOnChange>
+      <option value="1" id="select-12_2-opt-1">VAL1</option>
+      <option value="2" id="select-12_2-opt-2">VAL2</option>
+      <option value="3" id="select-12_2-opt-3">VAL3</option>
+    </select>
+  </div>
+  <div id="select-12_1-input-value">
+    INPUT_VALUE: {{ control12_1.inputValue | json }}
+  </div>
+  <div id="select-12_1-model-value">
+    MODEL_VALUE: {{ control12_1.modelValue | json }}
+  </div>
+</div>
