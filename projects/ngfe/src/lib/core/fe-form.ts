@@ -1,11 +1,11 @@
 import {
   ChangeDetectorRef,
-  Directive,
+  Directive, EventEmitter,
   HostBinding,
   Input,
   NgZone,
   OnChanges,
-  OnDestroy,
+  OnDestroy, Output,
   SimpleChanges,
 } from '@angular/core';
 import { ReplaySubject, Subject, Subscription, take } from 'rxjs';
@@ -28,7 +28,9 @@ export class FeForm implements OnChanges, OnDestroy {
   private _modelValueChange$ = new Subject<undefined>();
   readonly change$ = this._modelValueChange$.pipe(
     debounceTime(0),
+    map(() => undefined),
   );
+  @Output() modelValueChange = new EventEmitter<undefined>();
 
   private _validityCheck$ = new ReplaySubject<undefined>(1);
   readonly validity$ = this._validityCheck$.pipe(
@@ -36,6 +38,8 @@ export class FeForm implements OnChanges, OnDestroy {
     map(() => this.validity),
     distinctUntilChanged(),
   );
+  @Output() validityChange = new EventEmitter<FeValidity>();
+
   readonly valid$ = this._validityCheck$.pipe(
     debounceTime(0),
     map(() => this.valid),
@@ -59,6 +63,8 @@ export class FeForm implements OnChanges, OnDestroy {
     this._validityCheck$.subscribe(() => {
       this.cdr.markForCheck();
     });
+    this.change$.subscribe(this.modelValueChange);
+    this.validity$.subscribe(this.validityChange);
   }
 
   ngOnChanges(changes: SimpleChanges) {
