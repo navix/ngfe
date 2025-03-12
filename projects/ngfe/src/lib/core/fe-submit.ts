@@ -52,5 +52,6 @@ export class FeFormSubmit {
     } else {
       this.invalid.emit();
     }
+    return false;
   }
 }
