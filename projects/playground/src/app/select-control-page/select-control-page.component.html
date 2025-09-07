@@ -89,7 +89,9 @@
   <h4>7 - Select with objects values</h4>
   <div>
     <select [(feControl)]="value7" id="select-7">
-      <option *ngFor="let o of value7objects; let index = index" [value]="o" [id]="'select-7-' + index">{{ o.field }}</option>
+      @for (o of value7objects; track o; let index = $index) {
+        <option [value]="o" [id]="'select-7-' + index">{{ o.field }}</option>
+      }
     </select>
   </div>
   <div id="select-7-value">

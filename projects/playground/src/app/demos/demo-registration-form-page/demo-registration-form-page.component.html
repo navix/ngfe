@@ -4,9 +4,11 @@
   <div class="case">
     Email:
     <input [(feControl)]="form.email" required email id="email" #emailControl="feControl">
-    <div *ngIf="emailControl.visibleErrors as errors" id="email-errors">
-      ERRORS: {{ errors | json }}
-    </div>
+    @if (emailControl.visibleErrors; as errors) {
+      <div id="email-errors">
+        ERRORS: {{ errors | json }}
+      </div>
+    }
   </div>
 
   <div class="case">
@@ -17,45 +19,51 @@
       [extraValidators]="[usernameAvailable]"
       id="username"
       #usernameControl="feControl"
-    >
-    <div *ngIf="usernameControl.pending" id="username-availability-loading">LOADING...</div>
-    <div *ngIf="(usernameControl.visibleErrors$ | async) as errors" id="username-errors">
-      ERRORS: {{ errors | json }}
-    </div>
-  </div>
-
-  <div class="case">
-    <div>
-      Password:
-      <input [(feControl)]="form.password" required id="password" type="password">
-    </div>
-    <div>
-      Password confirm:
-      <input
-        [(feControl)]="form.passwordConfirm"
-        required
-        id="passwordConfirm"
-        type="password"
-        [equal]="form.password"
-        #passwordConfirmControl="feControl"
       >
+      @if (usernameControl.pending) {
+        <div id="username-availability-loading">LOADING...</div>
+      }
+      @if ((usernameControl.visibleErrors$ | async); as errors) {
+        <div id="username-errors">
+          ERRORS: {{ errors | json }}
+        </div>
+      }
     </div>
-    <div *ngIf="passwordConfirmControl.visibleErrors as errors" id="password-confirm-errors">
-      ERRORS: {{ errors | json }}
-    </div>
-  </div>
 
-  <div class="case">
-    <div id="form-validity">
-      FORM_VALIDITY: {{ feForm.validity | json }}
-    </div>
-    <div id="form-value">
-      FORM_VALUE: {{ form | json }}
-    </div>
-    <div id="form-submitted">
-      FORM_SUBMITTED: {{ submitted | json }}
-    </div>
-  </div>
+    <div class="case">
+      <div>
+        Password:
+        <input [(feControl)]="form.password" required id="password" type="password">
+      </div>
+      <div>
+        Password confirm:
+        <input
+          [(feControl)]="form.passwordConfirm"
+          required
+          id="passwordConfirm"
+          type="password"
+          [equal]="form.password"
+          #passwordConfirmControl="feControl"
+          >
+        </div>
+        @if (passwordConfirmControl.visibleErrors; as errors) {
+          <div id="password-confirm-errors">
+            ERRORS: {{ errors | json }}
+          </div>
+        }
+      </div>
 
-  <button (feSubmit)="submitted = !submitted" id="submit">Submit</button>
-</form>
+      <div class="case">
+        <div id="form-validity">
+          FORM_VALIDITY: {{ feForm.validity | json }}
+        </div>
+        <div id="form-value">
+          FORM_VALUE: {{ form | json }}
+        </div>
+        <div id="form-submitted">
+          FORM_SUBMITTED: {{ submitted | json }}
+        </div>
+      </div>
+
+      <button (feSubmit)="submitted = !submitted" id="submit">Submit</button>
+    </form>
