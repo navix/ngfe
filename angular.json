@@ -109,10 +109,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "playground:build:production"
+              "buildTarget": "playground:build:production"
             },
             "development": {
-              "browserTarget": "playground:build:development"
+              "buildTarget": "playground:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -120,7 +120,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "playground:build"
+            "buildTarget": "playground:build"
           }
         },
         "test": {
@@ -215,11 +215,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "playground-adapter:build:production"
+              "buildTarget": "playground-adapter:build:production"
             },
             "development": {
-              "browserTarget": "playground-adapter:build:development",
-              "port": 4201
+              "port": 4201,
+              "buildTarget": "playground-adapter:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -227,7 +227,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "playground-adapter:build"
+            "buildTarget": "playground-adapter:build"
           }
         },
         "test": {
@@ -350,11 +350,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "playground-performance:build:production"
+              "buildTarget": "playground-performance:build:production"
             },
             "development": {
-              "browserTarget": "playground-performance:build:development",
-              "port": 4202
+              "port": 4202,
+              "buildTarget": "playground-performance:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -362,7 +362,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "playground-performance:build"
+            "buildTarget": "playground-performance:build"
           }
         },
         "test": {
