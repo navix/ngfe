@@ -52,12 +52,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/playground",
+            "outputPath": {
+              "base": "dist/playground"
+            },
             "index": "projects/playground/src/index.html",
-            "main": "projects/playground/src/main.ts",
-            "polyfills": "projects/playground/src/polyfills.ts",
+            "polyfills": [
+              "projects/playground/src/polyfills.ts"
+            ],
             "tsConfig": "projects/playground/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -67,7 +70,8 @@
             "styles": [
               "projects/playground/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "projects/playground/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -90,13 +94,10 @@
                 }
               ],
               "outputHashing": "all",
-              "vendorChunk": true,
               "statsJson": true
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -158,12 +159,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/playground-adapter",
+            "outputPath": {
+              "base": "dist/playground-adapter"
+            },
             "index": "projects/playground-adapter/src/index.html",
-            "main": "projects/playground-adapter/src/main.ts",
-            "polyfills": "projects/playground-adapter/src/polyfills.ts",
+            "polyfills": [
+              "projects/playground-adapter/src/polyfills.ts"
+            ],
             "tsConfig": "projects/playground-adapter/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -173,7 +177,8 @@
             "styles": [
               "projects/playground-adapter/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "projects/playground-adapter/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -196,13 +201,10 @@
                 }
               ],
               "outputHashing": "all",
-              "vendorChunk": true,
               "statsJson": true
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -296,12 +298,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/playground-performance",
+            "outputPath": {
+              "base": "dist/playground-performance"
+            },
             "index": "projects/playground-performance/src/index.html",
-            "main": "projects/playground-performance/src/main.ts",
-            "polyfills": "projects/playground-performance/src/polyfills.ts",
+            "polyfills": [
+              "projects/playground-performance/src/polyfills.ts"
+            ],
             "tsConfig": "projects/playground-performance/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -311,7 +316,8 @@
             "styles": [
               "projects/playground-performance/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "projects/playground-performance/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -336,9 +342,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
