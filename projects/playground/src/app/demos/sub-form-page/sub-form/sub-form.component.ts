@@ -2,10 +2,9 @@ import { Component, Input } from '@angular/core';
 import { FeModule } from 'ngfe';
 
 @Component({
-  selector: 'app-sub-form',
-  templateUrl: './sub-form.component.html',
-  standalone: true,
-  imports: [FeModule],
+    selector: 'app-sub-form',
+    templateUrl: './sub-form.component.html',
+    imports: [FeModule]
 })
 export class SubFormComponent {
   @Input() subForm!: {

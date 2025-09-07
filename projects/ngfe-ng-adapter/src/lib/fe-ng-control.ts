@@ -123,17 +123,18 @@ class LocalControl {
 }
 
 @Directive({
-  selector: '[feControl]',
-  providers: [
-    {
-      provide: NgControl,
-      useExisting: FeNgControl,
-    },
-    {
-      provide: ControlContainer,
-      useExisting: FeNgControl,
-    },
-  ],
+    selector: '[feControl]',
+    providers: [
+        {
+            provide: NgControl,
+            useExisting: FeNgControl,
+        },
+        {
+            provide: ControlContainer,
+            useExisting: FeNgControl,
+        },
+    ],
+    standalone: false
 })
 export class FeNgControl extends NgControl {
   @Input() name!: string | null;

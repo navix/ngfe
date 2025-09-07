@@ -2,14 +2,15 @@ import { Directive, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 
 @Directive({
-  selector: '[appCustomNgValidator]',
-  providers: [
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => CustomNgValidatorDirective),
-      multi: true,
-    },
-  ],
+    selector: '[appCustomNgValidator]',
+    providers: [
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => CustomNgValidatorDirective),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class CustomNgValidatorDirective implements Validator {
   constructor() {

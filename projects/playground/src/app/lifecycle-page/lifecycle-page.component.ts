@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-lifecycle-page',
-  templateUrl: './lifecycle-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-lifecycle-page',
+    templateUrl: './lifecycle-page.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LifecyclePageComponent {
   value1?:string = '123';

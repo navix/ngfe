@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-adapters-page',
-  templateUrl: './adapters-page.component.html',
+    selector: 'app-adapters-page',
+    templateUrl: './adapters-page.component.html',
+    standalone: false
 })
 export class AdaptersPageComponent {
   value1 = [1, 2, 3];

@@ -3,7 +3,8 @@ import { ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALIDATORS, NG_VALUE_ACCE
 import { FeControl, FeInput, FeSelect } from 'ngfe';
 
 @Directive({
-  selector: '[feControl]',
+    selector: '[feControl]',
+    standalone: false
 })
 export class FeNgAdapter {
   constructor(

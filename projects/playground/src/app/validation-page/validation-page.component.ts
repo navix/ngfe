@@ -4,9 +4,10 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-validation-page',
-  templateUrl: './validation-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-validation-page',
+    templateUrl: './validation-page.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ValidationPageComponent {
   value1 = '';

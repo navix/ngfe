@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FeControl } from 'ngfe';
 
 @Component({
-  selector: 'app-custom-control',
-  templateUrl: './custom-control.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-custom-control',
+    templateUrl: './custom-control.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CustomControlComponent {
   value?: string = '';

@@ -4,8 +4,9 @@ import { take } from 'rxjs/operators';
 // @todo switch to firstValueFrom after rxjs update to @7
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent {
   cycles = 10000;

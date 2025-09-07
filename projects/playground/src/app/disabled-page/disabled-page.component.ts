@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-disabled-page',
-  templateUrl: './disabled-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-disabled-page',
+    templateUrl: './disabled-page.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DisabledPageComponent {
   value1 = '';

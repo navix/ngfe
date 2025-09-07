@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-sub-form-page',
-  templateUrl: './sub-form-page.component.html',
+    selector: 'app-sub-form-page',
+    templateUrl: './sub-form-page.component.html',
+    standalone: false
 })
 export class SubFormPageComponent {
   form: {

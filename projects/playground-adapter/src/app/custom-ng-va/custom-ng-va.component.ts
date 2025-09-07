@@ -3,15 +3,16 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-custom-ng-va',
-  templateUrl: './custom-ng-va.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomNgVaComponent),
-      multi: true,
-    },
-  ],
+    selector: 'app-custom-ng-va',
+    templateUrl: './custom-ng-va.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => CustomNgVaComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class CustomNgVaComponent implements OnInit, ControlValueAccessor {
   value = ''

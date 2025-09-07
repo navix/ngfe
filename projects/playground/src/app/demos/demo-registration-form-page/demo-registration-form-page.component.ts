@@ -4,9 +4,10 @@ import { of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-demo-registration-form-page',
-  templateUrl: './demo-registration-form-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-demo-registration-form-page',
+    templateUrl: './demo-registration-form-page.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DemoRegistrationFormPageComponent {
   form: {

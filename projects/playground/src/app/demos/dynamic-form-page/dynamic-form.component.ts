@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-dynamic-form-page',
-  templateUrl: './dynamic-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-dynamic-form-page',
+    templateUrl: './dynamic-form.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DynamicFormComponent {
   form: {

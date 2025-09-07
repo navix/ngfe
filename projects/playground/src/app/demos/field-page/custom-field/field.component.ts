@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, ContentChild, Input } from '@angula
 import { FeControl, FeRequiredValidator } from 'ngfe';
 
 @Component({
-  selector: 'app-custom-field',
-  templateUrl: './field.component.html',
-  styleUrls: ['./field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-custom-field',
+    templateUrl: './field.component.html',
+    styleUrls: ['./field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FieldComponent<T> {
   @Input() label?: string;

@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { compileFileList, FeLoadedFile, readFiles } from 'ngfe';
 
 @Component({
-  selector: 'app-input-control-page',
-  templateUrl: './input-control-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-input-control-page',
+    templateUrl: './input-control-page.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InputControlPageComponent {
   value1 = '';
