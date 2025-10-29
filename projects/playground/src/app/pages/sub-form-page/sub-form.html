@@ -1,0 +1,24 @@
+@let sf = subForm();
+
+<div>
+  <label>
+    SubField1
+    <input
+      [(model)]="sf.subField1"
+      id="subField1"
+      required
+    />
+  </label>
+</div>
+
+<div>
+  <label>
+    SubField2
+    <input
+      [(model)]="sf.subField2"
+      id="subField2"
+      required
+      type="number"
+    />
+  </label>
+</div>

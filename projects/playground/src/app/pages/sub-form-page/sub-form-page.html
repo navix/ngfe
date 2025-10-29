@@ -1,0 +1,27 @@
+<h2>Demo:SubForm</h2>
+
+@let fs = formState();
+
+<form #f="form">
+  <div>
+    <label>
+      Field1
+      <input
+        [(model)]="fs.field1"
+        id="field1"
+        required
+      />
+    </label>
+  </div>
+
+  <app-sub-form [subForm]="fs.subForm()"></app-sub-form>
+
+  <app-value-view
+    [value]="f.valid()"
+    name="FORM_VALID"
+  />
+  <app-value-view
+    [value]="fs.data()"
+    name="FORM_STATE_DATA"
+  />
+</form>

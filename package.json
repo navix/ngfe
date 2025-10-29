@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "playground2:serve": "ng run playground2:serve",
+    "playground:serve": "ng run playground2:serve",
     "playground:build": "ng run playground:build:production",
     "playground:stats": "npx webpack-bundle-analyzer dist/playground/stats.json",
     "playground-adapter:serve": "ng run playground-adapter:serve",

@@ -1,0 +1,359 @@
+<h2>Validation</h2>
+
+<div
+  class="case"
+  data-id="1-required-validator"
+>
+  <h4>1 - Required validator</h4>
+  <div>
+    <input
+      [(model)]="value1"
+      #c1="model"
+      id="control-1"
+      required
+    />
+  </div>
+  <app-value-view
+    [value]="c1.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c1.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="2-function-validator"
+>
+  <h4>2 - Function validator</h4>
+  <div>
+    <input
+      [validators]="[syncVal]"
+      [(model)]="value2"
+      #c2="model"
+      id="control-2"
+    />
+  </div>
+  <app-value-view
+    [value]="c2.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c2.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="3-async-observable-validator"
+>
+  <h4>3 - Function async Observable validator</h4>
+  <div>
+    <input
+      [validators]="[asyncValObs]"
+      [(model)]="value3"
+      #c3="model"
+      id="control-3"
+    />
+  </div>
+  <app-value-view
+    [value]="c3.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c3.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="4-async-promise-validator"
+>
+  <h4>4 - Function async Promise validator</h4>
+  <div>
+    <input
+      [validators]="[asyncValProm]"
+      [(model)]="value4"
+      #c4="model"
+      id="control-4"
+    />
+  </div>
+  <app-value-view
+    [value]="c4.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c4.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="5-debounce-before-async"
+>
+  <h4>5 - Debounce before async</h4>
+  <div>
+    <input
+      [debounce]="300"
+      [validators]="[asyncValObs]"
+      [(model)]="value5"
+      #c5="model"
+      id="control-5"
+    />
+  </div>
+  <app-value-view
+    [value]="c5.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c5.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="6-email-validator"
+>
+  <h4>6 - Email validator</h4>
+  <div>
+    <input
+      [(model)]="value6"
+      #c6="model"
+      email
+      id="control-6"
+    />
+  </div>
+  <app-value-view
+    [value]="c6.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c6.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="7-length-validator"
+>
+  <h4>7 - Length validator</h4>
+  <div>
+    <input
+      [maxLength]="10"
+      [(model)]="value7"
+      #c7="model"
+      id="control-7"
+      minLength="5"
+    />
+  </div>
+  <app-value-view
+    [value]="c7.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c7.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="8-pattern-validator"
+>
+  <h4>8 - Pattern validator</h4>
+  <div>
+    <input
+      [(model)]="value8"
+      #c8="model"
+      id="control-8"
+      pattern="[a-zA-Z ]*"
+    />
+  </div>
+  <app-value-view
+    [value]="c8.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c8.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="9-required-validator-with-initial-value"
+>
+  <h4>9 - Required validator with initial value</h4>
+  <div>
+    <input
+      [(model)]="value9"
+      #c9="model"
+      id="control-9"
+      required
+    />
+  </div>
+  <app-value-view
+    [value]="c9.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c9.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="10-number-validator"
+>
+  <h4>10 - Number validator</h4>
+  <div>
+    <input
+      [(model)]="value10"
+      #c10="model"
+      id="control-10"
+      max="20"
+      min="10"
+    />
+  </div>
+  <app-value-view
+    [value]="c10.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c10.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="11-is-number-validator"
+>
+  <h4>11 - isNumber validator</h4>
+  <div>
+    <input
+      [(model)]="value11"
+      #c11="model"
+      id="control-11"
+      isNumber
+    />
+  </div>
+  <app-value-view
+    [value]="value11()"
+    name="VALUE"
+  />
+  <app-value-view
+    [value]="c11.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c11.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="12-equal-validator"
+>
+  <h4>12 - Equal validator</h4>
+  <div>
+    <input
+      [(model)]="value12"
+      #c12="model"
+      equal="321"
+      id="control-12"
+    />
+  </div>
+  <app-value-view
+    [value]="c12.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c12.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="13-not-equal-validator"
+>
+  <h4>13 - Not equal validator</h4>
+  <div>
+    <input
+      [(model)]="value13"
+      #c13="model"
+      id="control-13"
+      notEqual="654"
+    />
+  </div>
+  <app-value-view
+    [value]="c13.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c13.errors()"
+    name="ERRORS"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="14-equal-models-validator"
+>
+  <h4>14 - Equal models validator</h4>
+  <div>
+    <input
+      [equal]="value14_2()"
+      [(model)]="value14_1"
+      #c14_1="model"
+      id="control-14-1"
+    />
+    <input
+      [equal]="value14_1()"
+      [(model)]="value14_2"
+      #c14_2="model"
+      id="control-14-2"
+    />
+    <input
+      [equal]="value14_1()"
+      [(model)]="value14_3"
+      #c14_3="model"
+      activeWhenEmpty
+      id="control-14-3"
+    />
+  </div>
+  <app-value-view
+    [value]="c14_1.validity()"
+    name="C1 VALIDITY"
+  />
+  <app-value-view
+    [value]="c14_2.validity()"
+    name="C2 VALIDITY"
+  />
+  <app-value-view
+    [value]="c14_3.validity()"
+    name="C3 VALIDITY"
+  />
+  <app-value-view
+    [value]="c14_1.errors()"
+    name="C1 ERRORS"
+  />
+  <app-value-view
+    [value]="c14_2.errors()"
+    name="C2 ERRORS"
+  />
+  <app-value-view
+    [value]="c14_3.errors()"
+    name="C3 ERRORS"
+  />
+</div>

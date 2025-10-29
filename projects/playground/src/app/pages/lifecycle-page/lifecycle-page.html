@@ -1,0 +1,64 @@
+<h2>Lifecycle</h2>
+
+<div
+  class="case"
+  data-id="1-destroy"
+>
+  <h4>1 - (destroy)</h4>
+  <div>
+    @if (show1()) {
+      <input
+        [(model)]="value1"
+        (destroy)="value1.set(undefined)"
+        id="control-1"
+      />
+    }
+    <button
+      (click)="show1.set(!show1())"
+      id="control-1-toggle"
+      type="button"
+    >
+      Toggle
+    </button>
+  </div>
+  <app-value-view
+    [value]="value1()"
+    name="VALUE"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="2-touch-handle"
+>
+  <h4>2 - Touch handle</h4>
+  <div>
+    <input
+      [(model)]="value2"
+      #c2="model"
+      id="control-2"
+    />
+  </div>
+  <app-value-view
+    [value]="c2.touched()"
+    name="TOUCHED"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="3-dirty-handle"
+>
+  <h4>3 - Dirty handle</h4>
+  <div>
+    <input
+      [(model)]="value3"
+      #c3="model"
+      id="control-3"
+    />
+  </div>
+  <app-value-view
+    [value]="c3.dirty()"
+    name="DIRTY"
+  />
+</div>

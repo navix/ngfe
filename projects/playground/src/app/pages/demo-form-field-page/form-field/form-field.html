@@ -1,0 +1,19 @@
+@let m = model();
+
+<div class="wrapper">
+  <label>
+    {{ label() }}
+    @if (requiredValidator()?.required()) {
+      <span>*</span>
+    }
+  </label>
+  <ng-content></ng-content>
+  @if (m.touched()) {
+    <div class="errors">
+      <ng-content select="[errors]"></ng-content>
+    </div>
+  }
+  @if (m.pending()) {
+    <div class="errors">loading...</div>
+  }
+</div>

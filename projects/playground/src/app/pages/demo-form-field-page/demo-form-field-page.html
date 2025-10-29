@@ -1,0 +1,47 @@
+<h2>Demo:Field</h2>
+
+<button id="unfocus">UNFCS</button>
+
+<div class="case">
+  <h4>1 - Errors on touch</h4>
+  <div>
+    <app-form-field
+      id="field-1"
+      label="Field-1"
+    >
+      <input
+        [(model)]="value1"
+        #m1="model"
+        equal="123"
+        id="control-1"
+      />
+      <div errors>
+        {{ m1.errors() | json }}
+      </div>
+    </app-form-field>
+  </div>
+</div>
+
+<div class="case">
+  <h4>2 - Required mark</h4>
+  <div>
+    <app-form-field
+      id="field-2"
+      label="Field-2"
+    >
+      <input
+        [required]="required2()"
+        [(model)]="value2"
+        #m2="model"
+      />
+      <input
+        [(model)]="required2"
+        id="control-2-required-toggle"
+        type="checkbox"
+      />
+      <div errors>
+        {{ m2.errors() | json }}
+      </div>
+    </app-form-field>
+  </div>
+</div>

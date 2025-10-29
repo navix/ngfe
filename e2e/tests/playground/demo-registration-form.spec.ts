@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
-import { PageKit, PageKitFactory } from '../page-kit';
+import {expect, test} from '@playwright/test';
+import {PageKit, PageKitFactory} from '../page-kit';
 
 test.describe.serial('Demo:RegistrationForm', () => {
   let kit: PageKit;
@@ -15,7 +15,9 @@ test.describe.serial('Demo:RegistrationForm', () => {
 
   test('Init', async () => {
     await expect(kit.$('#form-validity')).toHaveText('FORM_VALIDITY: "invalid" ');
-    await expect(kit.$('#form-value')).toHaveText('FORM_VALUE: { "email": "", "username": "", "password": "", "passwordConfirm": "" } ');
+    await expect(kit.$('#form-value')).toHaveText(
+      'FORM_VALUE: { "email": "", "username": "", "password": "", "passwordConfirm": "" } ',
+    );
   });
 
   test('Show email errors on touch', async () => {
@@ -58,7 +60,9 @@ test.describe.serial('Demo:RegistrationForm', () => {
     await kit.$('#password').fill('123');
     await kit.$('#passwordConfirm').fill('1234');
     await kit.$('#password').focus();
-    await expect(kit.$('#password-confirm-errors')).toHaveText('ERRORS: { "equal": { "equal": "123", "modelValue": "1234" } } ');
+    await expect(kit.$('#password-confirm-errors')).toHaveText(
+      'ERRORS: { "equal": { "equal": "123", "value": "1234" } } ',
+    );
   });
 
   test('Hide different passwords errors', async () => {
@@ -68,7 +72,9 @@ test.describe.serial('Demo:RegistrationForm', () => {
 
   test('Form is valid and have proper state', async () => {
     await expect(kit.$('#form-validity')).toHaveText('FORM_VALIDITY: "valid" ');
-    await expect(kit.$('#form-value')).toHaveText('FORM_VALUE: { "email": "my@mail", "username": "my_name", "password": "1234", "passwordConfirm": "1234" } ');
+    await expect(kit.$('#form-value')).toHaveText(
+      'FORM_VALUE: { "email": "my@mail", "username": "my_name", "password": "1234", "passwordConfirm": "1234" } ',
+    );
   });
 
   test('Submit form', async () => {

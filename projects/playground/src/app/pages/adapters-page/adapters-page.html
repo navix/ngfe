@@ -1,0 +1,27 @@
+<h2>Adapters</h2>
+
+<div class="case">
+  <h4>2 - numberToString using nested controls</h4>
+  <div>
+    <div
+      [max]="300"
+      [(model)]="value2"
+      #c2="model"
+    >
+      <input
+        [forcedErrors]="c2.errors()"
+        [model]="value2Input()"
+        (modelChange)="value2.set($event ? +$event : 0)"
+        #ci2="model"
+        id="control-2"
+        isNumber
+        whenInvalid="retain"
+      />
+      <div id="control-2-value">
+        VALUE: {{ value2() | json }}, ERRORS: {{ c2.errors() | json }}
+        <br />
+        INPUT_VALUE: {{ value2Input() | json }}, INPUT_ERRORS: {{ ci2.errors() | json }}
+      </div>
+    </div>
+  </div>
+</div>

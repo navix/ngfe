@@ -1,0 +1,56 @@
+<h2>Disabled</h2>
+
+<div class="case">
+  <h4>1 - Control disabled handling</h4>
+  <div>
+    <input
+      [disabled]="true"
+      [(model)]="value1"
+      #c1="model"
+      id="control-1"
+    />
+  </div>
+  <div id="control-1-disabled">DISABLED: {{ c1.disabled() | json }}</div>
+</div>
+
+<div class="case">
+  <h4>2 - Disabled toggle</h4>
+  <div>
+    <input
+      [disabled]="disabled2()"
+      [(model)]="value2"
+      #c2="model"
+      id="control-2"
+    />
+    <input
+      [(model)]="disabled2"
+      id="control-2-disabled-toggle"
+      type="checkbox"
+    />
+  </div>
+  <div id="control-2-disabled">DISABLED: {{ c2.disabled() | json }}</div>
+</div>
+
+<div class="case">
+  <h4>3 - Disabled in form</h4>
+  <div>
+    <form #f3="form">
+      <input
+        [disabled]="disabled3()"
+        [(model)]="value3"
+        #c3="model"
+        id="control-3"
+        required
+      />
+      <input
+        [(model)]="disabled3"
+        id="control-3-disabled-toggle"
+        type="checkbox"
+      />
+    </form>
+  </div>
+  <div id="control-3-disabled">DISABLED: {{ c3.disabled() | json }}</div>
+  <div id="control-3-valid">VALID: {{ c3.valid() | json }}</div>
+  <div id="form-3-valid">FORM_VALID: {{ f3.valid() | json }}</div>
+  <div id="form-3-valid-async">FORM_VALID$: {{ f3.valid$ | async | json }}</div>
+</div>

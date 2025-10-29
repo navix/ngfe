@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
-import { PageKit, PageKitFactory } from '../page-kit';
+import {expect, test} from '@playwright/test';
+import {PageKit, PageKitFactory} from '../page-kit';
 
 test.describe.serial('Demo:Field', () => {
   let kit: PageKit;
@@ -17,7 +17,9 @@ test.describe.serial('Demo:Field', () => {
     await expect(kit.$('#field-1 [errors]')).not.toBeVisible();
     await kit.$('#control-1').focus();
     await kit.$('#unfocus').focus();
-    await expect(kit.$('#field-1 [errors]')).toHaveText('{ "equal": { "equal": "123", "modelValue": "" } } ');
+    await expect(kit.$('#field-1 [errors]')).toHaveText(
+      '{ "equal": { "equal": "123", "value": "" } } ',
+    );
   });
 
   test('Required mark', async () => {

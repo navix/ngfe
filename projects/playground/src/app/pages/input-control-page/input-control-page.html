@@ -1,0 +1,561 @@
+<h2>Input Control</h2>
+
+<div
+  class="case"
+  data-id="1-basic-text-input"
+>
+  <h4>1 - Basic text input</h4>
+  <div>
+    <input
+      [(model)]="value1"
+      id="input-1"
+    />
+    <app-value-view
+      [value]="value1()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="2-bind-value-on-init"
+>
+  <h4>2 - Bind value on init</h4>
+  <div>
+    <input
+      [(model)]="value2"
+      id="input-2"
+    />
+    <app-value-view
+      [value]="value2()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="3-bind-undefined-on-init"
+>
+  <h4>3 - Bind undefined on init</h4>
+  <div>
+    <input
+      [(model)]="value3"
+      id="input-3"
+    />
+    <app-value-view
+      [value]="value3()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="4-number-input"
+>
+  <h4>4 - Number input</h4>
+  <div>
+    <input
+      [(model)]="value4"
+      id="input-4"
+      type="number"
+    />
+    <app-value-view
+      [value]="value4()"
+      name="VALUE"
+    />
+    <app-value-view
+      [value]="typeof value4()"
+      name="VALUE_TYPEOF"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="5-number-input-with-forced-string-type"
+>
+  <h4>5 - Number input with forced string type</h4>
+  <div>
+    <input
+      [(model)]="value5"
+      id="input-5"
+      type="number"
+      valueType="string"
+    />
+    <app-value-view
+      [value]="value5()"
+      name="VALUE"
+    />
+    <app-value-view
+      [value]="typeof value5()"
+      name="VALUE_TYPEOF"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="6-text-input-with-forced-number-type"
+>
+  <h4>6 - Text input with forced number type</h4>
+  <div>
+    <input
+      [(model)]="value6"
+      id="input-6"
+      type="text"
+      valueType="number"
+    />
+    <app-value-view
+      [value]="value6()"
+      name="VALUE"
+    />
+    <app-value-view
+      [value]="typeof value6()"
+      name="VALUE_TYPEOF"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="7-base-checkbox"
+>
+  <h4>7 - Base checkbox</h4>
+  <div>
+    <input
+      [(model)]="value7"
+      id="input-7"
+      type="checkbox"
+    />
+    <app-value-view
+      [value]="value7()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="8-checkbox-with-true-init"
+>
+  <h4>8 - Checkbox with true init</h4>
+  <div>
+    <input
+      [(model)]="value8"
+      id="input-8"
+      type="checkbox"
+    />
+    <app-value-view
+      [value]="value8()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="9-checkbox-with-undefined-init"
+>
+  <h4>9 - Checkbox with undefined init</h4>
+  <div>
+    <input
+      [(model)]="value9"
+      id="input-9"
+      type="checkbox"
+    />
+    <app-value-view
+      [value]="value9()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="10-base-radio"
+>
+  <h4>10 - Base radio</h4>
+  <div>
+    1
+    <input
+      [(model)]="value10"
+      id="input-10-1"
+      name="radio-1"
+      type="radio"
+      value="1"
+    />
+    2
+    <input
+      [(model)]="value10"
+      id="input-10-2"
+      name="radio-1"
+      type="radio"
+      value="2"
+    />
+    3
+    <input
+      [(model)]="value10"
+      id="input-10-3"
+      name="radio-1"
+      type="radio"
+      value="3"
+    />
+    <app-value-view
+      [value]="value10()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="11-radio-without-name"
+>
+  <h4>11 - Radio without name</h4>
+  <div>
+    1
+    <input
+      [(model)]="value11"
+      id="input-11-1"
+      type="radio"
+      value="1"
+    />
+    2
+    <input
+      [(model)]="value11"
+      id="input-11-2"
+      type="radio"
+      value="2"
+    />
+    3
+    <input
+      [(model)]="value11"
+      id="input-11-3"
+      type="radio"
+      value="3"
+    />
+    <app-value-view
+      [value]="value11()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="12-radio-with-undefined-init"
+>
+  <h4>12 - Radio with undefined init</h4>
+  <div>
+    1
+    <input
+      [(model)]="value12"
+      id="input-12-1"
+      type="radio"
+      value="1"
+    />
+    2
+    <input
+      [(model)]="value12"
+      id="input-12-2"
+      type="radio"
+      value="2"
+    />
+    <app-value-view
+      [value]="value12()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="13-radio-with-number-value"
+>
+  <h4>13 - Radio with number value</h4>
+  <div>
+    1
+    <input
+      [value]="1"
+      [(model)]="value13"
+      id="input-13-1"
+      type="radio"
+    />
+    2
+    <input
+      [value]="2"
+      [(model)]="value13"
+      id="input-13-2"
+      type="radio"
+    />
+    <app-value-view
+      [value]="value13()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="14-base-date"
+>
+  <h4>14 - Base date</h4>
+  <div>
+    <input
+      [(model)]="value14"
+      id="input-14"
+      type="date"
+    />
+    <app-value-view
+      [value]="value14()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="15-date-with-date-type"
+>
+  <h4>15 - Date with Date valueType</h4>
+  <div>
+    <input
+      [(model)]="value15"
+      id="input-15"
+      type="date"
+      valueType="Date"
+    />
+    <app-value-view
+      [value]="value15()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="16-datetime-local"
+>
+  <h4>16 - Datetime-local</h4>
+  <div>
+    <input
+      [(model)]="value16"
+      id="input-16"
+      type="datetime-local"
+    />
+    <app-value-view
+      [value]="value16()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="17-datetime-local-with-date-type"
+>
+  <h4>17 - Datetime-local with Date valueType</h4>
+  <div>
+    <input
+      [(model)]="value17"
+      id="input-17"
+      type="datetime-local"
+      valueType="Date"
+    />
+    <app-value-view
+      [value]="value17()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="18-base-file"
+>
+  <h4>18 - Base file</h4>
+  <div>
+    <input
+      [(model)]="files1"
+      id="input-18"
+      type="file"
+    />
+  </div>
+  <app-value-view
+    [value]="files1()"
+    name="VALUE"
+  />
+  <app-value-view
+    [value]="files1()?.length"
+    name="LEN"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="19-file-readfiles"
+>
+  <h4>19 - File + readFiles</h4>
+  <div>
+    <input
+      [model]="files2()"
+      (modelChange)="loadFiles2($event)"
+      id="input-19"
+      multiple
+      type="file"
+    />
+  </div>
+  <app-value-view
+    [value]="files2()"
+    name="VALUE"
+  />
+  <app-value-view
+    [value]="files2()?.length"
+    name="LEN"
+  />
+  <app-value-view
+    [value]="files2loaded()"
+    name="LOADED_FILES__VALUE"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="20-file-from-model"
+>
+  <h4>20 - File from model</h4>
+  <div>
+    <input
+      [(model)]="files3"
+      type="file"
+    />
+  </div>
+  <app-value-view
+    [value]="files3()"
+    name="VALUE"
+  />
+  <app-value-view
+    [value]="files3()?.length"
+    name="LEN"
+  />
+</div>
+
+<div
+  class="case"
+  data-id="21-update-on-blur"
+>
+  <h4>21 - Update on blur</h4>
+  <div>
+    <input
+      [(model)]="value21"
+      id="input-21"
+      updateOn="blur"
+    />
+    <app-value-view
+      [value]="value21()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="22-textarea"
+>
+  <h4>22 - Textarea</h4>
+  <div>
+    <textarea
+      [(model)]="value22"
+      id="input-22"
+    ></textarea>
+    <app-value-view
+      [value]="value22()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="23-range"
+>
+  <h4>23 - Range</h4>
+  <div>
+    <input
+      [(model)]="value23"
+      id="input-23"
+      type="range"
+    />
+    <app-value-view
+      [value]="value23()"
+      name="VALUE"
+    />
+    <app-value-view
+      [value]="typeof value23()"
+      name="VALUE_TYPEOF"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="24-range-with-number-adapter"
+>
+  <h4>24 - Range with valueType number</h4>
+  <div>
+    <input
+      [(model)]="value24"
+      id="input-24"
+      type="range"
+      valueType="number"
+    />
+    <app-value-view
+      [value]="value24()"
+      name="VALUE"
+    />
+    <app-value-view
+      [value]="typeof value24()"
+      name="VALUE_TYPEOF"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="25-readonly"
+>
+  <h4>25 - Readonly</h4>
+  <div>
+    <input
+      [(model)]="value25"
+      id="input-25"
+      readonly
+    />
+    <app-value-view
+      [value]="value25()"
+      name="VALUE"
+    />
+  </div>
+</div>
+
+<div
+  class="case"
+  data-id="26-touch-on-change"
+>
+  <h4>26 - touch on change</h4>
+  <div>
+    <input
+      [(model)]="value26"
+      #control26="model"
+      id="input-26"
+      touchOnChange
+    />
+    <app-value-view
+      [value]="control26.touched()"
+      name="TOUCHED"
+    />
+  </div>
+</div>

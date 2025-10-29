@@ -1,0 +1,23 @@
+<h2>Demo:CustomControl</h2>
+
+<div
+  class="case"
+  data-id="1-basic-custom-control"
+>
+  <h4>1 - Basic custom control</h4>
+  <div>
+    <app-custom-control
+      [(model)]="value1"
+      #c1="model"
+      id="control-1"
+    />
+  </div>
+  <app-value-view
+    [value]="value1()"
+    name="VALUE"
+  />
+  <app-value-view
+    [value]="c1.touched()"
+    name="TOUCHED"
+  />
+</div>
