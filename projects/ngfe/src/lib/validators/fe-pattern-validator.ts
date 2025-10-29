@@ -1,50 +1,58 @@
-import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { FeControl } from '../core';
+import {computed, Directive, inject, input, OnChanges} from '@angular/core';
+import {FeModel} from '../core/fe-model';
 
 @Directive({
-  selector: '[feControl][pattern]',
-  exportAs: 'fePatternValidator',
-  standalone: true,
+  selector: '[model][pattern]',
+  exportAs: 'patternValidator',
 })
 export class FePatternValidator implements OnChanges {
-  @Input() pattern?: string | RegExp | false;
+  readonly model = inject(FeModel, {self: true});
 
-  private regex?: RegExp;
-  private regexStr?: string;
+  readonly pattern = input<string | RegExp | false>();
 
-  constructor(
-    @Self() private control: FeControl<string>,
-  ) {
-    this.control.addValidator(({modelValue}) => {
-      if (!this.regex || !this.regexStr || !modelValue) {
-        return undefined;
-      }
-      return this.regex.test(modelValue)
-        ? undefined
-        : {pattern: {pattern: this.regexStr, modelValue}};
-    });
-  }
-
-  ngOnChanges() {
-    const pattern = this.pattern;
+  readonly regex = computed<RegExp | undefined>(() => {
+    const pattern = this.pattern();
     if (!pattern) {
-      this.regex = undefined;
-      this.regexStr = undefined;
-      return;
+      return undefined;
     }
-
     if (typeof pattern === 'string') {
       let regexStr = '';
       if (pattern.charAt(0) !== '^') regexStr += '^';
       regexStr += pattern;
       if (pattern.charAt(pattern.length - 1) !== '$') regexStr += '$';
-      this.regex = new RegExp(regexStr);
-      this.regexStr = regexStr;
+      return new RegExp(regexStr);
     } else {
-      this.regex = pattern;
-      this.regexStr = pattern.toString();
+      return pattern;
     }
+  });
+  readonly regexStr = computed<string | undefined>(() => {
+    const pattern = this.pattern();
+    if (!pattern) {
+      return undefined;
+    }
+    if (typeof pattern === 'string') {
+      let regexStr = '';
+      if (pattern.charAt(0) !== '^') regexStr += '^';
+      regexStr += pattern;
+      if (pattern.charAt(pattern.length - 1) !== '$') regexStr += '$';
+      return regexStr;
+    } else {
+      return pattern.toString();
+    }
+  });
 
-    this.control.updateValidity();
+  constructor() {
+    this.model.addValidator(value => {
+      const regex = this.regex();
+      const regexStr = this.regexStr();
+      if (!regex || !regexStr || !value) {
+        return undefined;
+      }
+      return regex.test(value) ? undefined : {pattern: {pattern: regexStr, value}};
+    });
+  }
+
+  ngOnChanges() {
+    this.model.updateValidity();
   }
 }

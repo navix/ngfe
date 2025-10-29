@@ -1,16 +1,15 @@
-import { Observable } from 'rxjs';
-import { FeControl } from './fe-control';
+import {Observable} from 'rxjs';
+import {FeModel} from './fe-model';
 
-/**
- * Returns `undefined` for valid values.
- */
-export type FeValidator<MODEL = any, INPUT = any> = (control: FeControl<MODEL, INPUT>)
-  => FeValidatorResult | Promise<FeValidatorResult> | Observable<FeValidatorResult>;
+export type FeValidator<VALUE = any> = (
+  value: VALUE | undefined,
+  control: FeModel<VALUE>,
+) => FeValidatorResult | Promise<FeValidatorResult> | Observable<FeValidatorResult>;
 
-export type FeValidatorResult = undefined | FeErrors;
+export type FeValidatorResult = undefined | FeValidationErrors;
 
-export type FeValidity = 'initial' | 'pending' | 'valid' | 'invalid';
+export type FeValidity = 'pending' | 'valid' | 'invalid';
 
-export type FeErrors = {
+export type FeValidationErrors = {
   [key: string]: any;
-}
+};

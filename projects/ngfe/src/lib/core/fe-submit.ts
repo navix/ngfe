@@ -1,56 +1,56 @@
-import { Directive, EventEmitter, HostListener, Inject, Optional, Output } from '@angular/core';
-import { err } from '../util';
-import { FeForm } from './fe-form';
+import {Directive, HostListener, inject, output} from '@angular/core';
+import {FeForm} from './fe-form';
 
 @Directive({
-  selector: 'button[feSubmit]',
-  exportAs: 'feSubmit',
-  standalone: true,
+  selector: 'button[anySubmit],button[validSubmit],button[invalidSubmit]',
+  exportAs: 'submit',
 })
 export class FeSubmit {
-  @Output() feSubmit = new EventEmitter();
-  @Output() invalid = new EventEmitter();
+  readonly form = inject(FeForm, {optional: true});
 
-  constructor(
-    @Optional() @Inject(FeForm) private form: FeForm,
-  ) {
+  readonly anySubmit = output<boolean>();
+  readonly validSubmit = output();
+  readonly invalidSubmit = output();
+
+  constructor() {
     if (!this.form) {
-      // @todo allow formSubmit to work outside form
-      err('FeButtonSubmitDirective', 'Should be used inside form or element with [feForm].');
+      throw new Error('SfSubmit should be used inside FeForm.');
     }
   }
 
   @HostListener('click') clickHandler() {
-    this.form.touchAll();
-    if (this.form.valid) {
-      this.feSubmit.emit();
+    const form = this.form!;
+    const valid = form.valid();
+    form.touchAll();
+    this.anySubmit.emit(valid);
+    if (valid) {
+      this.validSubmit.emit();
     } else {
-      this.invalid.emit();
+      this.invalidSubmit.emit();
     }
     return false;
   }
 }
 
 @Directive({
-  selector: 'form[feSubmit]',
-  exportAs: 'feSubmit',
-  standalone: true,
+  selector: 'form[anySubmit],form[validSubmit],form[invalidSubmit]',
+  exportAs: 'submit',
 })
 export class FeFormSubmit {
-  @Output() feSubmit = new EventEmitter();
-  @Output() invalid = new EventEmitter();
+  readonly form = inject(FeForm);
 
-  constructor(
-    @Inject(FeForm) private group: FeForm,
-  ) {
-  }
+  readonly anySubmit = output<boolean>();
+  readonly validSubmit = output();
+  readonly invalidSubmit = output();
 
   @HostListener('submit') submitHandler() {
-    this.group.touchAll();
-    if (this.group.valid) {
-      this.feSubmit.emit();
+    const valid = this.form.valid();
+    this.form.touchAll();
+    this.anySubmit.emit(valid);
+    if (valid) {
+      this.validSubmit.emit();
     } else {
-      this.invalid.emit();
+      this.invalidSubmit.emit();
     }
     return false;
   }

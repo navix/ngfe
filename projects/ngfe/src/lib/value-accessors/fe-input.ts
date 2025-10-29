@@ -1,76 +1,151 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
-import { FeControl } from '../core';
-import { coerceToBoolean } from '../util';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import {
+  Directive,
+  effect,
+  ElementRef,
+  HostListener,
+  inject,
+  input,
+  output,
+  Renderer2,
+} from '@angular/core';
+import {FeModel} from '../core/fe-model';
+import {ensureNumber} from '../util/ensure-number';
+
+export type FeInputType =
+  | 'text'
+  | 'color'
+  | 'email'
+  | 'password'
+  | 'range'
+  | 'search'
+  | 'tel'
+  | 'url'
+  | 'time'
+  | 'month'
+  | 'week'
+  | 'number'
+  | 'checkbox'
+  | 'radio'
+  | 'date'
+  | 'datetime-local'
+  | 'file'
+  | 'hidden'
+  | 'button'
+  | 'image'
+  | 'reset';
+
+const lastInputValueInit = Symbol('lastInputValueInit');
 
 @Directive({
-  selector: 'input[feControl],textarea[feControl]',
-  exportAs: 'feInput',
-  standalone: true,
+  selector: 'input[model],textarea[model]',
+  exportAs: 'input',
 })
 export class FeInput {
-  @Input() type:
-    'text' | 'color' | 'email' | 'password' | 'range' | 'search' | 'tel' | 'url' | 'time' | 'month' | 'week' |
-    'number' |
-    'checkbox' |
-    'radio' |
-    'date' | 'datetime-local' |
-    'file' |
-    'hidden' | 'button' | 'image' | 'reset' = 'text';
+  readonly model = inject(FeModel);
+  readonly renderer = inject(Renderer2);
+  readonly elementRef = inject(ElementRef);
 
-  @Input() name?: string;
+  /**
+   * <input> field type.
+   */
+  readonly type = input<FeInputType>('text');
 
-  @Input() value?: any;
+  /**
+   * Enforce value type that will be set to control.
+   * Works only for text-like and number input types.
+   * When not set, the value type will be inferred according to input type.
+   */
+  readonly valueType = input<undefined | 'string' | 'number' | 'boolean' | 'Date'>(undefined);
 
-  @Input() updateOn: 'change' | 'blur' = 'change';
+  readonly name = input<string>();
+  readonly value = input<any>();
+  readonly updateOn = input<'change' | 'blur'>('change');
+  readonly touchOnBlur = input(true, {transform: coerceBooleanProperty});
+  readonly touchOnChange = input(false, {transform: coerceBooleanProperty});
 
-  @Input() set touchOnBlur(touchOnBlur: boolean | string) {
-    this._touchOnBlur = coerceToBoolean(touchOnBlur);
-  }
+  // @todo impl?
+  readonly readFileAs = input<'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString'>('DataURL');
 
-  @Input() set touchOnChange(touchOnChange: boolean | string) {
-    this._touchOnChange = coerceToBoolean(touchOnChange);
-  }
-
-  @Input() readFileAs: 'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString' = 'DataURL';
-
-  @Output() fileError = new EventEmitter<string>();
+  readonly fileError = output<string>();
 
   /**
    * Set to `false` to disconnect from FeControl.
    */
   connected = true;
+  lastInputValue: any = lastInputValueInit;
 
-  private _touchOnBlur = true;
-  private _touchOnChange = false;
-
-  constructor(
-    private control: FeControl,
-    private renderer: Renderer2,
-    private elementRef: ElementRef,
-  ) {
-    this.control.toInputValue$.subscribe(value => {
+  constructor() {
+    // Render value
+    effect(() => {
       if (!this.connected) {
         return;
       }
-      let inputValue = value;
-      switch (this.type) {
+      const value = this.model.value();
+      if (this.lastInputValue !== lastInputValueInit && this.lastInputValue === value) {
+        return;
+      }
+      switch (this.type()) {
         case 'checkbox':
-          this.renderer.setProperty(this.elementRef.nativeElement, 'checked', inputValue);
+          this.renderer.setProperty(this.elementRef.nativeElement, 'checked', value);
           break;
         case 'radio':
-          this.renderer.setProperty(this.elementRef.nativeElement, 'checked', this.value === inputValue);
+          this.renderer.setProperty(
+            this.elementRef.nativeElement,
+            'checked',
+            this.value() === value,
+          );
           break;
         case 'file':
-          this.renderer.setProperty(this.elementRef.nativeElement, 'files', inputValue);
+          this.renderer.setProperty(this.elementRef.nativeElement, 'files', value);
+          break;
+        case 'date':
+        case 'datetime-local':
+        case 'time':
+        case 'month':
+        case 'week':
+          this.renderer.setProperty(
+            this.elementRef.nativeElement,
+            'value',
+            value instanceof Date
+              ? this.type() === 'date'
+                ? value.toISOString().substring(0, 10)
+                : this.type() === 'datetime-local'
+                  ? value.toISOString().substring(0, 16)
+                  : this.type() === 'time'
+                    ? value.toISOString().substring(11, 16)
+                    : this.type() === 'month'
+                      ? value.toISOString().substring(0, 7)
+                      : this.type() === 'week'
+                        ? `${value.getUTCFullYear()}-W${String(
+                            Math.ceil(
+                              (Date.UTC(
+                                value.getUTCFullYear(),
+                                value.getUTCMonth(),
+                                value.getUTCDate(),
+                              ) -
+                                Date.UTC(value.getUTCFullYear(), 0, 1)) /
+                                86400000,
+                            ),
+                          ).padStart(2, '0')}`
+                        : ''
+              : `${value}`,
+          );
           break;
         default:
-          this.renderer.setProperty(this.elementRef.nativeElement, 'value', inputValue == null ? '' : inputValue);
+          this.renderer.setProperty(
+            this.elementRef.nativeElement,
+            'value',
+            value == null ? '' : value,
+          );
       }
     });
-    this.control.disabled$.subscribe(disabled => {
+    // Render disabled
+    effect(() => {
       if (!this.connected) {
         return;
       }
+      const disabled = this.model.disabledWithForm();
       this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', disabled);
     });
   }
@@ -79,7 +154,7 @@ export class FeInput {
     if (!this.connected) {
       return;
     }
-    if (this.type !== 'checkbox' && this.type !== 'radio' && this.updateOn === 'change') {
+    if (this.type() !== 'checkbox' && this.type() !== 'radio' && this.updateOn() === 'change') {
       this.input(event);
     }
   }
@@ -88,7 +163,7 @@ export class FeInput {
     if (!this.connected) {
       return;
     }
-    if ((this.type === 'checkbox' || this.type === 'radio') && this.updateOn === 'change') {
+    if ((this.type() === 'checkbox' || this.type() === 'radio') && this.updateOn() === 'change') {
       this.input(event);
     }
   }
@@ -97,34 +172,56 @@ export class FeInput {
     if (!this.connected) {
       return;
     }
-    if (this._touchOnBlur) {
-      this.control.touch();
+    if (this.touchOnBlur()) {
+      this.model.touch();
     }
-    if (this.updateOn === 'blur') {
+    if (this.updateOn() === 'blur') {
       this.input(event);
     }
   }
 
   private input(event: any) {
-    switch (this.type) {
+    const valueType = this.valueType();
+    switch (this.type()) {
       case 'checkbox':
-        this.control.input(!!event?.target?.checked);
+        this.inputToModel(!!event?.target?.checked);
         break;
       case 'radio':
-        this.control.input(this.value);
+        this.inputToModel(this.value());
         break;
       case 'file':
-        this.control.input(event.target.files);
+        this.inputToModel(event.target.files);
         break;
-      case 'number':
+      case 'number': {
         const value = event?.target?.value;
-        this.control.input(value !== '' ? parseFloat(value) : undefined);
+        if (valueType === 'string') {
+          this.inputToModel(`${value}`);
+        } else {
+          this.inputToModel(ensureNumber(value));
+        }
         break;
-      default:
-        this.control.input(event?.target?.value);
+      }
+      default: {
+        const value = event?.target?.value;
+        if (valueType === 'number') {
+          this.inputToModel(ensureNumber(value));
+        } else if (valueType === 'Date') {
+          const date = value ? new Date(value) : undefined;
+          this.inputToModel(isNaN(date as any) ? undefined : date);
+        } else if (valueType === 'boolean') {
+          this.inputToModel(!!value);
+        } else {
+          this.inputToModel(value);
+        }
+      }
     }
-    if (this._touchOnChange) {
-      this.control.touch();
+    if (this.touchOnChange()) {
+      this.model.touch();
     }
+  }
+
+  private inputToModel(value: any) {
+    this.lastInputValue = value;
+    this.model.input(value);
   }
 }

@@ -1,14 +1,14 @@
-import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { FeControl } from '../core';
-import { coerceToBoolean } from '../util';
+import {booleanAttribute, Directive, inject, input, OnChanges} from '@angular/core';
+import {FeModel} from '../core/fe-model';
 
 @Directive({
-  selector: '[feControl][email]',
-  exportAs: 'feEmailValidator',
-  standalone: true,
+  selector: '[model][email]',
+  exportAs: 'emailValidator',
 })
 export class FeEmailValidator implements OnChanges {
-  @Input() email!: boolean | string;
+  readonly model = inject(FeModel, {self: true});
+
+  readonly email = input(true, {transform: booleanAttribute});
 
   /**
    * @license Copyright Google LLC All Rights Reserved.
@@ -24,22 +24,17 @@ export class FeEmailValidator implements OnChanges {
   private readonly emailRegexp =
     /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
-  constructor(
-    @Self() private control: FeControl<string, string>,
-  ) {
-    this.control.addValidator(({modelValue}) => {
-      if (!this.isEnabled || !modelValue) {
+  constructor() {
+    this.model.addValidator(value => {
+      if (!this.email() || !value) {
         return;
       }
-      return this.emailRegexp.test(modelValue) ? undefined : {'email': true};
+      return this.emailRegexp.test(value) ? undefined : {email: {value}};
     });
   }
 
+  // @todo switch to effect?
   ngOnChanges() {
-    this.control.updateValidity();
-  }
-
-  get isEnabled() {
-    return coerceToBoolean(this.email);
+    this.model.updateValidity();
   }
 }

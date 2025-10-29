@@ -1,4 +1,4 @@
-import { forkJoin, Observable } from 'rxjs';
+import {forkJoin, Observable} from 'rxjs';
 
 export interface FeLoadedFile {
   file: File;

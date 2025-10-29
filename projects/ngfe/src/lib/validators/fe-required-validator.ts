@@ -1,39 +1,30 @@
-import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { FeControl } from '../core';
-import { coerceToBoolean } from '../util';
+import {booleanAttribute, Directive, inject, input, OnChanges} from '@angular/core';
+import {toObservable} from '@angular/core/rxjs-interop';
+import {FeModel} from '../core/fe-model';
 
 @Directive({
-  selector: '[feControl][required]',
-  exportAs: 'feRequiredValidator',
-  standalone: true,
+  selector: '[model][required]',
+  exportAs: 'requiredValidator',
 })
 export class FeRequiredValidator implements OnChanges {
-  @Input() required!: boolean | string;
+  readonly model = inject(FeModel, {self: true});
 
-  private readonly _isEnabled$ = new BehaviorSubject<boolean>(false);
+  readonly required = input(true, {transform: booleanAttribute});
+  readonly required$ = toObservable(this.required);
 
-  constructor(
-    @Self() private control: FeControl,
-  ) {
-    this.control.addValidator(({modelValue}) => {
-      if (!this.isEnabled || modelValue) {
+  constructor() {
+    this.model.addValidator(value => {
+      if (!this.required()) {
         return;
       }
-      return {required: true};
+      if (value != null && value !== '') {
+        return;
+      }
+      return {required: {value}};
     });
   }
 
   ngOnChanges() {
-    this._isEnabled$.next(coerceToBoolean(this.required));
-    this.control.updateValidity();
-  }
-
-  get isEnabled() {
-    return this._isEnabled$.value;
-  }
-
-  get isEnabled$() {
-    return this._isEnabled$.asObservable();
+    this.model.updateValidity();
   }
 }

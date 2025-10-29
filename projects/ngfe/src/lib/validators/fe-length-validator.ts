@@ -1,33 +1,37 @@
-import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { FeControl } from '../core';
+import {Directive, inject, input, OnChanges} from '@angular/core';
+import {FeModel} from '../core/fe-model';
 
 @Directive({
-  selector: '[feControl][minlength],[feControl][maxlength]',
-  exportAs: 'feLengthValidator',
-  standalone: true,
+  selector: '[model][minLength],[model][maxLength]',
+  exportAs: 'lengthValidator',
 })
 export class FeLengthValidator implements OnChanges {
-  @Input() minlength?: string | number | false;
-  @Input() maxlength?: string | number | false;
+  readonly model = inject(FeModel, {self: true});
 
-  constructor(
-    @Self() private control: FeControl<string | Array<any>>,
-  ) {
-    this.control.addValidator(({modelValue}) => {
-      if (!this.hasValidLength(modelValue)) {
+  readonly minLength = input<string | number | false>();
+  readonly maxLength = input<string | number | false>();
+
+  constructor() {
+    this.model.addValidator(value => {
+      if (value === '') {
         return undefined;
       }
-      const actualLength = modelValue!.length;
-      if (this.minlength !== undefined) {
-        const requiredLength = +this.minlength;
+      if (!this.hasValidLength(value)) {
+        return undefined;
+      }
+      const actualLength = value!.length;
+      const minLength = this.minLength();
+      const maxLength = this.maxLength();
+      if (minLength !== undefined) {
+        const requiredLength = +minLength;
         if (actualLength < requiredLength) {
-          return {minlength: {requiredLength, actualLength}};
+          return {minLength: {requiredLength, actualLength, value}};
         }
       }
-      if (this.maxlength !== undefined) {
-        const requiredLength = +this.maxlength;
+      if (maxLength !== undefined) {
+        const requiredLength = +maxLength;
         if (actualLength > requiredLength) {
-          return {maxlength: {requiredLength, actualLength}};
+          return {maxLength: {requiredLength, actualLength, value}};
         }
       }
       return undefined;
@@ -35,7 +39,7 @@ export class FeLengthValidator implements OnChanges {
   }
 
   ngOnChanges() {
-    this.control.updateValidity();
+    this.model.updateValidity();
   }
 
   private hasValidLength(value: any): boolean {

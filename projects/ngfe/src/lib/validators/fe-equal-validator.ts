@@ -1,23 +1,26 @@
-import { Directive, Input, OnChanges, Self } from '@angular/core';
-import { FeControl } from '../core';
+import {booleanAttribute, Directive, inject, input, OnChanges} from '@angular/core';
+import {FeModel} from '../core/fe-model';
 
 @Directive({
-  selector: '[feControl][equal]',
-  exportAs: 'feEqualValidator',
-  standalone: true,
+  selector: '[model][equal]',
+  exportAs: 'equalValidator',
 })
 export class FeEqualValidator implements OnChanges {
-  @Input() equal: any;
+  readonly model = inject(FeModel, {self: true});
 
-  constructor(
-    @Self() private control: FeControl,
-  ) {
-    this.control.addValidator(({modelValue}) => {
-      if (this.equal !== modelValue) {
+  readonly equal = input<any>();
+  readonly activeWhenEmpty = input(false, {transform: booleanAttribute});
+
+  constructor() {
+    this.model.addValidator(value => {
+      if (!value && !this.activeWhenEmpty()) {
+        return undefined;
+      }
+      if (this.equal() !== value) {
         return {
-          'equal': {
-            equal: this.equal,
-            modelValue,
+          equal: {
+            equal: this.equal(),
+            value,
           },
         };
       }
@@ -26,6 +29,7 @@ export class FeEqualValidator implements OnChanges {
   }
 
   ngOnChanges() {
-    this.control.updateValidity();
+    console.log('EqualValidator ngOnChanges', this.equal());
+    this.model.updateValidity();
   }
 }

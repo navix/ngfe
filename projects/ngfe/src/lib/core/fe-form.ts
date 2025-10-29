@@ -1,156 +1,88 @@
-import {
-  ChangeDetectorRef,
-  Directive, EventEmitter,
-  HostBinding,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy, Output,
-  SimpleChanges,
-} from '@angular/core';
-import { ReplaySubject, Subject, Subscription, take } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { FeControl } from './fe-control';
-import { FeValidity } from './validation';
+import {computed, Directive, HostBinding, model, output, signal} from '@angular/core';
+import {toObservable} from '@angular/core/rxjs-interop';
+import {FeModel} from './fe-model';
+import {FeValidity} from './validation';
+
+export type FeFormValue = Record<string, any>;
 
 @Directive({
-  selector: '[feForm],form',
-  exportAs: 'feForm',
-  standalone: true,
+  selector: '[form],form',
+  exportAs: 'form',
 })
-export class FeForm implements OnChanges, OnDestroy {
-  @Input() disabled = false;
+export class FeForm {
+  readonly disabled = model(false);
+
+  readonly modelValueChange = output<FeFormValue>();
+  readonly validityChange = output<FeValidity>();
+
+  readonly #controlsMap = signal<FeModel[]>([]);
+
+  readonly controls = computed(() => [...this.#controlsMap()]);
+  readonly enabledControls = computed(() =>
+    this.controls().filter(control => !control.disabledWithForm()),
+  );
+
+  readonly value = computed<FeFormValue>(() => {
+    const value: {[key: string]: any} = {};
+    let nonameIndex = 0;
+    this.enabledControls().forEach(control => {
+      const name = control.name();
+      value[name || `noname_${nonameIndex}`] = control.value();
+      if (!name) {
+        nonameIndex++;
+      }
+    });
+    return value;
+  });
+  readonly value$ = toObservable(this.value);
+
+  readonly pending = computed(() => this.enabledControls().some(m => m.pending()));
+  readonly pending$ = toObservable(this.pending);
+  readonly valid = computed(() => this.enabledControls().every(m => m.valid()));
+  readonly valid$ = toObservable(this.valid);
+  readonly invalid = computed(() => this.enabledControls().some(m => m.invalid()));
+  readonly invalid$ = toObservable(this.invalid);
+  readonly touched = computed(() => this.enabledControls().some(m => m.touched()));
+  readonly touched$ = toObservable(this.touched);
+  readonly dirty = computed(() => this.enabledControls().some(m => m.dirty()));
+  readonly dirty$ = toObservable(this.dirty);
+  readonly validity = computed<FeValidity>(() =>
+    this.pending() ? 'pending' : this.invalid() ? 'invalid' : 'valid',
+  );
+  readonly validity$ = toObservable(this.validity);
 
   @HostBinding('attr.novalidate') novalidate = '';
 
-  private controlsMap = new Map<FeControl, Subscription[]>();
-
-  private _modelValueChange$ = new Subject<undefined>();
-  readonly change$ = this._modelValueChange$.pipe(
-    debounceTime(0),
-    map(() => undefined),
-  );
-  @Output() modelValueChange = new EventEmitter<undefined>();
-
-  private _validityCheck$ = new ReplaySubject<undefined>(1);
-  readonly validity$ = this._validityCheck$.pipe(
-    debounceTime(0),
-    map(() => this.validity),
-    distinctUntilChanged(),
-  );
-  @Output() validityChange = new EventEmitter<FeValidity>();
-
-  readonly valid$ = this._validityCheck$.pipe(
-    debounceTime(0),
-    map(() => this.valid),
-    distinctUntilChanged(),
-  );
-  readonly invalid$ = this._validityCheck$.pipe(
-    debounceTime(0),
-    map(() => this.invalid),
-    distinctUntilChanged(),
-  );
-  readonly pending$ = this._validityCheck$.pipe(
-    debounceTime(0),
-    map(() => this.pending),
-    distinctUntilChanged(),
-  );
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
-  ) {
-    this._validityCheck$.subscribe(() => {
-      this.cdr.markForCheck();
-    });
-    this.change$.subscribe(this.modelValueChange);
-    this.validity$.subscribe(this.validityChange);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if ('disabled' in changes) {
-      this.controls.forEach(control => control.disabled = this.disabled);
-    }
-  }
-
-  ngOnDestroy() {
-    this._modelValueChange$.complete();
-  }
-
-  get controls() {
-    return [...this.controlsMap.keys()];
-  }
-
-  get enabledControls() {
-    return this.controls.filter(control => !control.disabled);
-  }
-
-  get validity(): FeValidity {
-    return this.pending
-      ? 'pending'
-      : this.invalid
-        ? 'invalid'
-        : 'valid';
-  }
-
-  get invalid() {
-    return this.enabledControls.some(m => m.invalid);
-  }
-
-  get pending() {
-    return this.enabledControls.some(m => m.pending);
-  }
-
-  get valid() {
-    return this.enabledControls.every(m => m.valid);
-  }
-
-  get touched() {
-    return this.enabledControls.some(m => m.touched);
-  }
-
-  get dirty() {
-    return this.enabledControls.some(m => m.dirty);
+  constructor() {
+    this.value$.subscribe(modelValue => this.modelValueChange.emit(modelValue));
+    this.validity$.subscribe(validity => this.validityChange.emit(validity));
   }
 
   touchAll() {
-    this.enabledControls.forEach(m => m.touch());
+    this.enabledControls().forEach(m => m.touch());
   }
 
   reset() {
-    this.controls.forEach(m => m.reset());
+    this.controls().forEach(m => m.reset());
   }
 
   /**
    * @internal
    */
-  addControl(control: FeControl) {
-    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
-      if (!this.controlsMap.has(control)) {
-        this.ngZone.run(() => {
-          this.controlsMap.set(control, [
-            control.modelValue$.subscribe(this._modelValueChange$),
-            control.validity$.subscribe(() => this._validityCheck$.next(undefined)),
-            control.disabled$.subscribe(() => this._validityCheck$.next(undefined)),
-          ]);
-        });
-      }
-    });
+  addControl(control: FeModel) {
+    //    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+    if (!this.#controlsMap().includes(control)) {
+      //      this.ngZone.run(() => {
+      this.#controlsMap.set([...this.#controlsMap(), control]);
+    }
   }
 
   /**
    * @internal
    */
-  removeControl(control: FeControl) {
-    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
-      const subs = this.controlsMap.get(control);
-      if (subs) {
-        subs.forEach(s => s.unsubscribe());
-        this.controlsMap.delete(control);
-        this.ngZone.run(() => {
-          this._validityCheck$.next(undefined);
-        });
-      }
-    });
+  removeControl(control: FeModel) {
+    if (this.#controlsMap().includes(control)) {
+      this.#controlsMap.set(this.#controlsMap().filter(c => c !== control));
+    }
   }
 }

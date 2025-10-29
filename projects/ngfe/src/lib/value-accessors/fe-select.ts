@@ -1,69 +1,68 @@
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
   Directive,
+  effect,
   ElementRef,
   HostListener,
-  Input,
+  inject,
+  input,
+  model,
   OnChanges,
   OnDestroy,
-  OnInit, Optional,
+  OnInit,
   Renderer2,
-  SimpleChanges,
+  signal,
 } from '@angular/core';
-import { FeControl } from '../core';
-import { coerceToBoolean } from '../util';
+import {FeModel} from '../core/fe-model';
+
+const optionValueInit = Symbol('optionValueInit');
 
 @Directive({
-  selector: 'select[feControl]',
-  exportAs: 'feSelect',
-  standalone: true,
+  selector: 'select[model]',
+  exportAs: 'select',
 })
 export class FeSelect {
-  @Input() multiple?: boolean | string;
+  control = inject(FeModel);
+  renderer = inject(Renderer2);
+  elementRef = inject(ElementRef);
 
-  @Input() updateOn: 'change' | 'blur' = 'change';
-
-  @Input() set touchOnBlur(touchOnBlur: boolean | string) {
-    this._touchOnBlur = coerceToBoolean(touchOnBlur);
-  }
-
-  @Input() set touchOnChange(touchOnChange: boolean | string) {
-    this._touchOnChange = coerceToBoolean(touchOnChange);
-  }
+  readonly multiple = input(false, {transform: coerceBooleanProperty});
+  readonly updateOn = input<'change' | 'blur'>('change');
+  readonly touchOnBlur = input(true, {transform: coerceBooleanProperty});
+  readonly touchOnChange = input(false, {transform: coerceBooleanProperty});
 
   readonly options = new Set<FeSelectOption>();
 
   connected = true;
 
-  private _value: any[] = [undefined];
-  private _touchOnBlur = true;
-  private _touchOnChange = false;
+  #value: any[] = [undefined];
 
-  constructor(
-    private control: FeControl,
-    private renderer: Renderer2,
-    private elementRef: ElementRef,
-  ) {
-    this.control.toInputValue$.subscribe(value => {
+  constructor() {
+    // Render inputValue
+    effect(() => {
       if (!this.connected) {
         return;
       }
-      this._value = Array.isArray(value) ? value : [value];
+      const value = this.control.value();
+      this.#value = Array.isArray(value) ? value : [value];
       this.bindValue();
     });
-    this.control.disabled$.subscribe(disabled => {
+    // Render disabled
+    effect(() => {
+      if (!this.connected) {
+        return;
+      }
+      const disabled = this.control.disabledWithForm();
       this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', disabled);
     });
-  }
-
-  get isMultiple() {
-    return coerceToBoolean(this.multiple);
   }
 
   @HostListener('change') inputHandler() {
     if (!this.connected) {
       return;
     }
-    if (this.updateOn === 'change') {
+    this.options.forEach(option => option.checkSelected());
+    if (this.updateOn() === 'change') {
       this.input();
     }
   }
@@ -72,20 +71,29 @@ export class FeSelect {
     if (!this.connected) {
       return;
     }
-    if (this.isMultiple) {
+    if (this.multiple()) {
       this.options.forEach(option => {
-        if (this._value.find(v => v === option.value)) {
-          option.selected = true;
+        if (this.#value.find(v => v === option.value())) {
+          option.selected.set(true);
         } else {
-          option.selected = false;
+          option.selected.set(false);
         }
       });
     } else {
-      const selected = Array.from(this.options).find(o => o.value === this._value[0]);
+      const selected = Array.from(this.options)
+        .filter(option => option.value() !== optionValueInit)
+        .find(option => this.#value[0] === option.value());
       if (selected) {
-        selected.selected = true;
+        selected.selected.set(true);
+        // Select other selected to false
+        this.options.forEach(option => {
+          if (option !== selected) {
+            option.selected.set(false);
+          }
+        });
       } else {
         this.renderer.setProperty(this.elementRef.nativeElement, 'value', '');
+        this.renderer.setProperty(this.elementRef.nativeElement, 'selectedIndex', '-1');
       }
     }
   }
@@ -94,22 +102,26 @@ export class FeSelect {
     if (!this.connected) {
       return;
     }
-    if (this._touchOnBlur) {
+    if (this.touchOnBlur()) {
       this.control.touch();
     }
-    if (this.updateOn === 'blur') {
+    if (this.updateOn() === 'blur') {
       this.input();
     }
   }
 
   private input() {
-    if (this.isMultiple) {
-      this.control.input(Array.from(this.options).filter(s => s.selected && s.value).map(s => s.value!));
+    if (this.multiple()) {
+      this.control.input(
+        Array.from(this.options)
+          .filter(o => o.selected() && o.value())
+          .map(o => o.value()!),
+      );
     } else {
-      const selected = Array.from(this.options).find(o => o.selected);
-      this.control.input(selected !== undefined ? selected.value : undefined);
+      const selected = Array.from(this.options).find(o => o.selected());
+      this.control.input(selected !== undefined ? selected.value() : undefined);
     }
-    if (this._touchOnChange) {
+    if (this.touchOnChange()) {
       this.control.touch();
     }
   }
@@ -117,21 +129,32 @@ export class FeSelect {
 
 @Directive({
   selector: 'option',
-  exportAs: 'feSelectOption',
-  standalone: true,
+  exportAs: 'option',
 })
 export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
-  @Input() value?: any;
+  select = inject(FeSelect, {optional: true});
+  renderer = inject(Renderer2);
+  elementRef = inject(ElementRef);
 
-  constructor(
-    @Optional() private select: FeSelect,
-    private renderer: Renderer2,
-    private elementRef: ElementRef,
-  ) {
+  readonly value = input<any>(optionValueInit);
+
+  readonly selected = signal<boolean | string | undefined>(undefined);
+
+  constructor() {
     if (!this.select) {
       return;
     }
     this.select.options.add(this);
+    // Render selected
+    effect(() => {
+      const selected = this.selected();
+      if (!this.select) {
+        return;
+      }
+      if (selected !== this.domSelected) {
+        this.renderer.setProperty(this.elementRef.nativeElement, 'selected', selected);
+      }
+    });
   }
 
   ngOnInit() {
@@ -142,7 +165,8 @@ export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
     this.select.bindValue();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  // @todo use effect ??
+  ngOnChanges() {
     if (!this.select) {
       return;
     }
@@ -157,11 +181,11 @@ export class FeSelectOption implements OnInit, OnChanges, OnDestroy {
     this.select.bindValue();
   }
 
-  get selected() {
+  get domSelected() {
     return this.elementRef.nativeElement.selected;
   }
 
-  @Input() set selected(selected: boolean) {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'selected', selected);
+  checkSelected() {
+    this.selected.set(this.domSelected);
   }
 }
