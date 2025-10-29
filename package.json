@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "playground:serve": "ng run playground:serve",
+    "playground2:serve": "ng run playground2:serve",
     "playground:build": "ng run playground:build:production",
     "playground:stats": "npx webpack-bundle-analyzer dist/playground/stats.json",
     "playground-adapter:serve": "ng run playground-adapter:serve",
@@ -18,7 +18,9 @@
     "ngfe-ng-adapter:publish:beta": "npm publish ./dist/ngfe-ng-adapter --access=public --tag=beta",
     "e2e": "start-server-and-test playground:serve http://localhost:4200 e2e-test",
     "e2e-test": "playwright test -c e2e/playwright.config.ts",
-    "e2e-test:chromium": "npm run e2e-test -- --project=chromium"
+    "e2e-test:chromium": "npm run e2e-test -- --project=chromium",
+    "prettier:check": "npx prettier --check .",
+    "prettier:write": "npx prettier --write ."
   },
   "private": true,
   "dependencies": {
@@ -43,7 +45,11 @@
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.3.1",
     "cpx": "^1.5.0",
+    "css-declaration-sorter": "^7.2.0",
     "ng-packagr": "^20.2.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-css-order": "^2.1.2",
+    "prettier-plugin-organize-attributes": "^1.0.0",
     "start-server-and-test": "^2.1.0",
     "typescript": "~5.8.3",
     "webpack-bundle-analyzer": "^4.10.2"
