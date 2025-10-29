@@ -1,4 +1,4 @@
-import { devices, PlaywrightTestConfig } from '@playwright/test';
+import {devices, PlaywrightTestConfig} from '@playwright/test';
 
 const viewport = {
   width: 1920,
@@ -12,6 +12,7 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
+    timezoneId: 'UTC',
   },
   projects: [
     {

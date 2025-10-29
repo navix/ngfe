@@ -1,171 +1,235 @@
-import { expect, test } from '@playwright/test';
-import { PageKit, PageKitFactory } from '../page-kit';
+import {expect, test} from '@playwright/test';
+import {PageKitFactory} from '../page-kit';
 
-test.describe.serial('Validation', () => {
-  let kit: PageKit;
+test('Validation', async ({browser}) => {
+  const kit = await PageKitFactory.new(browser);
 
-  test.beforeAll(async ({browser}) => {
-    kit = await PageKitFactory.new(browser);
-  });
-
-  test('open', async ({page}) => {
+  await test.step('open', async () => {
     await kit.goto('/validation');
     await expect(kit.subTitle).toHaveText('Validation');
   });
 
-  test('1 - Required validator', async () => {
-    await expect(kit.$('#control-1-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-1-errors')).toHaveText('ERRORS: { "required": true } ');
-    await kit.$('#control-1').fill('123');
-    await expect(kit.$('#control-1-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-1-errors')).toHaveText('ERRORS:');
-    await kit.$('#control-1').fill('');
-    await expect(kit.$('#control-1-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-1-errors')).toHaveText('ERRORS: { "required": true } ');
+  await test.step('1 - Required validator', async () => {
+    const c = kit.getCase('1-required-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "required": { "value": "" } }');
+    await c.$('input').fill('123');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('ERRORS')).toHaveText('');
+    await c.$('input').fill('');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "required": { "value": "" } }');
   });
 
-  test('2 - Function validator', async () => {
-    await expect(kit.$('#control-2-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-2-errors')).toHaveText('ERRORS: { "fn": true } ');
-    await kit.$('#control-2').fill('123');
-    await expect(kit.$('#control-2-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-2-errors')).toHaveText('ERRORS:');
-    await kit.$('#control-2').fill('');
-    await expect(kit.$('#control-2-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-2-errors')).toHaveText('ERRORS: { "fn": true } ');
+  await test.step('2 - Function validator', async () => {
+    const c = kit.getCase('2-function-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "fn": true } ');
+    await c.$('input').fill('123');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('ERRORS')).toHaveText('');
+    await c.$('input').fill('');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "fn": true } ');
   });
 
-  test('3 - Function async Observable validator', async () => {
-    await expect(kit.$('#control-3-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-3-errors')).toHaveText('ERRORS: { "avo": true }');
-    await kit.$('#control-3').fill('123');
-    await expect(kit.$('#control-3-validity')).toHaveText('VALIDITY: "pending"');
-    await expect(kit.$('#control-3-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-3-errors')).toHaveText('ERRORS:');
-    await kit.$('#control-3').fill('321');
-    await expect(kit.$('#control-3-validity')).toHaveText('VALIDITY: "pending"');
-    await expect(kit.$('#control-3-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-3-errors')).toHaveText('ERRORS: { "avo": true } ');
+  await test.step('3 - Function async Observable validator', async () => {
+    const c = kit.getCase('3-async-observable-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "avo": true }');
+    await c.$('input').fill('123');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('ERRORS')).toHaveText('');
+    await c.$('input').fill('321');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "avo": true } ');
   });
 
-  test('4 - Function async Promise validator', async () => {
-    await expect(kit.$('#control-4-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-4-errors')).toHaveText('ERRORS: { "avp": true }');
-    await kit.$('#control-4').fill('456');
-    await expect(kit.$('#control-4-validity')).toHaveText('VALIDITY: "pending"');
-    await expect(kit.$('#control-4-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-4-errors')).toHaveText('ERRORS:');
-    await kit.$('#control-4').fill('654');
-    await expect(kit.$('#control-4-validity')).toHaveText('VALIDITY: "pending"');
-    await expect(kit.$('#control-4-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-4-errors')).toHaveText('ERRORS: { "avp": true } ');
+  await test.step('4 - Function async Promise validator', async () => {
+    const c = kit.getCase('4-async-promise-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "avp": true }');
+    await c.$('input').fill('456');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('ERRORS')).toHaveText('');
+    await c.$('input').fill('654');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "avp": true } ');
   });
 
-  test('5 - Debounce before async', async () => {
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-5-errors')).toHaveText('ERRORS: { "avo": true }');
-    await kit.$('#control-5').fill('123');
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "pending"');
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-5-errors')).toHaveText('ERRORS:');
-    await kit.$('#control-5').fill('321');
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "pending"');
-    await expect(kit.$('#control-5-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-5-errors')).toHaveText('ERRORS: { "avo": true } ');
+  await test.step('5 - Debounce before async', async () => {
+    const c = kit.getCase('5-debounce-before-async');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "avo": true }');
+
+    await test.step('Enter valid', async () => {
+      await c.$('input').fill('123');
+      await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+      await expect(c.vv('ERRORS')).toHaveText('');
+    });
+
+    await test.step('Enter invalid', async () => {
+      await c.$('input').fill('321');
+      await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+      await expect(c.vv('ERRORS')).toHaveText('{ "avo": true } ');
+    });
+
+    await test.step('Enter valid then different invalid during pending', async () => {
+      await c.$('input').fill('123');
+      await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await c.$('input').fill('321');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await c.$('input').fill('321x');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await c.$('input').fill('321');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+      await expect(c.vv('ERRORS')).toHaveText('{ "avo": true } ');
+    });
+
+    await test.step('Enter valid then invalid after pending started then valid again', async () => {
+      await c.$('input').fill('123');
+      await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await c.$('input').fill('321');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await c.$('input').fill('123');
+      await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+      await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    });
   });
 
-  test('6 - Email validator', async () => {
-    await expect(kit.$('#control-6-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-6').fill('mail');
-    await expect(kit.$('#control-6-validity')).toHaveText('VALIDITY: "invalid"');
-    await expect(kit.$('#control-6-errors')).toHaveText('ERRORS: { "email": true }');
-    await kit.$('#control-6').fill('my@mail');
-    await expect(kit.$('#control-6-validity')).toHaveText('VALIDITY: "valid"');
+  await test.step('6 - Email validator', async () => {
+    const c = kit.getCase('6-email-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('mail');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "email": { "value": "mail" } }');
+    await c.$('input').fill('my@mail');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
   });
 
-  test('7 - Length validator', async () => {
-    await expect(kit.$('#control-7-errors')).toHaveText('ERRORS: { "minlength": { "requiredLength": 5, "actualLength": 0 } } ');
-    await kit.$('#control-7').fill('1234');
-    await expect(kit.$('#control-7-errors')).toHaveText('ERRORS: { "minlength": { "requiredLength": 5, "actualLength": 4 } } ');
-    await kit.$('#control-7').fill('12345');
-    await expect(kit.$('#control-7-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-7').fill('1234512345');
-    await expect(kit.$('#control-7-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-7').fill('12345123450');
-    await expect(kit.$('#control-7-errors')).toHaveText('ERRORS: { "maxlength": { "requiredLength": 10, "actualLength": 11 } } ');
+  await test.step('7 - Length validator', async () => {
+    const c = kit.getCase('7-length-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('1');
+    await expect(c.vv('ERRORS')).toHaveText(
+      `{ "minLength": { "requiredLength": 5, "actualLength": 1, "value": "1" } }`,
+    );
+    await c.$('input').fill('1234');
+    await expect(c.vv('ERRORS')).toHaveText(
+      `{ "minLength": { "requiredLength": 5, "actualLength": 4, "value": "1234" } }`,
+    );
+    await c.$('input').fill('12345');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('1234512345');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('12345123450');
+    await expect(c.vv('ERRORS')).toHaveText(
+      `{ "maxLength": { "requiredLength": 10, "actualLength": 11, "value": "12345123450" } }`,
+    );
   });
 
-  test('8 - Pattern validator', async () => {
-    await expect(kit.$('#control-8-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-8').fill('aa');
-    await expect(kit.$('#control-8-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-8').fill('aa66');
-    await expect(kit.$('#control-8-errors')).toHaveText('ERRORS: { "pattern": { "pattern": "^[a-zA-Z ]*$", "modelValue": "aa66" } } ');
-    await kit.$('#control-8').fill('66');
-    await expect(kit.$('#control-8-errors')).toHaveText('ERRORS: { "pattern": { "pattern": "^[a-zA-Z ]*$", "modelValue": "66" } } ');
-    await kit.$('#control-8').fill('bb');
-    await expect(kit.$('#control-8-validity')).toHaveText('VALIDITY: "valid"');
+  await test.step('8 - Pattern validator', async () => {
+    const c = kit.getCase('8-pattern-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('aa');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('aa66');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "pattern": { "pattern": "^[a-zA-Z ]*$", "value": "aa66" } } ',
+    );
+    await c.$('input').fill('66');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "pattern": { "pattern": "^[a-zA-Z ]*$", "value": "66" } } ',
+    );
+    await c.$('input').fill('bb');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
   });
 
-  test('9 - Required validator with initial value', async () => {
-    await expect(kit.$('#control-9-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-9').fill('');
-    await expect(kit.$('#control-9-errors')).toHaveText('ERRORS: { "required": true } ');
-    await kit.$('#control-9').fill('ccc');
-    await expect(kit.$('#control-9-validity')).toHaveText('VALIDITY: "valid"');
+  await test.step('9 - Required validator with initial value', async () => {
+    const c = kit.getCase('9-required-validator-with-initial-value');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('');
+    await expect(c.vv('ERRORS')).toHaveText('{ "required": { "value": "" } }');
+    await c.$('input').fill('ccc');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
   });
 
-  test('10 - Number validator', async () => {
-    await expect(kit.$('#control-10-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-10').fill('9');
-    await expect(kit.$('#control-10-errors')).toHaveText('ERRORS: { "min": { "min": 10, "modelValue": 9 } } ');
-    await kit.$('#control-10').fill('10');
-    await expect(kit.$('#control-10-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-10').fill('20');
-    await expect(kit.$('#control-10-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-10').fill('21');
-    await expect(kit.$('#control-10-errors')).toHaveText('ERRORS: { "max": { "max": 20, "modelValue": 21 } } ');
+  await test.step('10 - Number validator', async () => {
+    const c = kit.getCase('10-number-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('9');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "min": { "min": 10, "value": "9", "numberValue": 9 } }',
+    );
+    await c.$('input').fill('10');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('20');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('21');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "max": { "max": 20, "value": "21", "numberValue": 21 } }',
+    );
   });
 
-  test('11 - isNumber validator', async () => {
-    await expect(kit.$('#control-11-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-11-value')).toHaveText('VAL: 123');
-    await kit.$('#control-11').fill('123aaa');
-    await expect(kit.$('#control-11-value')).toHaveText('VAL:');
-    await expect(kit.$('#control-11-errors')).toHaveText('ERRORS: { "isNumber": { "inputValue": "123aaa" } } ');
-    await kit.$('#control-11').fill('');
-    await expect(kit.$('#control-11-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-11-sub').fill('123');
-    await expect(kit.$('#control-11-value')).toHaveText('VAL: "123"');
-    await expect(kit.$('#control-11-errors')).toHaveText('ERRORS: { "isNumber": { "modelValue": "123" } } ');
+  await test.step('11 - isNumber validator', async () => {
+    const c = kit.getCase('11-is-number-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('123aaa');
+    await expect(c.vv('VALUE')).toHaveText('"123aaa"');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "isNumber": { "value": "123aaa" } } ');
+    await c.$('input').fill('');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('123');
+    await expect(c.vv('VALUE')).toHaveText('"123"');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
   });
 
-  test('12 - Equal validator', async () => {
-    await expect(kit.$('#control-12-errors')).toHaveText('ERRORS: { "equal": { "equal": "321", "modelValue": "" } } ');
-    await kit.$('#control-12').fill('321');
-    await expect(kit.$('#control-12-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-12').fill('123');
-    await expect(kit.$('#control-12-errors')).toHaveText('ERRORS: { "equal": { "equal": "321", "modelValue": "123" } } ');
+  await test.step('12 - Equal validator', async () => {
+    const c = kit.getCase('12-equal-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('123');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "equal": { "equal": "321", "value": "123" } }');
+    await c.$('input').fill('321');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
   });
 
-  test('13 - Not equal validator', async () => {
-    await expect(kit.$('#control-13-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-13').fill('654');
-    await expect(kit.$('#control-13-errors')).toHaveText('ERRORS: { "notEqual": { "notEqual": "654", "modelValue": "654" } } ');
-    await kit.$('#control-13').fill('456');
-    await expect(kit.$('#control-13-validity')).toHaveText('VALIDITY: "valid"');
+  await test.step('13 - Not equal validator', async () => {
+    const c = kit.getCase('13-not-equal-validator');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('654');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "notEqual": { "notEqual": "654", "value": "654" } } ',
+    );
+    await c.$('input').fill('456');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
   });
 
-  test('14 - Equal models validator', async () => {
-    await expect(kit.$('#control-14-1-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-14-2-validity')).toHaveText('VALIDITY: "valid"');
-    await kit.$('#control-14-1').fill('654');
-    await expect(kit.$('#control-14-1-errors')).toHaveText('ERRORS: { "equal": { "equal": "", "modelValue": "654" } }');
-    await expect(kit.$('#control-14-2-errors')).toHaveText('ERRORS: { "equal": { "equal": "654", "modelValue": "" } } ');
-    await kit.$('#control-14-2').fill('654');
-    await expect(kit.$('#control-14-1-validity')).toHaveText('VALIDITY: "valid"');
-    await expect(kit.$('#control-14-2-validity')).toHaveText('VALIDITY: "valid"');
+  await test.step('14 - Equal models validator', async () => {
+    const c = kit.getCase('14-equal-models-validator');
+    await expect(c.vv('C1 VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('C2 VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('C2 VALIDITY')).toHaveText('"valid"');
+    await c.$('input').nth(0).fill('654');
+    await expect(c.vv('C1 ERRORS')).toHaveText('{ "equal": { "equal": "", "value": "654" } }');
+    await expect(c.vv('C2 ERRORS')).toHaveText('');
+    await expect(c.vv('C3 ERRORS')).toHaveText('{ "equal": { "equal": "654", "value": "" } } ');
+    await c.$('input').nth(1).fill('654');
+    await c.$('input').nth(2).fill('654');
+    await expect(c.vv('C1 VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('C2 VALIDITY')).toHaveText('"valid"');
+    await expect(c.vv('C3 VALIDITY')).toHaveText('"valid"');
   });
 });

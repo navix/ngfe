@@ -1,11 +1,9 @@
-import { Browser, Page } from '@playwright/test';
+import {Browser, Locator, Page} from '@playwright/test';
 
 export class PageKit {
   proxyConsole = false;
 
-  constructor(
-    public page: Page,
-  ) {
+  constructor(public page: Page) {
     page.on('console', message => {
       if (this.proxyConsole) {
         console.log('PAGE CONSOLE >>', message);
@@ -14,11 +12,15 @@ export class PageKit {
   }
 
   goto(url: string) {
-    this.page.goto(url);
+    return this.page.goto(url);
   }
 
   $(selector: string) {
     return this.page.locator(selector);
+  }
+
+  getCase(id: string) {
+    return new CasePo(this.page.locator(`.case[data-id="${id}"]`));
   }
 
   get subTitle() {
@@ -30,11 +32,11 @@ export class PageKit {
   }
 
   fill(name: string, value: string) {
-//    return this.page.fi
+    //    return this.page.fi
   }
 
-  isSelected(locator: string) {
-    return this.page.locator(locator).evaluate((el: any) => el.selected);
+  isSelected(locator: Locator) {
+    return locator.evaluate((el: any) => el.selected);
   }
 
   async chooseFiles(locator: string, files: string[]) {
@@ -50,10 +52,29 @@ export class PageKit {
   }
 }
 
+export class CasePo {
+  constructor(public component: Locator) {}
+
+  get title() {
+    return this.component.locator('h4');
+  }
+
+  $(selector: string) {
+    return this.component.locator(selector);
+  }
+
+  /**
+   * Get value-view by name
+   */
+  vv(name: string) {
+    return this.component.locator(`.value-view[data-name="${name}"] .value`);
+  }
+}
+
 export class PageKitFactory {
   static async new(browser: Browser) {
     const page = await browser.newPage({
-//      recordVideo: video ? { dir: video, size: { width: 1920, height: 1080 } } : undefined,
+      //      recordVideo: video ? { dir: video, size: { width: 1920, height: 1080 } } : undefined,
     });
     return new PageKit(page);
   }
