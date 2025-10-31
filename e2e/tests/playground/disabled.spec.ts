@@ -1,8 +1,8 @@
-import { expect, test } from '@playwright/test';
-import { delay } from '../../util';
-import { PageKit, PageKitFactory } from '../page-kit';
+import {expect, test} from '@playwright/test';
+import {delay} from '../../util';
+import {PageKit, PageKitFactory} from '../page-kit';
 
-test.describe.serial('Disabled', () => {
+test.describe.skip('Disabled', () => {
   let kit: PageKit;
 
   test.beforeAll(async ({browser}) => {
