@@ -28,6 +28,10 @@ import {map, switchMap} from 'rxjs/operators';
 import {FeForm} from './fe-form';
 import {FeValidationErrors, FeValidator, FeValidatorResult, FeValidity} from './validation';
 
+export type FeModelInvalidValueStrategy<VALUE> = 'accept' | 'retain' | {value: VALUE};
+
+export type FeModelAsyncValidatorsStrategy = 'runAfterSyncValid' | 'runAlways';
+
 /**
  * Allow to bind value to control.
  * Provides `FeModel` service to handle control state and communications.
@@ -69,7 +73,14 @@ export class FeModel<VALUE = any> implements OnDestroy {
    * - `retain` - do not update value, keep previous valid value.
    * - `{value: VALUE}` - update value with provided VALUE.
    */
-  readonly whenInvalid = input<'accept' | 'retain' | {value: VALUE}>('accept');
+  readonly invalidValueStrategy = input<FeModelInvalidValueStrategy<VALUE>>('accept');
+
+  /**
+   * When to run async validators.
+   * - `runAfterSyncValid` - only if sync validators passed (default).
+   * - `runAlways` - always run async validators.
+   */
+  readonly asyncValidatorsStrategy = input<FeModelAsyncValidatorsStrategy>('runAfterSyncValid');
 
   /**
    * Custom errors which will be merged with validation errors.
@@ -252,11 +263,11 @@ export class FeModel<VALUE = any> implements OnDestroy {
         console.log('Input validation', {inputValue, isValid, errors});
         if (!isValid) {
           this.setValueErrors(errors, inputValue);
-          const whenInvalid = this.whenInvalid();
-          if (whenInvalid === 'accept') {
+          const strategy = this.invalidValueStrategy();
+          if (strategy === 'accept') {
             this.model.set(inputValue);
-          } else if (typeof whenInvalid === 'object' && 'value' in whenInvalid) {
-            this.model.set(whenInvalid.value);
+          } else if (typeof strategy === 'object' && 'value' in strategy) {
+            this.model.set(strategy.value);
           }
         } else {
           this.setValueErrors(undefined, inputValue);
@@ -271,6 +282,7 @@ export class FeModel<VALUE = any> implements OnDestroy {
     merge(
       this.value$.pipe(filter(value => value !== this.validatedValue())), // @todo possible race condition on async validators
       toObservable(this.allValidators),
+      toObservable(this.asyncValidatorsStrategy),
       this.#updateValidity$,
     )
       .pipe(
@@ -308,7 +320,18 @@ export class FeModel<VALUE = any> implements OnDestroy {
       syncs.push(of(res));
     }
     if (asyncs.length > 0) {
-      return forkJoin([...syncs, ...asyncs]);
+      return forkJoin(syncs?.length > 0 ? syncs : [of(undefined)]).pipe(
+        switchMap(results => {
+          if (
+            this.asyncValidatorsStrategy() === 'runAfterSyncValid' &&
+            results.filter(r => !!r).length > 0
+          ) {
+            return of(results);
+          } else {
+            return forkJoin([...asyncs]).pipe(map(asyncResults => [...results, ...asyncResults]));
+          }
+        }),
+      );
     } else if (syncs.length > 0) {
       return forkJoin([...syncs]);
     } else {

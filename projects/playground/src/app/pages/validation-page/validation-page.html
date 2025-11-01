@@ -357,3 +357,34 @@
     name="C3 ERRORS"
   />
 </div>
+
+<div
+  class="case"
+  data-id="15-asyncValidatorsStrategy-param"
+>
+  <h4>15 - asyncValidatorsStrategy param</h4>
+  <div>
+    <input
+      [asyncValidatorsStrategy]="value15_param()"
+      [minLength]="3"
+      [validators]="[asyncValObs]"
+      [(model)]="value15"
+      #c="model"
+      required
+    />
+  </div>
+  <div>
+    <select [(model)]="value15_param">
+      <option value="runAfterSyncValid">runAfterSyncValid</option>
+      <option value="runAlways">runAlways</option>
+    </select>
+  </div>
+  <app-value-view
+    [value]="c.validity()"
+    name="VALIDITY"
+  />
+  <app-value-view
+    [value]="c.errors()"
+    name="ERRORS"
+  />
+</div>

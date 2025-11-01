@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {of} from 'rxjs';
 import {delay} from 'rxjs/operators';
+import {FeModelAsyncValidatorsStrategy} from '../../../../../ngfe/src/lib/core/fe-model';
 import {FeModule, FeValidator} from '../../../../../ngfe/src/public-api';
 import {ValueView} from '../../components/value-view/value-view';
 
@@ -27,6 +28,8 @@ export class ValidationPage {
   value14_1 = signal('');
   value14_2 = signal('');
   value14_3 = signal('');
+  value15 = signal('');
+  value15_param = signal<FeModelAsyncValidatorsStrategy>('runAfterSyncValid');
 
   syncVal: FeValidator<string> = value => {
     return value !== '' ? undefined : {fn: true};

@@ -14,8 +14,8 @@
         (modelChange)="value2.set($event ? +$event : 0)"
         #ci2="model"
         id="control-2"
+        invalidValueStrategy="retain"
         isNumber
-        whenInvalid="retain"
       />
       <div id="control-2-value">
         VALUE: {{ value2() | json }}, ERRORS: {{ c2.errors() | json }}

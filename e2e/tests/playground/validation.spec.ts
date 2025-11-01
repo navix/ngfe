@@ -232,4 +232,31 @@ test('Validation', async ({browser}) => {
     await expect(c.vv('C2 VALIDITY')).toHaveText('"valid"');
     await expect(c.vv('C3 VALIDITY')).toHaveText('"valid"');
   });
+
+  await test.step('15 - runAsyncValidators param', async () => {
+    const c = kit.getCase('15-asyncValidatorsStrategy-param');
+    // afterSyncValid
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "required": { "value": "" } }');
+    await c.$('input').fill('12');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "minLength": { "requiredLength": 3, "actualLength": 2, "value": "12" } }',
+    );
+    await c.$('input').fill('123');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"valid"');
+    await c.$('input').fill('1234');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText('{ "avo": true } ');
+    await c.$('input').fill('12');
+    // always
+    await c.$('select').selectOption('runAlways');
+    await expect(c.vv('VALIDITY')).toHaveText('"pending"');
+    await expect(c.vv('VALIDITY')).toHaveText('"invalid"');
+    await expect(c.vv('ERRORS')).toHaveText(
+      '{ "minLength": { "requiredLength": 3, "actualLength": 2, "value": "12" }, "avo": true }',
+    );
+  });
 });
