@@ -15,6 +15,8 @@ import {
 } from '@angular/core';
 import {FeModel} from '../core/fe-model';
 
+export type FeSelectCompareFn = (value1: any, value2: any) => boolean;
+
 const optionValueInit = Symbol('optionValueInit');
 
 @Directive({
@@ -30,6 +32,7 @@ export class FeSelect {
   readonly updateOn = input<'change' | 'blur'>('change');
   readonly touchOnBlur = input(true, {transform: coerceBooleanProperty});
   readonly touchOnChange = input(false, {transform: coerceBooleanProperty});
+  readonly compareFn = input<FeSelectCompareFn>((v1, v2) => v1 === v2);
 
   readonly options = new Set<FeSelectOption>();
 
@@ -73,7 +76,7 @@ export class FeSelect {
     }
     if (this.multiple()) {
       this.options.forEach(option => {
-        if (this.#value.find(v => v === option.value())) {
+        if (this.#value.find(v => this.compareFn()(v, option.value()))) {
           option.selected.set(true);
         } else {
           option.selected.set(false);
@@ -82,7 +85,7 @@ export class FeSelect {
     } else {
       const selected = Array.from(this.options)
         .filter(option => option.value() !== optionValueInit)
-        .find(option => this.#value[0] === option.value());
+        .find(option => this.compareFn()(this.#value[0], option.value()));
       if (selected) {
         selected.selected.set(true);
         // Select other selected to false
