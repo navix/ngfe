@@ -37,7 +37,7 @@ export type FeModelAsyncValidatorsStrategy = 'runAfterSyncValid' | 'runAlways';
  * Provides `FeModel` service to handle control state and communications.
  */
 @Directive({
-  selector: '[model],[modelChange]',
+  selector: '[model]:not([noModel]),[modelChange]:not([noModel])',
   exportAs: 'model',
 })
 export class FeModel<VALUE = any> implements OnDestroy {

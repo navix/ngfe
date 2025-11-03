@@ -6,7 +6,7 @@ import {FeValidity} from './validation';
 export type FeFormValue = Record<string, any>;
 
 @Directive({
-  selector: '[form],form',
+  selector: 'form:not([noForm]),[feForm]',
   exportAs: 'form',
 })
 export class FeForm {
