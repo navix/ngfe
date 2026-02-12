@@ -1,4 +1,4 @@
-import {computed, Directive, HostBinding, model, output, signal} from '@angular/core';
+import {computed, Directive, HostBinding, input, model, output, signal} from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {FeModel} from './fe-model';
 import {FeValidity} from './validation';
@@ -10,6 +10,8 @@ export type FeFormValue = Record<string, any>;
   exportAs: 'form',
 })
 export class FeForm {
+  readonly name = input<string>();
+
   readonly disabled = model(false);
 
   readonly modelValueChange = output<FeFormValue>();
@@ -26,10 +28,21 @@ export class FeForm {
     const value: {[key: string]: any} = {};
     let nonameIndex = 0;
     this.enabledControls().forEach(control => {
-      const name = control.name();
-      value[name || `noname_${nonameIndex}`] = control.value();
+      let name = control.name();
+      let duplicated = false;
+      if (name && name in value) {
+        duplicated = true;
+        name = undefined;
+      }
+      const key = name || `noname_${nonameIndex}`;
+      value[key] = control.value();
       if (!name) {
         nonameIndex++;
+      }
+      if (duplicated) {
+        console.warn(
+          `Duplicate control name "${name}" in form "${this.name()}" - this control's value will be available under "${key}" key.`,
+        );
       }
     });
     return value;
@@ -70,9 +83,7 @@ export class FeForm {
    * @internal
    */
   addControl(control: FeModel) {
-    //    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
     if (!this.#controlsMap().includes(control)) {
-      //      this.ngZone.run(() => {
       this.#controlsMap.set([...this.#controlsMap(), control]);
     }
   }
