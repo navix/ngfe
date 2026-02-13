@@ -605,3 +605,13 @@ Also, with this package, `FeModel` provides `NgControl` and allows you to use **
 ## LICENSE 
 
 MIT
+
+
+
+## TODO
+
+* Fix tests
+* Bind state classes for control/form
+* Any validator should be possible to switch off
+* Programmatic validation using Component: `validate(SomeFormComponent, {formState}): Observable<FeValidationResult>`
+* Clean up logs
