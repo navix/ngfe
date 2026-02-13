@@ -1,18 +1,20 @@
 [![npm version](https://badge.fury.io/js/ngfe.svg)](https://www.npmjs.com/package/ngfe)
 ![CI](https://github.com/navix/ngfe/actions/workflows/ci.yml/badge.svg)
 
-# 🧰 ngfe | Angular Forms Extra
+# ngfe | Angular Forms Engine | Template-based Signal Forms
 
 Boosted template-driven Angular forms.
 
-It is an alternative for the Angular `FormsModule`.
-If your project have complex and dynamic forms this lib will save you a lot of time and lines of code.
+It is an alternative for the Angular Forms of any kind: simpler, more flexible, more powerful, no restrictions.
+
+If your project have complex and dynamic forms this package will save you a lot of time and lines of code.
 
 > [StackBlitz showcase](https://stackblitz.com/edit/ngfe-showcase?file=src/app/app.component.html)
 
 ## Features
 
 * **Focused on template-driven approach.**
+* **Signal under the hood.**
 * **Less abstractions, ultimate control.**
 * **More freedom for developers.**
 * Nothing exceptionally new for Angular people.
@@ -22,18 +24,15 @@ If your project have complex and dynamic forms this lib will save you a lot of t
   * Single interface for sync and async validators.
   * No `ControlContainer` providing for sub-forms.
   * No required `name` binding.
-  * Directive for easy value init/cleanup on dynamic forms.
   * Handy way to display validation errors only on touched fields.
 * Function validators binding.
 * Built-in debounce.
-* Adapters for two-way value conversion.
 * Two-way state binding in templates (e.g `[(touched)]`).
 * Almost all states have reactive alternative (e.g `.errors`+`.errors$`).
 * Submit directive which touches all fields and checks validity.
 * Stricter types in controls.
-* `OnPush` mode support.
 * SSR support.
-* Zero deps, only Angular and RxJS.
+* Zero deps.
 * Reduced bundle size without @angular/forms (~20KB parsed size in prod mode).
 * Does not conflict with the Angular `FormsModule`.
 * Optional integration with Angular `Validator` and `ValueAccessor` interfaces.
@@ -47,10 +46,13 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 
 ### Why template forms
 
-* **Single source of truth for your forms - templates.**
+* Angular template is the best DSL for describing forms.
+* **Single source of truth for your forms - templates.** 
+* No structure and binding duplication.
 * Almost all logic written in a declarative manner.
 * Less code to write.
 * https://www.youtube.com/watch?v=L7rGogdfe2Q
+
 
 
 ## Terms
@@ -60,9 +62,8 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 * **Input** - HTML element (or custom component) allows you to display and change some state.
 * **Control** - a bridge between **Model** and **Input**.
 * **Value accessor** - directive or component that connects **Input** to the **Control**.
-* **Adapter** - functions that convert state when it flows between **Model** and **Input**. 
 * **Validator** - function to check **Model** or **Input** values to meet some conditions.
-* **Error** - returner by **Validator** if value is invalid. 
+* **Error** - returned by **Validator** if value is invalid. 
 * **Validity** - represents current validation state: 
   * `pending` - one or more async **Validators** are running,
   * `invalid` - one or more **Validators** returned errors,
@@ -78,7 +79,8 @@ If your project have complex and dynamic forms this lib will save you a lot of t
 $ npm i ngfe
 ```
 
-* `ngfe@13` for Angular 12 and 13. RxJS 7 needed.
+* `ngfe@13` for Angular@12 and Angular@13. RxJS@7 needed.
+* `ngfe@15` no-signals version with `[feControl]` syntax for Angular@14+.
 
 
 
@@ -86,7 +88,7 @@ $ npm i ngfe
 
 Import the module:
 
-```
+```typescript
 import { FeModule } from 'ngfe';
 ...
 imports: [
@@ -95,352 +97,482 @@ imports: [
 ]
 ```
 
-Also, all directives are standalone and can be imported separately:
+All directives are standalone and can be imported separately:
 
-```
-imports: [FeControl, FeInput, FeRequiredValidator]
+```typescript
+imports: [FeForm, FeModel, FeSubmit, FeInput, FeSelect, FeRequiredValidator, ...]
 ```
 
+### `feImports`
+
+A convenience constant containing all directives for quick standalone component setup:
+
+```typescript
+import { feImports } from 'ngfe';
+
+@Component({
+  standalone: true,
+  imports: [feImports],
+  ...
+})
+export class MyComponent {}
+```
 
 
 ## Binding
 
-On the surface [`[(feControl)]`](./projects/ngfe/src/lib/core/fe-control.ts) works exactly like `[(ngModel)]`.
+On the surface [`[(model)]`](projects/ngfe/src/lib/core/fe-model.ts) works exactly like `[(ngModel)]`.
 
+```html
+<input [(model)]="field">
 ```
-<input [(feControl)]="field">
+
+
+
+## [Form](projects/ngfe/src/lib/core/fe-form.ts)
+
+`FeForm` is automatically applied to `<form>` elements (selector: `form:not([noForm]),[feForm]`). 
+
+It aggregates all child `FeModel` controls and provides form-level state.
+
+Use the `noForm` attribute to opt out on a specific `<form>` element:
+
+```html
+<form noForm>
+  <!-- No FeForm directive here -->
+</form>
 ```
+
+Use the `[feForm]` attribute to create a form group on a non-form element:
+
+```html
+<div feForm>
+  <input [(model)]="field">
+</div>
+```
+
+### Example
+
+```html
+<form #form="form" [(disabled)]="formDisabled">
+  <input [(model)]="name" name="name" required>
+  <input [(model)]="email" name="email" email>
+
+  @if (form.invalid()) {
+    <p>Form has errors</p>
+  }
+
+  <button (validSubmit)="save()">Submit</button>
+</form>
+```
+
+
+
+## [Model](projects/ngfe/src/lib/core/fe-model.ts) (FeModel)
+
+`FeModel` is the core control directive. 
+
+Selector: `[model]:not([noModel]),[modelChange]:not([noModel])`.
+
+Use the `noModel` attribute to opt out:
+
+```html
+<input [model]="value" noModel>
+```
+
+#### `invalidValueStrategy`
+
+Controls what happens when input validation fails:
+
+* `'accept'` (default) - update model with the input value even if invalid.
+* `'retain'` - keep the previous valid value, do not update model.
+* `{value: VALUE}` - update model with the provided fallback value.
+
+#### `asyncValidatorsStrategy`
+
+Controls when async validators run:
+
+* `'runAfterSyncValid'` (default) - async validators only run if all sync validators pass.
+* `'runAlways'` - async validators always run regardless of sync validation results.
+
+
 
 ## Built-in value accessors
 
-### [Input](./projects/ngfe/src/lib/value-accessors/fe-input.ts)
+### [Input](projects/ngfe/src/lib/value-accessors/fe-input.ts) (FeInput)
 
-```
-<input [(feControl)]="field">
-<input [(feControl)]="field2" type="checkbox">
-<input [(feControl)]="field3" type="radio" value="1">
-<input [(feControl)]="field4" type="date" value="1">
-...
-```
+Selector: `input[model],textarea[model]`.
 
-> [[StackBlitz] ngfe inputs demo](https://stackblitz.com/edit/ngfe-inputs-demo?file=src/app/app.component.html)
+Bridges native `<input>` and `<textarea>` elements to `FeModel`.
 
-#### File helpers
-
-There is a built-in function [`readFiles`](./projects/ngfe/src/lib/util/read-files.ts) to read file data from file inputs:
-
-```
-<input (feControlChange)="loadFiles($event)" type="file">
+```html
+<input [(model)]="field">
+<input [(model)]="field2" type="checkbox">
+<input [(model)]="field3" type="radio" value="1">
+<input [(model)]="field4" type="date">
+<textarea [(model)]="field5"></textarea>
 ```
 
+#### `valueType`
+
+Force a specific value type regardless of the input element type:
+
+```html
+<!-- Force number parsing for a text input -->
+<input [(model)]="amount" valueType="number">
+
+<!-- Force Date object from a date input -->
+<input [(model)]="date" type="date" valueType="Date">
+
+<!-- Keep string value for a number input -->
+<input [(model)]="code" type="number" valueType="string">
 ```
+
+#### `updateOn`
+
+Control when the model value is updated:
+
+```html
+<!-- Default: update on every keystroke -->
+<input [(model)]="field" updateOn="change">
+
+<!-- Update only when input loses focus -->
+<input [(model)]="field" updateOn="blur">
+```
+
+#### File inputs
+
+```html
+<input (modelChange)="loadFiles($event)" type="file">
+```
+
+```typescript
 import { readFiles } from 'ngfe';
 ...
 loadFiles(files?: FileList) {
   readFiles(files || []).subscribe(loadedFiles => {
     ...
-    this.cdr.markForCheck();
   });
 }
 ```
 
-#### Touch on change
 
-You can control how touched state is set with `touchOnChange` and `touchOnBlur` parameters.
 
-By default `touchOnBlur` is `true` and `touchOnChange` is `false`. 
+### [Select](projects/ngfe/src/lib/value-accessors/fe-select.ts) (FeSelect)
 
-```
-<input [(feControl)]="field1" touchOnChange>
-<input [(feControl)]="field2" [touchOnBlur]="false">
-```
+Selector: `select[model]`. Bridges native `<select>` elements to `FeModel`.
 
-### [Textarea](./projects/ngfe/src/lib/value-accessors/fe-input.ts)
-
-```
-<textarea [(feControl)]="field"></textarea>
-```
-
-### [Select](./projects/ngfe/src/lib/value-accessors/fe-select.ts)
-
-```
-<select [(feControl)]="field">
+```html
+<select [(model)]="field">
   <option value="1">ONE</option>
   <option value="2">TWO</option>
 </select>
 ```
 
-Any type of value available to bind to `option[value]`.
+Any type of value available to bind to `option[value]`:
 
-```
+```typescript
 field: number;
 ```
 
-```
-<select [(feControl)]="field">
+```html
+<select [(model)]="field">
   <option [value]="1">ONE</option>
   <option [value]="2">TWO</option>
 </select>
 ```
 
+#### Multiple select
 
-
-## [Adapters](./projects/ngfe/src/lib/core/adapters.ts)
-
-Controls store 2 values at the same moment: `modelValue` and `inputValue`. When `modelValue` changes its' value also transferred to `inputValue` and vice-versa.  You could define functions that change the values during this transition. 
-
-At the first place this feature is needed to keep proper types for values in models.
-
-For example:
-
-```
-field: number = 100;
+```html
+<select [(model)]="selectedItems" multiple>
+  @for (let item of items) {
+    <option [value]="item">{{ item.name }}</option>
+  }
+</select>
 ```
 
-```
-<input [(feControl)]="field" adapter="numberToString">
-```
+#### Custom compare function
 
-_Note: value accessor for `input[type="number"]` parses input and returns number without the adapter._
+Useful when option values are objects:
 
-Or native Date:
-
-```
-field = new Date();
-```
-
-```
-<input [(feControl)]="field" type="date" adapter="dateToDateString">
+```html
+<select [(model)]="selected" [compareFn]="compareById">
+  @for (let item of items) {
+    <option [value]="item">{{ item.name }}</option>
+  }
+</select>
 ```
 
-_By default in browsers date input uses `string`._
-
-### [Built-in adapters](./projects/ngfe/src/lib/core/adapters.ts)
-
-* `numberToString` - keeps number in model and string in input.
-* `dateToDateString` - useful for inputs with type `date`.
-* `dateToDateLocalString` - useful for inputs with type `date-local`.
-* `deepCopy` - useful for objects and arrays.
-
-### Custom adapter
-
-Use [`FeAdapter`](./projects/ngfe/src/lib/core/adapters.ts) interface to declare modifying functions:
-
-```
-booleanToString: FeAdapter<boolean, string> = {
-  fromModel: modelValue => modelValue === true ? '1' : modelValue === false ? '0' : '',
-  fromInput: inputValue => inputValue === '1' ? true : inputValue === '0' ? false : undefined,
-};
+```typescript
+compareById = (v1: any, v2: any) => v1?.id === v2?.id;
 ```
 
-Pass it to `[adapter]` input:
+### [FeSelectOption](projects/ngfe/src/lib/value-accessors/fe-select.ts)
 
-```
-<input [(feControl)]="field" [adapter]="booleanToString">
-```
+Selector: `option`. 
 
-> [[StackBlitz] ngfe custom adapter demo](https://stackblitz.com/edit/ngfe-custom-adapter-demo?file=src/app/app.component.ts)
+Automatically connects to the parent `FeSelect` directive.
+
+
+
+## Debounce 
+
+Define debounce time for values from a value accessor:
+
+```html
+<input [(model)]="field" [debounce]="400">
+```
 
 
 
 ## [Validation](./projects/ngfe/src/lib/core/validation.ts)
 
-Work very similar to the default Angular validation.
+Works very similar to the default Angular validation.
 
+```html
+<input #model="model" [(model)]="field" required>
+@if (model.errors(); as errors) {
+  @if (errors.required) {
+    <span>Required</span>
+  }
+}
 ```
-<input #control="feControl" [(feControl)]="field" required>
-<div *ngIf="control.errors as errors">
-  <span *ngIf="errors.required">Required</span>
-</div>
-```
-
-> [[StackBlitz] ngfe validation demo](https://stackblitz.com/edit/ngfe-validation-demo?file=src/app/app.component.html)
 
 ### Visible Errors
 
-Also, there is `.visibleErrors` that passes errors object when control becomes touched.
+`.visibleErrors()` returns the errors object only when the control is touched:
 
+```html
+<input #model="model" [(model)]="field" required>
+@if (model.visibleErrors(); as errors) {
+  @if (errors.required) {
+    <span>Required</span>
+  }
+}
 ```
-<input #control="feControl" [(feControl)]="field" required>
-<div *ngIf="control.visibleErrors as errors">
-  <span *ngIf="errors.required">Field is required</span>
-</div>
-```
+
+
 
 ### [Built-in validators](./projects/ngfe/src/lib/validators)
 
-* `required`
-* `email`
-* `equal`, `notEqual`
-* `minlength`, `maxlength` - works only for strings and arrays in `modelValue`.
-* `min`, `max` - works only for numbers in `modelValue`.
-* `pattern`
-* `isNumber` - checks that `inputValue` represents a number or a string that can be parsed to number.
+| Validator | Selector | Key Inputs | Error Key |
+|-----------|----------|------------|-----------|
+| `FeRequiredValidator` | `[model][required]` | `required: boolean` (default: `true`) | `{required: {value}}` |
+| `FeEmailValidator` | `[model][email]` | `email: boolean` (default: `true`) | `{email: {value}}` |
+| `FeEqualValidator` | `[model][equal]` | `equal: any`, `activeWhenEmpty: boolean` | `{equal: {equal, value}}` |
+| `FeNotEqualValidator` | `[model][notEqual]` | `notEqual: any`, `activeWhenEmpty: boolean` | `{notEqual: {notEqual, value}}` |
+| `FeIsNumberValidator` | `[model][isNumber]` | `isNumber: boolean` (default: `true`) | `{isNumber: {value}}` |
+| `FeLengthValidator` | `[model][minLength],[model][maxLength]` | `minLength`, `maxLength` | `{minLength: {requiredLength, actualLength, value}}`, `{maxLength: ...}` |
+| `FeMinmaxValidator` | `[model][min],[model][max]` | `min`, `max` | `{min: {min, value, numberValue}}`, `{max: ...}` |
+| `FePatternValidator` | `[model][pattern]` | `pattern: string \| RegExp` | `{pattern: {pattern, value}}` |
+
+All boolean-toggle validators (`required`, `email`, `isNumber`) can be disabled by binding `false`:
+
+```html
+<input [(model)]="field" [required]="isRequired">
+<input [(model)]="field" [email]="shouldValidateEmail">
+```
+
+The `equal` and `notEqual` validators have an `activeWhenEmpty` input (default: `false`). When `false`, validation is skipped if the value is empty:
+
+```html
+<input [(model)]="field" [equal]="expectedValue" activeWhenEmpty>
+```
+
+
 
 ### Custom validator
 
 #### As a function
 
-Use [`FeValidator`](./projects/ngfe/src/lib/core/validation.ts) interface to implement a validator. Return errors object [`FeError`](./projects/ngfe/src/lib/core/validation.ts) or `undefined` if value is valid.
+Use [`FeValidator`](./projects/ngfe/src/lib/core/validation.ts) interface to implement a validator. Return errors object [`FeValidationErrors`](./projects/ngfe/src/lib/core/validation.ts) or `undefined` if value is valid.
 
-```
+```typescript
 // Invalid if value is not empty and have value "BOOM".
-notBoom: FeValidator<string> = ({modelValue}) => {
-  return !modelValue || modelValue !== 'BOOM'
+notBoom: FeValidator<string> = value => {
+  return value !== 'BOOM'
     ? undefined
     : {notBoom: true};
 };
 ```
 
-Pass it to `[extraValidators]` input:
+Pass it to `[validators]` input:
 
-```
-<input #control="feControl" [(feControl)]="field" [extraValidators]="[notBoom]">
-<span *ngIf="control.errors?.notBoom">Value should not be "BOOM"</span>
+```html
+<input #model="model" [(model)]="field" [validators]="[notBoom]">
+@if (model.errors()?.notBoom) {
+  <span>Value should not be "BOOM"</span>
+}
 ```
 
 #### As a directive
 
 Or, create a validator directive:
 
-```
+```typescript
 @Directive({
-  selector: '[feControl][notBoom]'
+  selector: '[model][notBoom]',
+  standalone: true,
 })
-export class notBoomValidatorDirective implements OnChanges {
-  constructor(
-    @Self() private control: FeControl<string>,
-  ) {
-    this.control.addValidator(({modelValue}) => {
-      return !modelValue || modelValue !== 'BOOM'
-        ? undefined
-        : {notBoom: true};
-    });
-  }
+export class NotBoomValidatorDirective {
+  private model = inject(FeModel<string>);
+  private removeFn = this.model.addValidator(value => {
+    return value !== 'BOOM'
+      ? undefined
+      : {notBoom: true};
+  });
 }
 ```
 
-```
-<input [(feControl)]="field" notBoom>
+```html
+<input [(model)]="field" notBoom>
 ```
 
-> [[StackBlitz] ngfe validation demo](https://stackblitz.com/edit/ngfe-validation-demo?file=src/app/not-boom-validator.directive.ts)
+
 
 ### Async validators
 
-Just return from validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts).
+Return from a validation function `Observable` or `Promise` with [`FeValidatorResult`](./projects/ngfe/src/lib/core/validation.ts):
 
-
-
-## Debounce 
-
-Define debounce time for values from a value accessor:b
-
+```typescript
+asyncValidator: FeValidator<string> = (value, control) => {
+  return new Observable<FeValidatorResult>(observer => {
+    // Async check...
+    observer.next(isValid ? undefined : {asyncError: true});
+    observer.complete();
+  });
+};
 ```
-<input [(feControl)]="field" [debounce]="400">
+
+
+
+### Forced errors
+
+You can programmatically set errors on a control using `forcedErrors`:
+
+```html
+<input #model="model" [(model)]="field" [forcedErrors]="serverErrors()">
 ```
 
+```typescript
+// Set from server response
+serverErrors = signal<FeValidationErrors | undefined>(undefined);
 
-
-## [Submit](./projects/ngfe/src/lib/core/fe-submit.ts)
-
-Directive that marks all form controls as touched, when user submits the form.
-
-Also emits event only if form has `valid` state.
-
-### On button
-
+onSubmit() {
+  this.api.save(this.field).subscribe({
+    error: (err) => {
+      this.serverErrors.set({serverError: err.message});
+    }
+  });
+}
 ```
+
+Set `forcedErrors` to `'pending'` to force `pending` validity state.
+
+
+
+## [Submit](projects/ngfe/src/lib/core/fe-submit.ts)
+
+Two directives that mark all form controls as touched and check validity on submit.
+
+### FeSubmit (on button or form)
+
+Selector: `button[anySubmit],button[validSubmit],button[invalidSubmit]`
+
+```html
 <form>
   ...
-  <button (feSubmit)="doStuff()">Submit</button>
+  <button (anySubmit)="doStuff()">Submit</button>
+  <button (validSubmit)="doValidStuff()">Submit</button>
+  <button (invalidSubmit)="doInvalidStuff()">Submit</button>
 </form>
 ```
 
-### On form
+Selector: `form[anySubmit],form[validSubmit],form[invalidSubmit]`
 
-```
-<form (feSubmit)="doStuff()">
+```html
+<form (anySubmit)="doStuff()" (validSubmit)="doValidStuff()" (invalidSubmit)="doInvalidStuff()">
   ...
 </form>
 ```
 
+| Output | Type | Description |
+|--------|------|-------------|
+| `anySubmit` | `boolean` | Emits validity (`true`/`false`) on click. |
+| `validSubmit` | `void` | Emits on click when form is valid. |
+| `invalidSubmit` | `void` | Emits on click when form is invalid. |
 
-
-## [Init/cleanup values](./projects/ngfe/src/lib/core/fe-if.ts)
-
-For dynamic forms we need to setup values when some fields became visible, and remove such values on field hiding.
-
-Structural directive [`feIf`](./projects/ngfe/src/lib/core/fe-if.ts) works similar to `ngIf` (except `else` part) and could set a model to some default / `undefined`.
-
-When Angular change detection runs, `feIf` directive checks that the condition is true/false, wait until template updates, then update bound model and renders conditional template. This allows us to keep this logic in template and not collide with rendering process.
-
-_The main disadvantage - it works only with `<ng-template>`._
-
-```
-<ng-template [feIf]="showField" [(ensure)]="field">
-  <input [(feControl)]="field">
-</ng-template>
-```
-
-Also, you could define `[default]` value that will be set to the model when it's empty.
-
-```
-<ng-template [feIf]="showField" [(ensure)]="field" default="BOOOM">
-  <input [(feControl)]="field">
-</ng-template>
-```
+Both directives call `form.touchAll()` before emitting, so all validation errors become visible.
 
 
 
 ## Custom Value Accessor
 
-Unlike default Angular approach, you do not need to implement `ValueAccessor` interface.
+You do not need to implement `ValueAccessor` interface.
 
-Just inject `FeControl` and use it's props and methods.
+Just inject `FeModel` and use its properties and methods:
 
-`.toInputValue$` - emits all changes except last passed from input itself.
-
-```
+```typescript
 @Component({
   selector: 'app-custom-control',
   ...
 })
 export class AppCustomControlComponent {
-  constructor(private control: FeControl) {
-    this.control.toInputValue$.subscribe(inputValue => {
-      ...
-    });
-    this.control.disabled$.subscribe(disabled => {
-      ...
-    });
+  private model = inject(FeModel);
+
+  onUserAction(value: any) {
+    this.model.input(value);
   }
-  
-  ...
-  this.control.input(value);
-  ...
-  this.control.touch();
+
+  onFocus() {
+    this.model.touch();
+  }
 }
 ```
 
-```
-<app-custom-control [(feControl)]="field"></app-custom-control>
+```html
+<app-custom-control [(model)]="field" />
 ```
 
-You can subscribe to any stream of the control and define any state.
-
-> [[StackBlitz] ngfe custom value accessor demo](https://stackblitz.com/edit/ngfe-custom-va-demo?file=src/app/custom-control.component.ts)
+You can use any signal or subscribe to any observable of the model and define any state.
 
 
 
 ## [Util](./projects/ngfe/src/lib/util)
 
-Set of functions that is very useful in work with forms.
+Set of functions useful for working with forms.
 
-* [`coerceToBoolean`](./projects/ngfe/src/lib/util/coercion.ts) - coerce an input value (typically a string) to a boolean.
-* [`deepCopy`](./projects/ngfe/src/lib/util/deep-copy.ts) - deep copy objects and arrays.
-* [`diff`](./projects/ngfe/src/lib/util/diff.ts) - compare objects and arrays.
-* [`readFiles`](./projects/ngfe/src/lib/util/read-files.ts) - read file data from File.
+### [`ensureNumber`](./projects/ngfe/src/lib/util/ensure-number.ts)
+
+Convert a string value to number if possible. 
+
+Returns `undefined` for empty string or non-numeric values.
+
+```typescript
+import { ensureNumber } from 'ngfe';
+
+ensureNumber('42');        // 42
+ensureNumber('abc');       // undefined
+ensureNumber('');          // undefined
+ensureNumber(undefined);   // undefined
+```
+
+
+
+### [`readFiles`](./projects/ngfe/src/lib/util/read-files.ts)
+
+Read file data from `File[]` or `FileList` (typically from file inputs).
+
+```typescript
+import { readFiles } from 'ngfe';
+
+readFiles(fileList, 'DataURL').subscribe((loadedFiles: FeLoadedFile[]) => {
+  loadedFiles.forEach(f => {
+    console.log(f.file.name, f.data);
+  });
+});
+```
 
 
 
@@ -456,7 +588,7 @@ $ npm i ngfe-ng-adapter
 
 Import module:
 
-```
+```typescript
 imports: [
   ...
   FeModule,
@@ -464,11 +596,9 @@ imports: [
 ]
 ```
 
-After that you can use Angular `ValueAccessors` and `Validator` with `[(feControl)]`.
+After that you can use Angular `ValueAccessors` and `Validators` with `[(model)]`.
 
-Also, with this package, `feControl` provides `NgControl` and allows you to use **ngfe** with Material components or other UI libs.
-
-> [[StackBlitz] ngfe-ng-adapter demo](https://stackblitz.com/edit/ngfe-ng-adapter?file=src/app/app.component.html)
+Also, with this package, `FeModel` provides `NgControl` and allows you to use **ngfe** with Material components or other UI libs.
 
 
 
