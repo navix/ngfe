@@ -29,7 +29,6 @@ export class FeEqualValidator implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log('EqualValidator ngOnChanges', this.equal());
     this.model.updateValidity();
   }
 }

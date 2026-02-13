@@ -1,6 +1,6 @@
 {
   "name": "ngfe-ng-adapter",
-  "version": "15.0.0",
+  "version": "20.0.0",
   "keywords": ["angular", "forms"],
   "author": {
     "name": "Oleksa Novyk",
@@ -13,8 +13,8 @@
     "type": "git"
   },
   "peerDependencies": {
-    "@angular/core": ">= 15.0.0",
-    "@angular/forms": ">= 15.0.0",
-    "ngfe": ">= 15.0.0"
+    "@angular/core": ">= 20.0.0",
+    "@angular/forms": ">= 20.0.0",
+    "ngfe": ">= 20.0.0"
   }
 }

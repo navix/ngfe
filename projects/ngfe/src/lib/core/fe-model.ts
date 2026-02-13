@@ -56,6 +56,7 @@ export class FeModel<VALUE = any> implements OnDestroy {
    */
   readonly disabled = model(false);
   readonly disabledWithForm = computed(() => this.disabled() || this.form?.disabled() || false);
+  readonly disabledWithForm$ = toObservable(this.disabledWithForm);
 
   readonly touched = model(false);
   readonly dirty = model(false);

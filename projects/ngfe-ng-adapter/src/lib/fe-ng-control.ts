@@ -1,42 +1,44 @@
-import { Directive, Input, Self } from '@angular/core';
-import { AbstractControl, ControlContainer, NgControl } from '@angular/forms';
-import { FeControl } from 'ngfe';
-import { merge, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Directive, Input, Self} from '@angular/core';
+import {AbstractControl, ControlContainer, NgControl} from '@angular/forms';
+import {FeModel} from 'ngfe';
+import {merge, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 class LocalControl {
   statusChanges: Observable<'DISABLED' | 'VALID' | 'INVALID' | 'PENDING'>;
   valueChanges: Observable<any>;
 
-  constructor(private feControl: FeControl) {
-    this.statusChanges = merge(this.feControl.validity$, this.feControl.disabled$).pipe(map(() => this.status));
-    this.valueChanges = this.feControl.modelValue$;
+  constructor(private model: FeModel) {
+    this.statusChanges = merge(this.model.validity$, this.model.disabledWithForm$).pipe(
+      map(() => this.status),
+    );
+    this.valueChanges = this.model.value$;
   }
 
   hasValidator() {}
 
   patchValue(value: any, options?: Object): void {
-    this.feControl.update(value);
+    this.model.update(value);
   }
 
   reset(value?: any, options?: Object): void {
-    this.feControl.reset();
+    this.model.reset();
   }
 
   setValue(value: any, options?: Object): void {
-    this.feControl.update(value);
+    this.model.update(value);
   }
 
   get value() {
-    return this.feControl.modelValue;
+    return this.model.value();
   }
 
   get status(): 'DISABLED' | 'VALID' | 'INVALID' | 'PENDING' {
-    if (this.feControl.disabled) {
+    if (this.model.disabledWithForm()) {
       return 'DISABLED';
-    } else if (this.feControl.validity === 'valid') {
+    } else if (this.model.validity() === 'valid') {
       return 'VALID';
-    } else if (this.feControl.validity === 'invalid') {
+    } else if (this.model.validity() === 'invalid') {
       return 'INVALID';
     } else {
       return 'PENDING';
@@ -44,67 +46,67 @@ class LocalControl {
   }
 
   get valid() {
-    return this.feControl.valid;
+    return this.model.valid;
   }
 
   get invalid() {
-    return this.feControl.invalid;
+    return this.model.invalid;
   }
 
   get untouched() {
-    return !this.feControl.touched;
+    return !this.model.touched;
   }
 
   get touched() {
-    return this.feControl.touched;
+    return this.model.touched;
   }
 
   get pristine() {
-    return !this.feControl.dirty;
+    return !this.model.dirty;
   }
 
   get dirty() {
-    return this.feControl.dirty;
+    return this.model.dirty;
   }
 
   get pending() {
-    return this.feControl.pending;
+    return this.model.pending;
   }
 
   markAsTouched() {
-    this.feControl.touch();
+    this.model.touch();
   }
 
   markAllAsTouched() {
-    this.feControl.touch();
+    this.model.touch();
   }
 
   markAsUntouched() {
-    this.feControl.touched = false;
+    this.model.touched.set(false);
   }
 
   markAsDirty() {
-    this.feControl.dirty = true;
+    this.model.dirty.set(true);
   }
 
   markAsPristine() {
-    this.feControl.dirty = false;
+    this.model.dirty.set(false);
   }
 
   markAsPending() {}
 
   disable() {
-    this.feControl.disabled = true;
+    this.model.disabled.set(true);
   }
 
   enable() {
-    this.feControl.disabled = false;
+    this.model.disabled.set(false);
   }
 
   setParent() {}
 
   updateValueAndValidity() {
-    this.feControl.updateValidity();
+    this.model.updateValidity();
   }
 
   setErrors() {}
@@ -112,38 +114,38 @@ class LocalControl {
   get() {}
 
   getError(errorCode: string) {
-    return this.feControl.errors?.[errorCode];
+    return this.model.errors()?.[errorCode];
   }
 
   hasError(errorCode: string) {
-    return !!this.feControl.errors?.[errorCode];
+    return !!this.model.errors()?.[errorCode];
   }
 
   root() {}
 }
 
 @Directive({
-    selector: '[feControl]',
-    providers: [
-        {
-            provide: NgControl,
-            useExisting: FeNgControl,
-        },
-        {
-            provide: ControlContainer,
-            useExisting: FeNgControl,
-        },
-    ],
-    standalone: false
+  selector: '[feControl]',
+  providers: [
+    {
+      provide: NgControl,
+      useExisting: FeNgControl,
+    },
+    {
+      provide: ControlContainer,
+      useExisting: FeNgControl,
+    },
+  ],
+  standalone: false,
 })
 export class FeNgControl extends NgControl {
   @Input() name!: string | null;
 
   private _control?: LocalControl;
 
-  constructor(@Self() private feControl: FeControl) {
+  constructor(@Self() private model: FeModel) {
     super();
-    this._control = new LocalControl(this.feControl);
+    this._control = new LocalControl(this.model);
   }
 
   get control(): AbstractControl {

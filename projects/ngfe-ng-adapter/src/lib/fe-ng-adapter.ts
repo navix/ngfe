@@ -1,14 +1,20 @@
-import { Directive, Inject, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
-import { FeControl, FeInput, FeSelect } from 'ngfe';
+import {Directive, Inject, Optional, Self} from '@angular/core';
+import {
+  ControlValueAccessor,
+  NG_ASYNC_VALIDATORS,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validator,
+} from '@angular/forms';
+import {FeModel, FeInput, FeSelect} from 'ngfe';
 
 @Directive({
-    selector: '[feControl]',
-    standalone: false
+  selector: '[feControl]',
+  standalone: false,
 })
 export class FeNgAdapter {
   constructor(
-    @Self() private control: FeControl,
+    @Self() private model: FeModel,
     @Self() @Optional() @Inject(NG_VALUE_ACCESSOR) private ngValueAccessors: ControlValueAccessor[],
     @Self() @Optional() @Inject(NG_VALIDATORS) private ngValidators: Validator[],
     @Self() @Optional() @Inject(NG_ASYNC_VALIDATORS) private ngAsyncValidators: Validator[],
@@ -26,25 +32,25 @@ export class FeNgAdapter {
         this.feSelectDirective.connected = false;
       }
       va.registerOnTouched(() => {
-        this.control.touch();
+        this.model.touch();
       });
       va.registerOnChange((value: any) => {
-        this.control.input(value);
+        this.model.input(value);
       });
-      this.control.toInputValue$.subscribe(value => {
+      this.model.value$.subscribe(value => {
         va.writeValue(value);
       });
       if (va.setDisabledState) {
-        this.control.disabled$.subscribe(disabled => {
+        this.model.disabledWithForm$.subscribe(disabled => {
           va.setDisabledState?.(disabled);
         });
       }
     }
     if (this.ngValidators) {
-      this.control.updateValidators({
+      this.model.updateValidators({
         add: this.ngValidators.map(ngValidator => {
-          return ({modelValue}) => {
-            return ngValidator.validate({value: modelValue} as any) || undefined;
+          return (value: any) => {
+            return ngValidator.validate({value} as any) || undefined;
           };
         }),
       });
