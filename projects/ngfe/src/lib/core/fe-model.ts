@@ -198,7 +198,6 @@ export class FeModel<VALUE = any> implements OnDestroy {
    * Run input flow: set INPUT value, run input validators, if valid update value.
    */
   input(inputValue: VALUE | undefined) {
-    console.log('Input', inputValue);
     this.#input$.next(inputValue);
   }
 
@@ -261,7 +260,6 @@ export class FeModel<VALUE = any> implements OnDestroy {
       )
       .subscribe(({validationResults, inputValue}) => {
         const {errors, isValid} = this.processValidationResults(validationResults);
-        console.log('Input validation', {inputValue, isValid, errors});
         if (!isValid) {
           this.setValueErrors(errors, inputValue);
           const strategy = this.invalidValueStrategy();
@@ -273,7 +271,6 @@ export class FeModel<VALUE = any> implements OnDestroy {
         } else {
           this.setValueErrors(undefined, inputValue);
           this.model.set(inputValue);
-          console.log('Value updated', inputValue);
         }
       });
   }
@@ -297,7 +294,6 @@ export class FeModel<VALUE = any> implements OnDestroy {
       )
       .subscribe(validationResults => {
         const {errors, isValid} = this.processValidationResults(validationResults);
-        console.log('Validity validation', {value: this.value(), isValid, errors});
         this.setValueErrors(isValid ? undefined : errors, this.value());
       });
   }

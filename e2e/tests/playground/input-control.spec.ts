@@ -205,7 +205,13 @@ test('Input Control', async ({browser}) => {
     await expect(c.vv('VALUE')).toHaveText('{ "0": {} }');
     await expect(c.vv('LEN')).toHaveText('1');
     await expect(c.vv('LOADED_FILES__VALUE')).toHaveText(
-      '[ { "file": {}, "data": "data:text/plain;base64,RklMRSBURVNU" } ]',
+      `[
+  {
+    "file": {},
+    "data": "data:text/plain;base64,RklMRSBURVNUCg=="
+  }
+]
+`,
     );
     await kit.chooseFiles('#input-19', ['./e2e/file-test.txt', './e2e/file-test-2.txt']);
     await expect(c.vv('VALUE')).toHaveText('{ "0": {}, "1": {} }');
@@ -214,11 +220,11 @@ test('Input Control', async ({browser}) => {
       `[
   {
     "file": {},
-    "data": "data:text/plain;base64,RklMRSBURVNU"
+    "data": "data:text/plain;base64,RklMRSBURVNUCg=="
   },
   {
     "file": {},
-    "data": "data:text/plain;base64,RklMRSBURVNUIDINCg=="
+    "data": "data:text/plain;base64,RklMRSBURVNUIDIK"
   }
 ]`,
     );
