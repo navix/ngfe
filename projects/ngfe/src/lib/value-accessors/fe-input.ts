@@ -1,5 +1,5 @@
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
+  booleanAttribute,
   Directive,
   effect,
   ElementRef,
@@ -61,8 +61,8 @@ export class FeInput {
   readonly name = input<string>();
   readonly value = input<any>();
   readonly updateOn = input<'change' | 'blur'>('change');
-  readonly touchOnBlur = input(true, {transform: coerceBooleanProperty});
-  readonly touchOnChange = input(false, {transform: coerceBooleanProperty});
+  readonly touchOnBlur = input(true, {transform: booleanAttribute});
+  readonly touchOnChange = input(false, {transform: booleanAttribute});
 
   // @todo impl?
   readonly readFileAs = input<'DataURL' | 'Text' | 'ArrayBuffer' | 'BinaryString'>('DataURL');

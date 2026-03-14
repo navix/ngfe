@@ -1,5 +1,5 @@
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
+  booleanAttribute,
   Directive,
   effect,
   ElementRef,
@@ -28,10 +28,10 @@ export class FeSelect {
   renderer = inject(Renderer2);
   elementRef = inject(ElementRef);
 
-  readonly multiple = input(false, {transform: coerceBooleanProperty});
+  readonly multiple = input(false, {transform: booleanAttribute});
   readonly updateOn = input<'change' | 'blur'>('change');
-  readonly touchOnBlur = input(true, {transform: coerceBooleanProperty});
-  readonly touchOnChange = input(false, {transform: coerceBooleanProperty});
+  readonly touchOnBlur = input(true, {transform: booleanAttribute});
+  readonly touchOnChange = input(false, {transform: booleanAttribute});
   readonly compareFn = input<FeSelectCompareFn>((v1, v2) => v1 === v2);
 
   readonly options = new Set<FeSelectOption>();
